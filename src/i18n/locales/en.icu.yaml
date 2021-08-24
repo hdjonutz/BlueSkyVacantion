@@ -1,0 +1,35 @@
+### Englische Übersetzung für InLine Web
+
+# Wiederholt auftretende Aktionen, z.B. Beschriftungen für Buttons in Dialogen
+aktionen:
+  abbrechen: Cancel
+  zurucksetzen: Reset to default
+  details_einblenden: Show details
+  details_ausblenden: Hide details
+  hinzufuegen: Add
+  loeschen: Delete
+  bearbeiten: Edit
+  speichern: Save
+  anlegen: Create
+  erstellen: Create
+  import: Import
+  export: Export
+  ok: OK
+  ja: "Yes"
+  nein: "No"
+  folgen: Follow
+  details: Details
+  zentrieren: Center
+  schliessen: Close
+  aktualisieren: Refresh
+  neu_anlegen: Create new
+  ansicht: View
+  aendern: Change
+  ausfuehren: Execute
+  abmelden: Logout
+  hintergrund_laufen: Running in Background
+
+tabs_name:
+  server: Server
+  notification: Notification
+  information: Information

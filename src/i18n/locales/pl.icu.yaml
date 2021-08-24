@@ -1,0 +1,35 @@
+### Polnische Übersetzung für InLine Web
+
+# Wiederholt auftretende Aktionen, z.B. Beschriftungen für Buttons in Dialogen:
+aktionen:
+  abbrechen: Zakończ
+  zurucksetzen: Zurücksetzen #TODO: possibly faulty translation!
+  details_einblenden: Pokaż szczegóły #TODO: possibly faulty translation!
+  details_ausblenden: Ukryj szczegóły #TODO: possibly faulty translation!
+  hinzufuegen: Wstaw
+  loeschen: Usuń
+  bearbeiten: Edytowanie
+  speichern: Zapisz
+  anlegen: Utwórz
+  erstellen: Utwórz
+  import: Importieren #TODO: Missing translation
+  export: Exportieren #TODO: Missing translation
+  ok: OK
+  ja: Tak
+  nein: Nie
+  folgen: śledzić #TODO: possibly faulty translation!
+  details: Szczegóły ?
+  zentrieren: Centrum
+  schliessen: Zamknię
+  aktualisieren: Aktualizacja
+  neu_anlegen: Nowy #TODO: possibly faulty translation!
+  ansicht: Widok
+  aendern: Zmiana
+  ausfuehren: Ausführen #TODO: Missing translation
+  abmelden: Abmelden  #TODO: Missing translation!
+  hintergrund_laufen: Działa w tle
+
+tabs_name:
+  server: Server #TODO: Missing translation!
+  notification: Notification #TODO: Missing translation!
+  information: Information #TODO: Missing translation!
