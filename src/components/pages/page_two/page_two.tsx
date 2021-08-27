@@ -15,7 +15,7 @@ export default class Page_two extends React.PureComponent<{}, {}> {
         this.state = {};
     }
 
-    componentWillMount() {
+    componentDidUpdate(prevProps, prevState) {
         logger.info('Example of logger');
         this._counterService.getData().subscribe((res) => {
             console.log(res);

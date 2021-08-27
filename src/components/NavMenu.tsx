@@ -3,6 +3,7 @@ import * as React from 'react';
 import { Collapse, Container, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import style from './NavMenu.less';
+import classNames from "classnames";
 
 export default class NavMenu extends React.PureComponent<{}, { isOpen: boolean }> {
     public state = {
@@ -16,7 +17,7 @@ export default class NavMenu extends React.PureComponent<{}, { isOpen: boolean }
                     <Container>
                         <NavbarBrand tag={Link} to="/">BlueSkyVacantion</NavbarBrand>
                         <Collapse className="d-sm-inline-flex flex-sm-row-reverse" navbar>
-                            <ul className="navbar-nav flex-grow" className={style.menu_right}>
+                            <ul className={classNames("navbar-nav flex-grow", style.menu_right)}>
                                 <NavItem>
                                     <NavLink tag={Link} className="text-dark" to="/">1</NavLink>
                                 </NavItem>

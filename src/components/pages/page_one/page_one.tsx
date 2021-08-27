@@ -13,9 +13,10 @@ export default class Page_one extends React.PureComponent<{}, {}> {
     constructor(props: any) {
         super(props);
         this.state = {};
+
     }
 
-    componentWillMount() {
+    componentDidUpdate(prevProps, prevState) {
         logger.info('Example of logger');
         this._counterService.getData().subscribe((res) => {
             console.log(res);
