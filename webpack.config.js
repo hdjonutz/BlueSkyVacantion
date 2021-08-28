@@ -15,8 +15,10 @@ const buildDate = moment().format('YYYYMMDD');
 // const gitHash = git.long();
 // const gitBranch = process.env['BRANCH_NAME'] || git.branch();
 
-const isProduction = false;
-
+const isProduction = argv && argv.mode !== 'development';
+console.log('**********************************************');
+console.log(argv);
+console.log('**********************************************');
 module.exports = {
     entry: { index: path.resolve(__dirname, "src", "index.tsx") },
     output: {
@@ -37,7 +39,9 @@ module.exports = {
                     {
                         loader: 'css-loader',
                         options: {
-                            modules: true,
+                            modules: {
+                                localIdentName: isProduction ? "[hash:base64:5]" : "[path][name]__[local]--[hash:base64:5]",
+                            },
                             importLoaders: true,
                         },
                     },
