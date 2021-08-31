@@ -20,7 +20,8 @@
     "types": ["reflect-metadata"],
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "strictPropertyInitialization": false
+    "strictPropertyInitialization": false,
+    "typeRoots": ["./node_modules/@types", "./typings"]
   },
   "include": [
     "src"

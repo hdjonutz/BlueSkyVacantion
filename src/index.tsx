@@ -15,6 +15,8 @@ import {environment} from './enviroment/enviroment';
 import ApplicationVersion from './version';
 const info = ApplicationVersion();
 
+import 'mdb-react-ui-kit/dist/css/mdb.min.css';
+
 import App from './App';
 
 // Create browser history to use in the Redux store
