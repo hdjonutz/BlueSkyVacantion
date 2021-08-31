@@ -19,6 +19,7 @@ const isProduction = argv && argv.mode !== 'development';
 console.log('**********************************************');
 console.log(argv);
 console.log('**********************************************');
+
 module.exports = {
     entry: { index: path.resolve(__dirname, "src", "index.tsx") },
     output: {
@@ -32,7 +33,7 @@ module.exports = {
     module: {
         rules: [
             {
-                test: /\.(c|le|sc)ss?$/,
+                test: /\.(le|sc)ss?$/,
                 exclude: /node_modules/,
                 use: [
                     "style-loader",
@@ -55,6 +56,10 @@ module.exports = {
                         loader: 'postcss-loader'
                     }
                 ],
+            },
+            {
+                test: /\.css$/i,
+                use: ["style-loader", "css-loader"],
             },
             {
                 test: /\.(ts|js)x?$/,
@@ -128,7 +133,7 @@ module.exports = {
         ]
     },
     resolve: {
-        extensions: ['.tsx', '.ts', '.js', 'jsx'],
+        extensions: ['.tsx', '.ts', '.js', 'jsx', 'css', 'less', 'scss'],
     },
     plugins: [
         new ProgressBarPlugin(),
