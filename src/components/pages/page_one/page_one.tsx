@@ -9,8 +9,8 @@ const logger = Logger.create('Counter');
 
 export default class Page_one extends React.PureComponent<{}, {}> {
 
-    @resolve(CounterService)
-    private _counterService: CounterService;
+    // @resolve(CounterService)
+    // private _counterService: CounterService;
 
     constructor(props: any) {
         super(props);
@@ -20,9 +20,9 @@ export default class Page_one extends React.PureComponent<{}, {}> {
 
     componentDidUpdate(prevProps, prevState) {
         logger.info('Example of logger');
-        this._counterService.getData().subscribe((res) => {
-            console.log(res);
-        });
+        // this._counterService.getData().subscribe((res) => {
+        //     console.log(res);
+        // });
     }
 
     public render() {
