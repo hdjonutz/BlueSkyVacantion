@@ -20,8 +20,10 @@ import 'mdb-react-ui-kit/dist/css/mdb.min.css';
 import App from './App';
 
 // Create browser history to use in the Redux store
-const baseUrl = window.location.hash as string;
-const history = createBrowserHistory({ basename: baseUrl });
+const baseUrl = window.location.pathname;
+const history = createBrowserHistory({
+    basename: baseUrl ? baseUrl : '/BlueSkyVacantion/dist/',
+});
 
 // Get the application-wide store instance, prepopulating with state from the server where available.
 const store = configureStore(history);
@@ -31,10 +33,14 @@ console.log(`%c🛳 BlueSkyVacantion %c\n name: ${info.name} \n version: ${info.
     'font-size: 16px; color: #ab0000; font-family: "Segoe UI Symbol";',
     'font-size: 16px; color: #000; font-family: "Segoe UI Symbol";',);
 
-ReactDOM.render(
-    <Provider store={store}>
-        <ConnectedRouter history={history}>
-            <App />
-        </ConnectedRouter>
-    </Provider>,
-    document.getElementById('root'));
+// ReactDOM.render(
+//     <Provider store={store}>
+//         <ConnectedRouter history={history}>
+//             <App />
+//         </ConnectedRouter>
+//     </Provider>,
+//     document.getElementById('root'));
+
+import {AppContainer} from 'react-hot-loader';
+
+ReactDOM.render(<AppContainer><App /></AppContainer>, document.getElementById('root'));

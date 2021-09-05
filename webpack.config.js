@@ -6,6 +6,8 @@ const CopyWebpackPlugin = require("copy-webpack-plugin");
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 const ProgressBarPlugin = require('progress-bar-webpack-plugin');
+const SvgoTransformer = require('./src/tools/webpack/svgo-transformer');
+
 const argv = require('yargs').argv;
 const git = require('git-rev-sync');
 const moment = require('moment');
@@ -19,11 +21,10 @@ const isProduction = argv && argv.mode !== 'development';
 console.log('**********************************************');
 console.log(argv);
 console.log('**********************************************');
-
 module.exports = {
     entry: { index: path.resolve(__dirname, "src", "index.tsx") },
     output: {
-        filename: 'bundle.js',
+        filename: isProduction ? '[name].js' : 'bundle.js',
         path: path.resolve(__dirname, 'dist'),
         chunkFilename: '[chunkhash].js',
         publicPath: ''
@@ -76,7 +77,42 @@ module.exports = {
                 },
             },
             { test: /\.html$/, use: 'html-loader' },
-            { test: /\.(png|svg)$/, use: 'url-loader?limit=10000' },
+            /*{ test: /\.(png|svg)$/, use: 'url-loader?limit=10000' }, */
+            {
+                // Load all svg files that aren't directly included into the bundle by default.
+                test: /\.svg$/,
+                exclude: [/node_modules/, path.resolve(__dirname, "src/assets/svg")],
+                use: [
+                    'file-loader?name=[name].[ext]',
+                    {
+                        loader: 'svgo-loader',
+                        options: {
+                            plugins: [
+                                {"cleanupIDs": false}
+                            ]
+                        }
+                    },
+                ]
+            },
+            {
+                // Include our icon set directly into the bundle to avoid loading these small files one by one (which
+                // would be a performance hit). We also strip away the color and use currentColor instead to let them
+                // take the same color as the font.
+                test: /\.svg$/,
+                include: path.resolve(__dirname, "src/assets/svg"),
+                use: [
+                    { loader: 'svg-sprite-loader', options: {  } },
+                    'svg-fill-loader?fill=currentColor',
+                    {
+                        loader: 'svgo-loader',
+                        options: {
+                            plugins: [
+                                { removeAttrs: { attrs: '(color|style)' } },
+                            ]
+                        }
+                    },
+                ]
+            },
             { test: /\.(jpg|gif)$/, use: 'file-loader' },
             {
                 test: /\.(png|jpe?g|gif|jp2|webp)$/,
@@ -133,7 +169,7 @@ module.exports = {
         ]
     },
     resolve: {
-        extensions: ['.tsx', '.ts', '.js', 'jsx', 'css', 'less', 'scss'],
+        extensions: ['.tsx', '.ts', '.js', '.jsx', '.css', '.less', '.scss', '.svg'],
     },
     plugins: [
         new ProgressBarPlugin(),
@@ -146,6 +182,15 @@ module.exports = {
             patterns: [
                 { from: "src/assets/icons", to: "assets/icons" },
                 { from: "src/assets/images", to: "assets/images" },
+                { from: "src/assets/svg", to: "assets/svg" },
+                // {
+                //     // Copy all svg asset files and run the svgo transformer over them (to make the svg files a lot
+                //     // smaller).
+                //     context: 'src/assets/svg',
+                //     from: '**/*.svg',
+                //     to: 'assets/svg',
+                //     transform: SvgoTransformer /* isDevelopmentMode ? null : SvgoTransformer*/
+                // },
             ],
         }),
     ],
@@ -156,6 +201,7 @@ module.exports = {
     devServer: {
         compress: true,
         port: 8086,
-        hot: true
+        hot: true,
     },
+    devtool: 'source-map'
 };

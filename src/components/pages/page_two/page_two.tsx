@@ -7,6 +7,7 @@ import {
     MDBBtn, MDBCard, MDBRipple, MDBIcon, MDBCardTitle, MDBCardText, MDBCardImage, MDBCardBody,
     MDBInput
 } from 'mdb-react-ui-kit';
+import IconButton from "../ui/utils/icon-button";
 
 const logger = Logger.create('Counter');
 
@@ -122,6 +123,7 @@ export default class Page_two extends React.PureComponent<{}, {}> {
                     </div>
                 </div>
 
+                <IconButton icon={'download'}/>
             </div>
         );
     }

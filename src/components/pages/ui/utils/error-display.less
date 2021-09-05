@@ -1,0 +1,34 @@
+@interautomation-red: red;
+@font-color-bright: blue;
+
+.container {
+    background-color: @interautomation-red;
+    color: @font-color-bright;
+    overflow: auto;
+    padding: 10px;
+    border: 5px @font-color-bright solid;
+}
+
+.title {
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.stack {
+    font-family: monospace;
+    white-space: pre-line;
+}
+
+.header {
+    display: flex;
+    flex-direction: row;
+
+    .icon {
+        padding-right: 10px;
+        padding-top: 5px;
+    }
+
+    .text {
+        flex: 1;
+    }
+}
