@@ -45,14 +45,15 @@ const IconButton: React.StatelessComponent<IconButtonProps> = (props) => {
     }
 
     if (props.title) {
-        return (
-            <TooltipContainer
-                wrapper={<div className={style.tooltip} />}
-                text={props.title}
-            >
-                {renderIconButton()}
-            </TooltipContainer>
-        );
+        render(renderIconButton());
+        // return (
+        //     <TooltipContainer
+        //         wrapper={<div className={style.tooltip} />}
+        //         text={props.title}
+        //     >
+        //
+        //     </TooltipContainer>
+        // );
     } else {
         return renderIconButton();
     }
