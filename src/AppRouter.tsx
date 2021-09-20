@@ -10,12 +10,12 @@ import Page_three from "./components/pages/page_three/page_three";
 
 import { Provider } from 'inversify-react';
 import { container } from './inversify.config';
-import './App.less';
+import './AppRouter.less';
 import {HashRouter} from 'react-router-dom';
 import routes from './routes';
 import AppView from "./components/pages/AppView/app-view";
 
-class App extends React.Component {
+class AppRouter extends React.Component {
 
     render() {
         // return (
@@ -54,4 +54,4 @@ class App extends React.Component {
     }
 }
 
-export default App;
+export default AppRouter;
