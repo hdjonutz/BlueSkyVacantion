@@ -16,5 +16,3 @@ export class CounterService {
         return Observable.of('test text Observable');
     }
 }
-
-

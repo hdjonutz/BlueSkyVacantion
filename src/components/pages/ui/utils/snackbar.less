@@ -1,0 +1,45 @@
+@import '../../../../assets/css/colors_global.less';
+
+@snackbar-height: 42px;
+@snackbar-opacity: 90%;
+
+.snackbar {
+    position: absolute;
+    left: 0px;
+    bottom: 0px;
+    width: 100%;
+    height: 0px;
+    transition: height 0.3s ease-out;
+    background: fade(black, @snackbar-opacity);
+    color: @font-color-bright;
+    overflow: hidden;
+    display: flex;
+    font-family: Arial, sans-serif;
+    cursor: pointer;
+    z-index: 1000000;
+
+    >div {
+        padding-left: 32px;
+        flex: 1;
+        align-self: center;
+    }
+
+    >button {
+        border: none;
+        background: none;
+        color: white;
+        margin-right: 32px
+    }
+
+    >button:hover {
+        color: @interautomation-medium-blue;
+    }
+
+    &.visible {
+        height: @snackbar-height;
+    }
+
+    &.error {
+        background: fade(@interautomation-red, @snackbar-opacity);
+    }
+}

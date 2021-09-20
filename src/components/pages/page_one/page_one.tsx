@@ -4,13 +4,16 @@ import {CounterService} from '../../../services/CounterService';
 import { resolve } from 'inversify-react';
 import {Logger} from '../../../util/logger';
 import ReactTooltip from 'react-tooltip';
+import {AuthenticationService} from '../../../services/authentication_service';
 
 const logger = Logger.create('Counter');
 
 
 export default class Page_one extends React.PureComponent<{}, {}> {
 
-    @resolve(CounterService) private counterService: CounterService;
+    @resolve(CounterService)        private counterService: CounterService;
+    @resolve(AuthenticationService) private authenticationService: AuthenticationService;
+
 
     // @lazyInject("counterService") private readonly counterService: ICounterService<string>;
 
@@ -24,6 +27,11 @@ export default class Page_one extends React.PureComponent<{}, {}> {
         this.counterService.getData().subscribe((res) => {
             console.log("RESULT: ", res);
         });
+        this.authenticationService.login('daniel', 'pass')
+            .subscribe((res) => {
+                debugger;
+                console.log(res);
+            });
     }
 
     componentDidUpdate(prevProps, prevState) {

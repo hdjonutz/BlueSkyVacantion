@@ -15,7 +15,7 @@ const info = ApplicationVersion();
 import 'mdb-react-ui-kit/dist/css/mdb.min.css';
 
 import { Provider } from "inversify-react";
-import { container } from "./inversify.config";
+import { container } from "./services/inversify.config";
 
 import AppRouter from './AppRouter';
 

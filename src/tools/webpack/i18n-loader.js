@@ -2,8 +2,9 @@
  * Webpack loader for *.icu.yaml files. Parses the yaml files, the icu patterns and precompiles them.
  */
 
-var yaml = require('js-yaml');
-var parser = require('intl-messageformat-parser');
+const yaml = require('js-yaml');
+const fs   = require('fs');
+const parser = require('intl-messageformat-parser');
 
 module.exports = function(source) {
     var data = source;
@@ -11,7 +12,7 @@ module.exports = function(source) {
     var input = null;
 
     try {
-        input = yaml.safeLoad(data);
+        input = yaml.load(data);
     } catch (e) {
         console.error('Error while parsing yaml: ' + e);
         throw new Error('Error while parsing yaml: ' + e);
