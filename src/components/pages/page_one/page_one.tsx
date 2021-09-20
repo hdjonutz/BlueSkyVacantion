@@ -1,6 +1,8 @@
 import * as React from 'react';
-import { CounterService } from '../../../services/CounterService';
+import 'reflect-metadata';
+import {CounterService, ICounterService} from '../../../services/CounterService';
 import { resolve } from 'inversify-react';
+// import { lazyInject } from './../../../inversify.config';
 import {Logger} from '../../../util/logger';
 import ReactTooltip from 'react-tooltip';
 
@@ -9,19 +11,26 @@ const logger = Logger.create('Counter');
 
 export default class Page_one extends React.PureComponent<{}, {}> {
 
-    // @resolve(CounterService)
-    // private _counterService: CounterService;
+    @resolve(CounterService) private _counterService: CounterService;
+
+    // @lazyInject("counterService") private readonly counterService: ICounterService<string>;
 
     constructor(props: any) {
         super(props);
         this.state = {};
+    }
 
+    componentDidMount() {
+        logger.info('Example of logger');
+        this._counterService.getData().subscribe((res) => {
+            console.log("RESULT: ", res);
+        });
     }
 
     componentDidUpdate(prevProps, prevState) {
-        logger.info('Example of logger');
+        // logger.info('Example of logger');
         // this._counterService.getData().subscribe((res) => {
-        //     console.log(res);
+        //     console.log("RESULT: ", res);
         // });
     }
 

@@ -4,10 +4,11 @@ import './i18n/locales.ts';
 
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import { Provider } from 'react-redux';
-import { ConnectedRouter } from 'connected-react-router';
-import { createBrowserHistory } from 'history';
-import configureStore from './store/configureStore';
+import "reflect-metadata";
+// import { Provider } from 'react-redux';
+// import { ConnectedRouter } from 'connected-react-router';
+// import { createBrowserHistory } from 'history';
+// import configureStore from './store/configureStore';
 
 import * as moment from 'moment';
 moment.locale(environment.locale);
@@ -17,16 +18,19 @@ const info = ApplicationVersion();
 
 import 'mdb-react-ui-kit/dist/css/mdb.min.css';
 
+import { Provider } from "inversify-react";
+import { container } from "./inversify.config";
+
 import App from './App';
 
 // Create browser history to use in the Redux store
-const baseUrl = window.location.pathname;
-const history = createBrowserHistory({
-    basename: baseUrl ? baseUrl : '/BlueSkyVacantion/dist/',
-});
+// const baseUrl = window.location.pathname;
+// const history = createBrowserHistory({
+//     basename: baseUrl ? baseUrl : '/BlueSkyVacantion/dist/',
+// });
 
 // Get the application-wide store instance, prepopulating with state from the server where available.
-const store = configureStore(history);
+// const store = configureStore(history);
 
 console.log(`%c🛳 BlueSkyVacantion %c\n name: ${info.name} \n version: ${info.id} \n date: ${info.build} \n branch: ${info.branch} %c\n Copyright © Daniel-Ionut Hariga`,
     'font-size: 40px; color: #2196f3; font-family: "Segoe UI Symbol";',
@@ -43,4 +47,10 @@ console.log(`%c🛳 BlueSkyVacantion %c\n name: ${info.name} \n version: ${info.
 
 import {AppContainer} from 'react-hot-loader';
 
-ReactDOM.render(<AppContainer><App /></AppContainer>, document.getElementById('root'));
+ReactDOM.render(
+    <Provider container={container}>
+        <AppContainer>
+            <App />
+        </AppContainer>
+    </Provider>,
+    document.getElementById('root'));

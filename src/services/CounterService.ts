@@ -2,6 +2,10 @@ import 'reflect-metadata';
 import { injectable } from 'inversify';
 import {Observable} from 'rxjs';
 
+export interface ICounterService<T> {
+    getData(): T;
+}
+
 @injectable()
 export class CounterService {
     public count: number = 0;
@@ -12,3 +16,5 @@ export class CounterService {
         return Observable.of('test text Observable');
     }
 }
+
+
