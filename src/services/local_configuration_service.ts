@@ -1,22 +1,29 @@
-import {Observable} from 'rxjs/Observable';
-import {provideSingleton} from './inversify.config';
+import {Observable} from 'rxjs';
+import {injectable} from "inversify";
+import {getLocalConfig} from "../assets/config";
 
 export class LocalConfiguration {
     constructor(public readonly apiServerProtocol: string,
-                public readonly apiServerHostname: string, public readonly apiServerPort: number,
-                public readonly apiServerApiBase: string, public readonly enableEventPush: boolean,
-                public readonly eventsServerViaProxy: boolean, public readonly eventsServerProtocol: string,
-                public readonly eventsServerHost: string, public readonly eventsServerPort: number,
-                public readonly eventsServerApiBase: string, public readonly appType: 'WEB'|'INFO',
-                public readonly defaultUsername: string, public readonly defaultPassword: string) { }
+                public readonly apiServerHostname: string,
+                public readonly apiServerPort: number,
+                public readonly apiServerApiBase: string,
+                public readonly enableEventPush: boolean,
+                public readonly eventsServerViaProxy: boolean,
+                public readonly eventsServerProtocol: string,
+                public readonly eventsServerHost: string,
+                public readonly eventsServerPort: number,
+                public readonly eventsServerApiBase: string,
+                public readonly appType: 'WEB'|'INFO',
+                public readonly defaultUsername: string,
+                public readonly defaultPassword: string) { }
 }
 
-@provideSingleton(LocalConfigurationService)
+@injectable()
 export class LocalConfigurationService {
     private constructor() {}
 
     get(): Observable<LocalConfiguration> {
-        const configLocal = InLine.ConfigLocal;
+        const configLocal = getLocalConfig();
         const currentProtocol = window.location.protocol.replace(/:$/, '');
 
         // Host und Port automatisch auf Basis der aktuellen origin bestimmen, falls diese nicht Konfiguriert sind.
@@ -24,10 +31,10 @@ export class LocalConfigurationService {
         // die Adresszeile eingibt, das die API dann unter http://192.168.126:8080/InLine3Api/api.php liegt.
         const apiServerProtocol = configLocal.protocol || (currentProtocol === 'file' ? 'http' : currentProtocol);
         const apiServerHost = configLocal.host || window.location.hostname;
-        const apiServerPort = configLocal.Port || (window.location.port === ''
+        const apiServerPort = configLocal.port || (window.location.port === ''
                 ? (apiServerProtocol === 'https' ? 443 : 80)
-                : window.location.port);
-        const apiServerApiBase = (configLocal.ApiBase || '/InLine/api.php').replace(/\?$/, '');
+                : +window.location.port);
+        const apiServerApiBase = (configLocal.apiBase || '/InLine/api.php').replace(/\?$/, '');
 
         // Es gibt zwei mögliche Konfigurationen. Entweder ist der EventsServer eigenständig (was meistens der Fall ist)
         // und hat einen eigenen Port ist aber auf der selben Host. Oder der EventsServer wird über den Apache via Proxy

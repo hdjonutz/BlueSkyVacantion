@@ -5,6 +5,11 @@ import { resolve } from 'inversify-react';
 import {Logger} from '../../../util/logger';
 import ReactTooltip from 'react-tooltip';
 import {AuthenticationService} from '../../../services/authentication_service';
+import {LocalConfigurationService} from "../../../services/local_configuration_service";
+import {ApiService} from "../../../services/api_service";
+import {VersionService} from "../../../services/version_service";
+import {HttpClient} from "../../../services/http_client";
+import {SnackbarService} from "../../../services/snackbar_service";
 
 const logger = Logger.create('Counter');
 
@@ -13,6 +18,12 @@ export default class Page_one extends React.PureComponent<{}, {}> {
 
     @resolve(CounterService)        private counterService: CounterService;
     @resolve(AuthenticationService) private authenticationService: AuthenticationService;
+
+    @resolve(ApiService)                private ApiService: ApiService;
+    @resolve(VersionService)            private VersionService: VersionService;
+    @resolve(HttpClient)                private HttpClient: HttpClient;
+    @resolve(SnackbarService)           private SnackbarService: SnackbarService;
+    @resolve(LocalConfigurationService) private LocalConfigurationService: LocalConfigurationService;
 
 
     // @lazyInject("counterService") private readonly counterService: ICounterService<string>;
@@ -27,6 +38,15 @@ export default class Page_one extends React.PureComponent<{}, {}> {
         this.counterService.getData().subscribe((res) => {
             console.log("RESULT: ", res);
         });
+
+        this.LocalConfigurationService.get().subscribe(() => {
+            debugger;
+        });
+
+
+        console.log(this);
+        debugger;
+
         this.authenticationService.login('daniel', 'pass')
             .subscribe((res) => {
                 debugger;

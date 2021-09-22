@@ -1,4 +1,4 @@
-import {provideSingleton} from './inversify.config';
+import {injectable} from "inversify";
 import '../version';
 import {Observable} from 'rxjs';
 
@@ -14,7 +14,7 @@ export class VersionInfo {
                 public readonly branch: string, public readonly appVersion?: string) { }
 }
 
-@provideSingleton(VersionService)
+@injectable()
 export class VersionService {
     private constructor() {
         // TODO: Later move the update checker and reload functionality here... but only if not mobile!

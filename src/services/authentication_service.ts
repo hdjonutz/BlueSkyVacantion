@@ -1,9 +1,13 @@
+import 'reflect-metadata';
 import {Observable, ReplaySubject} from 'rxjs';
 import {ApiService} from './api_service';
 import {Logger} from '../util/logger';
 import {KJUR, Token} from 'jsrsasign'
 import { resolve } from 'inversify-react';
 import {provideSingleton} from './inversify.config';
+import {injectable} from "inversify";
+import {VersionService} from "./version_service";
+import {lazyInject} from "./inversify.config";
 // import Cookie from 'tiny-cookie';
 
 const logger = Logger.create('AuthenticationService');
@@ -43,11 +47,14 @@ export class Authentication implements PermissionSet {
 /**
  * Service to control and access the current authentication to access the server services.
  */
-@provideSingleton(AuthenticationService)
+
+@injectable()
 export class AuthenticationService {
     private readonly authenticationSubject: ReplaySubject<Authentication> = new ReplaySubject<Authentication>(1);
 
-    @resolve(ApiService) private apiService: ApiService;
+    @resolve(ApiService)             private apiService: ApiService;
+    @resolve(VersionService)         private versionService: VersionService;
+
 
     private constructor() {
         window.addEventListener('storage', (e) => {
@@ -170,6 +177,11 @@ export class AuthenticationService {
      * @return {any}
      */
     login(username: string, password: string): Observable<Authentication> {
+        this.versionService.getCurrentVersion().subscribe((res) => {
+            console.log(res);
+            debugger;
+        })
+
         return this.apiService
             .post('getAuthenticationUser', {user: username, pass: password})
             .switchMap((response) => {

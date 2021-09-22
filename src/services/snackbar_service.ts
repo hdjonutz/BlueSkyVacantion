@@ -3,7 +3,7 @@
  * do overlay a short notification text.
  */
 import style from '../components/pages/ui/utils/snackbar.less';
-import {provideSingleton} from './inversify.config';
+import {injectable} from "inversify";
 
 const DISPLAY_DURATION = 10000;
 const SHOW_ANIMATION_DURATION = 300;
@@ -89,7 +89,7 @@ class Snack {
     }
 }
 
-@provideSingleton(SnackbarService)
+@injectable()
 export class SnackbarService {
     private currentSnack: Snack = null;
     private nextSnack: Snack = null;
