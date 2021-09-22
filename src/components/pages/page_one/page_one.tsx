@@ -48,7 +48,7 @@ export default class Page_one extends React.PureComponent<{}, {}> {
         debugger;
 
         this.authenticationService.login('daniel', 'pass')
-            .subscribe((res) => {
+            .subscribe((res: any) => {
                 debugger;
                 console.log(res);
             });

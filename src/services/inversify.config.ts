@@ -14,16 +14,15 @@ import getDecorators from "inversify-inject-decorators";
 const container: Container = new Container();
 
     container.bind(CounterService).toSelf().inSingletonScope();
-
     container.bind(AuthenticationService).toSelf().inSingletonScope();
-
     container.bind(HttpClient).toSelf().inSingletonScope();
-    container.bind(ApiService).toSelf().inSingletonScope();
     container.bind(SnackbarService).toSelf().inSingletonScope();
     container.bind(LocalConfigurationService).toSelf().inSingletonScope();
 
-
-    container.bind(VersionService).to(VersionService);
+    container.bind<ApiService>('ApiService').to(ApiService);
+    container.bind<LocalConfigurationService>('LocalConfigurationService').to(LocalConfigurationService);
+    // container.bind(ApiService).toSelf().inSingletonScope();
+    container.bind(VersionService).toSelf().inSingletonScope();
 
 export { container };
 

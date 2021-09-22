@@ -3,9 +3,9 @@ import {Observable, ReplaySubject} from 'rxjs';
 import {ApiService} from './api_service';
 import {Logger} from '../util/logger';
 import {KJUR, Token} from 'jsrsasign'
-import { resolve } from 'inversify-react';
+import { resolve, useInjection } from 'inversify-react';
 import {provideSingleton} from './inversify.config';
-import {injectable} from "inversify";
+import {Container, injectable, inject} from "inversify";
 import {VersionService} from "./version_service";
 import {lazyInject} from "./inversify.config";
 // import Cookie from 'tiny-cookie';
@@ -52,11 +52,16 @@ export class Authentication implements PermissionSet {
 export class AuthenticationService {
     private readonly authenticationSubject: ReplaySubject<Authentication> = new ReplaySubject<Authentication>(1);
 
-    @resolve(ApiService)             private apiService: ApiService;
-    @resolve(VersionService)         private versionService: VersionService;
+    // @resolve(ApiService)             private apiService: ApiService;
+    // @resolve(VersionService)         private versionService: VersionService;
+    
+    private apiService: ApiService;
 
-
-    private constructor() {
+    private constructor(@inject('ApiService') apiService: ApiService) {
+        this.apiService = apiService;
+        
+        // https://www.youtube.com/watch?v=nk3wUKxVDAg&ab_channel=ProgrammingwithKarthik
+        
         window.addEventListener('storage', (e) => {
             if (e.key === 'accessToken') {
                 this.isAuthenticated().first().subscribe((isAuthenticated) => {
@@ -71,9 +76,10 @@ export class AuthenticationService {
             if (e.key === 'logout' && localStorage.getItem('logout') === 'true') {
                 logger.info('Received logout event! FOM ANOTHER OR THE SAME TAB!!!');
                 this.logout().subscribe(() => {
-                    if (InLine.Login) {
+                    debugger;
+                    /*if (InLine.Login) {
                         InLine.Login.showLoginView();
-                    }
+                    }*/
                 })
             }
         });
@@ -176,11 +182,11 @@ export class AuthenticationService {
      * @param password
      * @return {any}
      */
-    login(username: string, password: string): Observable<Authentication> {
-        this.versionService.getCurrentVersion().subscribe((res) => {
-            console.log(res);
-            debugger;
-        })
+    login(username: string, password: string): any /*Observable<Authentication>*/ {
+        
+        console.log(this);
+        debugger;
+
 
         return this.apiService
             .post('getAuthenticationUser', {user: username, pass: password})

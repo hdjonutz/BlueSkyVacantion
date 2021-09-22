@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import * as url from 'url';
 import ExtendableError from 'extendable-error-class';
 import { resolve } from 'inversify-react';
@@ -11,7 +12,8 @@ import {i18n} from '../i18n/i18n';
 import {ApiServiceState, ApiServiceStatus} from './api_service_status';
 import {showApiErrorDialog} from '../components/common/api-error-dialog';
 import {SnackbarService, SnackbarStyle} from './snackbar_service';
-import {injectable} from "inversify";
+import {inject, injectable} from "inversify";
+import { isThisTypeNode } from 'typescript';
 
 const logger = Logger.create('ApiService', LogLevel.Info);
 
@@ -46,9 +48,10 @@ export class ApiError extends ExtendableError {
 @injectable()
 export class ApiService {
 
-    @resolve(LocalConfigurationService) private localConfigurationService: LocalConfigurationService;
+    private localConfigurationService: LocalConfigurationService;
 
-    private constructor() {
+    private constructor(@inject('LocalConfigurationService') localConfigurationService: LocalConfigurationService) {
+        this.localConfigurationService = localConfigurationService;
         this.localConfigurationService.get().subscribe((result) => {
             console.log(result);
             debugger;
