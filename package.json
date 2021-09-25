@@ -10,7 +10,7 @@
     "start-chrome": "webpack serve --open 'Chrome'",
     "build-prod": "webpack --mode production",
     "start-dev": "webpack-dev-server --mode development --hot --progress --color --port 3000 --open",
-    "build:m-dev:watch": "webpack --watch --config webpack.config.js --env web",
+    "build:m-dev:watch": "webpack --watch --config webpack.config.js --env web --mode development",
     "watch": "webpack --watch --config webpack.config.js",
     "wath-history": "webpack serve --mode development --hot --history-api-fallback"
   },
