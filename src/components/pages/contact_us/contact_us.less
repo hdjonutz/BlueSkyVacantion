@@ -1,0 +1,66 @@
+.container{
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    margin-top: 50px;
+}
+.title{
+    font-weight: 500;
+    line-height: 1.2;
+    margin-top: .5rem;
+    margin-bottom: .5rem;
+    margin: 0 auto;
+}
+.caption{
+    width: 70%;
+    margin: 0 auto;
+}
+
+
+
+.formGroup{
+    display: flex;
+    flex-direction: row;
+    margin: 0 auto;
+    width: 70%;
+    .column{
+        display: flex;
+        flex-direction: column;
+        padding: 5px;
+        .row{
+            position: relative;
+            padding: 5px;
+            :global{
+                .form-outline{
+                    input{
+                        padding-left: 40px;
+                    }
+                    label{
+                        margin-left: 30px;
+                    }
+                    .form-control~.form-notch .form-notch-leading {
+                        width: 2.5rem;
+                    }
+                }
+            }
+
+            display: flex;
+            flex-direction: row;
+            .icon{
+                display: flex;
+                padding: 6px 1px;
+                border-right: 1px solid #d6d6d6;
+                flex: 1;
+                height: 36px;
+                width: 37px;
+                position: absolute;
+                svg{
+                    flex: 1;
+                }
+            }
+            input{
+
+            }
+        }
+    }
+}

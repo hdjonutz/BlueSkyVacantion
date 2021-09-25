@@ -2,6 +2,7 @@ import {MenuGroup} from './components/pages/ui/navigation/routes';
 import Page_one from './components/pages/page_one/page_one';
 import Page_two from './components/pages/page_two/page_two';
 import Page_theree from './components/pages/page_three/page_three';
+import ConatctUs from './components/pages/contact_us/contact_us_page';
 
 /**
  * Routen-Definition der Anwendung.
@@ -16,7 +17,7 @@ const routes: ReadonlyArray<MenuGroup> = [
         defaultPath: '/online/page1',
         items: [
             {
-                title: 'Übersicht Online-Daten Page1',
+                title: 'Page1',
                 path: '/online/page1',
                 icon: 'dashboard_online',
                 licenses: (l) => {return true;},
@@ -40,12 +41,28 @@ const routes: ReadonlyArray<MenuGroup> = [
         defaultPath: '/planung/page3',
         items: [
             {
-                title: 'Übersicht Planung Page3',
+                title: 'Page3',
                 path: '/planung/page3',
                 icon: 'dashboard_planung',
                 licenses: (l) => l.hasModule('inline3.planung.fahrzeugeinsatzplanung') || l.hasModule('inline3.planung.dispo'),
                 permissions: (p) => p.hasPermission('plan'),
                 component: Page_theree,
+            },
+        ]
+    },
+    {
+        titleI18n: 'ContactUs',
+        icon: 'ContactUs_icon',
+        path: '/contactUs',
+        defaultPath: '/contactUs/contact_us',
+        items: [
+            {
+                title: 'ContactUs',
+                path: '/contactUs/contact_us',
+                icon: 'ContactUs_icon',
+                licenses: (l) => l.hasModule('inline3.planung.fahrzeugeinsatzplanung') || l.hasModule('inline3.planung.dispo'),
+                permissions: (p) => p.hasPermission('plan'),
+                component: ConatctUs,
             },
         ]
     },

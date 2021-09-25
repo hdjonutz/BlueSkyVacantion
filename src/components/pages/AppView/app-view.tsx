@@ -9,8 +9,10 @@ import {ChildRoute, MenuGroup, MenuItem} from '../ui/navigation/routes';
 import Page_one from "../page_one/page_one";
 import Page_two from "../page_two/page_two";
 import Page_three from "../page_three/page_three";
+import LoginPage from "../login_page/login_page";
 import {NavLink} from 'react-router-dom';
 import * as classNames from 'classnames';
+import { MDBBtn } from 'mdb-react-ui-kit';
 
 interface AppViewProps {
     routes: ReadonlyArray<MenuGroup>;
@@ -102,14 +104,18 @@ export default class AppView extends React.Component<AppViewProps, AppViewState>
         });
     }
 
-    renderGroups(groups: ReadonlyArray<MenuGroup>): ReadonlyArray<React.ReactElement<any>> {
-        return groups.map((g) => {
-            return g.items.map((item) =>
+    renderGroups(groups: ReadonlyArray<MenuGroup>): ReadonlyArray<JSX.Element<any>> {
+        // debugger;
+        return groups.map((g) => g.items.map((item) =>
                 <NavLink className={classNames(style.link)}
                          activeClassName={style.activeRoute}
-                         to={item.path}>{item.title}{item.titleI18n}</NavLink>
+                         to={item.path}>
+                             <MDBBtn outline className='mx-2' color='secondary'>
+                                {item.title}{item.titleI18n}
+                            </MDBBtn>
+                         </NavLink>
             )
-        });
+        );
     }
 
     renderItems(items: ReadonlyArray<MenuItem>): ReadonlyArray<React.ReactElement<any>> {
@@ -233,13 +239,14 @@ export default class AppView extends React.Component<AppViewProps, AppViewState>
         return (
             <React.Fragment>
                 <div className={style.layout}>
-                    {this.renderGroups(gruppen)}
+                    <div style={{position: 'absolute', top:'20px', }}>{this.renderGroups(gruppen)}</div>
                     <div className={style.main}>
                         {this.state.menuRoutes && <Switch>
                             <Route exact path='/' component={HomePage} />
                             <Route exact path='/page1' component={Page_one} />
                             <Route exact path='/page2' component={Page_two} />
                             <Route exact path='/page3' component={Page_three} />
+                            <Route exact path='/login' component={LoginPage} />
                             {/* <Route path='/slave/' component={SlaveHomePage} /> */}
 
                             {this.renderRoutes(this.state.menuRoutes.groups)}

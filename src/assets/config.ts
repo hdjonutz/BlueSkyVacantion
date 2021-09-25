@@ -13,10 +13,10 @@ interface LocalConfig {
 }
 export function getLocalConfig(): LocalConfig {
     const configLocal = {
-        host: '192.168.1.246',
-        protocol: 'https',
-        apiBase: '/InLine/api.php',
-        port: 80,
+        host: '127.0.0.1',
+        protocol: 'http',
+        apiBase: '/blueSkyServer/api.php',
+        port: 81,
         eventsServerViaProxy: true,
         defaultUsername: 'service',
         defaultPassword: 'injm314',
