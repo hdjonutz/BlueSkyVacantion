@@ -15,6 +15,10 @@ DateTimePicker
 https://sapui5.hana.ondemand.com/#/entity/sap.m.DateTimePicker/sample/sap.m.sample.DateTimePicker
 https://experience.sap.com/fiori-design-web/date-picker/
 
+site:           https://www.elinext.com/
+mdbootstrap:    https://mdbootstrap.com/docs/standard/layout/flexbox/
+icons:          https://mdbootstrap.com/docs/standard/content-styles/icons/
+
 01.09.2021
 connected-react-router -> routing and store and container;
 https://github.com/supasate/connected-react-router/blob/master/examples/basic/package.json
