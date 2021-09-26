@@ -10,11 +10,12 @@ import {ApiService} from "../../../services/api_service";
 import {VersionService} from "../../../services/version_service";
 import {HttpClient} from "../../../services/http_client";
 import {SnackbarService} from "../../../services/snackbar_service";
+import classNames from 'classnames';
+import style from './page_one.less';
 
-const logger = Logger.create('Counter');
 
 
-export default class Page_one extends React.PureComponent<{}, {}> {
+export default class Page_one extends React.PureComponent<{}, {selected: number}> {
 
     @resolve(CounterService)        private counterService: CounterService;
     @resolve(AuthenticationService) private authenticationService: AuthenticationService;
@@ -30,26 +31,17 @@ export default class Page_one extends React.PureComponent<{}, {}> {
 
     constructor(props: any) {
         super(props);
-        this.state = {};
+        this.state = {
+            selected: 0,
+        };
     }
 
     componentDidMount() {
-        logger.info('Example of logger');
-        this.counterService.getData().subscribe((res) => {
-            console.log("RESULT: ", res);
-        });
-
-        this.LocalConfigurationService.get().subscribe(() => {
-            debugger;
-        });
-
-
-        console.log(this);
-        debugger;
+        // console.log(this);
 
         this.authenticationService.login('daniel', 'pass')
             .subscribe((res: any) => {
-                debugger;
+                // debugger;
                 console.log(res);
             });
     }
@@ -60,14 +52,14 @@ export default class Page_one extends React.PureComponent<{}, {}> {
         //     console.log("RESULT: ", res);
         // });
     }
-
     public render() {
         return (
             <React.Fragment>
                 <div style={{display: 'flex', flex: 1}}>
-                    Page_one
+
+                    {/*
                     <p data-tip="hello world here is a tooltip">Tooltip</p>
-                    <ReactTooltip />
+                    <ReactTooltip /> */}
                 </div>
             </React.Fragment>
         );

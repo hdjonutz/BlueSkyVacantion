@@ -1,51 +1,26 @@
-.container{
-    display: flex;
-    flex: 1;
-    flex-direction: column;
-    margin-top: 50px;
-}
-.title{
-    font-weight: 500;
-    line-height: 1.2;
-    margin-top: .5rem;
-    margin-bottom: .5rem;
-    margin: 0 auto;
-}
-.caption{
-    width: 70%;
-    margin: 0 auto;
+:global{
+    .bg-image{
+        height: 100vh;
+        position: unset !important;
+    }
 }
 
-
-
-.formGroup{
-    display: flex;
-    flex-direction: row;
-    margin: 0 auto;
-    width: 70%;
-    .column{
-        display: flex;
-        flex-direction: column;
-        padding: 5px;
-        .row{
-            position: relative;
-            padding: 5px;
-            :global{
-                .form-outline{
-                    input{
-                        padding-left: 40px;
-                    }
-                    label{
-                        margin-left: 30px;
-                    }
-                    .form-control~.form-notch .form-notch-leading {
-                        width: 2.5rem;
-                    }
+:global{
+    .row{
+        .col-md, .col-md-4, .col-lg-4{
+            padding: 0.3em !important;
+            .form-outline{
+                input{
+                    padding-left: 40px;
+                }
+                label{
+                    margin-left: 30px;
+                    padding-top: 0.15em;
+                }
+                .form-control~.form-notch .form-notch-leading {
+                    width: 2.5rem;
                 }
             }
-
-            display: flex;
-            flex-direction: row;
             .icon{
                 display: flex;
                 padding: 6px 1px;
@@ -58,9 +33,16 @@
                     flex: 1;
                 }
             }
-            input{
-
-            }
         }
     }
 }
+
+/*
+.colRow{
+    border: 1px solid rgb(15, 19, 236);   
+}
+.colMd{
+    background-color: rgb(31, 118, 231);
+    border: 1px solid rgb(8, 106, 235);
+}
+*/

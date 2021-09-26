@@ -55,65 +55,71 @@ export default class ConatctUs extends React.PureComponent<{}, {}> {
     public render() {
         return (
             <React.Fragment>
-                <div className={style.container}>
-                
-                    <h1 className={style.title}>Contact Us</h1>
-                    <div className={style.caption}>Feel free to contact us at any time that you find convenient. You will receive a response in the shortest time possible. If you have your innovative ideas about developing or implementing a software project, Elinext will gladly provide you with a team of seasoned professionals at a reasonable rate.</div>
+                <div className={classNames('container d-flex justify-content-center flex-column bg-image', style.debugContainer)}
+                    style={{backgroundImage:'url(assets/images/contact_us_world_3d.jpg)'}} >
 
-
-                    <div className={style.formGroup}>
-                        <div className={style.column}>
-                            <div className={style.row}>
-                                <div className={style.icon}><Icon name={'user'}/></div>
-                                <MDBInput label='First Name' id='formFirstNmae' type='text' onChange={(ev: any) => this.onChangeInput(ev)}/>
-                            </div>
-                            <div className={style.row}>
-                                <div className={style.icon}><Icon name={'envelope'}/></div>
-                                <MDBInput label='E-mail' id='formEnvelope' type='text' onChange={(ev: any) => this.onChangeInput(ev)}/>
-                            </div>
-                            <div className={style.row}>
-                                <div className={style.icon}><Icon name={'phone-alt'}/></div>
-                                <MDBInput label='Phone Number' id='formPhoneNumber' type='text' onChange={(ev: any) => this.onChangeInput(ev)}/>
-                            </div>
-                        </div>
-                        <div className={style.column}>
-                            <div className={style.row}>
-                                <div className={style.icon}><Icon name={'user'}/></div>
-                                <MDBInput label='Last Number' id='formLastName' type='text' onChange={(ev: any) => this.onChangeInput(ev)}/>
-                            </div>
-                            <div className={style.row}>
-                                <div className={style.icon}><Icon name={'phone-alt'}/></div>
-                                <MDBInput label='Company' id='formCompany' type='text' onChange={(ev: any) => this.onChangeInput(ev)}/>
-                            </div>
-                            <div className={style.row}>
-                                <div className={style.icon}><Icon name={'pencil-alt'}/></div>
-                                <MDBInput label='Message' type="textarea" id='formPhoneNumber' onChange={(ev: any) => this.onChangeInput(ev)}/>
-                            </div>
-
+                    <div className={classNames('row', style.colRow)}>
+                        <div className={classNames('col-md-10 col-lg-10 offset-md-2 offset-lg-2', style.colMd)}>
+                            <h1 className={style.title}>Contact Us</h1>
                         </div>
                     </div>
-                    <div className={style.formGroup}>
-                        <div className={style.column}>
-                            <div className={style.row}>
-                                <Icon name={'paperclip'}/> Attach File
-                            </div>
-                            <div className={style.row}>
-                                <div>
-                                    <div>
-                                        <input type='checkbox' />
-                                    </div>
-                                    <div>
-                                        I agree with the use of my personal data and information by Elinext as it is said in the Privacy and Cookie Policy.
-                                    </div>               
-                                </div>
-                            </div>
-                            <div className={style.row}>
-                                <button type="button" className="btn btn-outline-primary" data-mdb-ripple-color="dark">
-                                <Icon name={'paper-plane'}/>Send Message</button>
-                            </div>
+                    <div className={classNames('row', style.colRow)}>
+                        <div className={classNames('col-md-10 col-lg-10 offset-md-2 offset-lg-2', style.colMd)}>
+                            Feel free to contact us at any time that you find convenient. You will receive a response in the shortest time possible. If you have your innovative ideas about developing or implementing a software project, Elinext will gladly provide you with a team of seasoned professionals at a reasonable rate.
                         </div>
                     </div>
-            
+
+                    <div className={classNames('row', style.colRow)}>
+                        <div className={classNames('col-md-4 col-lg-4 offset-md-2 offset-lg-2', style.colMd)}>
+                            <div className={'icon'}><Icon name={'user'}/></div>
+                            <MDBInput label='First Name' id='formFirstNmae' type='text' onChange={(ev: any) => this.onChangeInput(ev)}/>
+                        </div>
+                        <div className={classNames('col-md-4 col-lg-4', style.colMd)}>
+                            <div className={'icon'}><Icon name={'user'}/></div>
+                            <MDBInput label='Last Number' id='formLastName' type='text' onChange={(ev: any) => this.onChangeInput(ev)}/>
+                        </div>
+                    </div>
+
+                    <div className={classNames('row', style.colRow)}>
+                        <div className={classNames('col-md-4 col-lg-4 offset-md-2 offset-lg-2', style.colMd)}>
+                            <div className={'icon'}><Icon name={'envelope'}/></div>
+                            <MDBInput label='E-mail' id='formEnvelope' type='text' onChange={(ev: any) => this.onChangeInput(ev)}/>
+                        </div>
+                        <div className={classNames('col-md-4 col-lg-4', style.colMd)}>
+                            <div className={'icon'}><Icon name={'phone-alt'}/></div>
+                            <MDBInput label='Company Name' id='formPhoneNumber' type='text' onChange={(ev: any) => this.onChangeInput(ev)}/>
+                        </div>
+                    </div>
+
+                    <div className={classNames('row', style.colRow)}>
+                        <div className={classNames('col-md-4 col-lg-4 offset-md-2 offset-lg-2', style.colMd)}>
+                            <div className={'icon'}><Icon name={'phone-alt'}/></div>
+                            <MDBInput label='Phone Number' id='formPhoneNumber' type='text' onChange={(ev: any) => this.onChangeInput(ev)}/>
+                        </div>
+                        <div className={classNames('col-md-4 col-lg-4', style.colMd)}>
+                            <div className={'icon'}><Icon name={'pencil-alt'}/></div>
+                            <MDBInput label='Message' type="textarea" id='formPhoneNumber' onChange={(ev: any) => this.onChangeInput(ev)}/>
+                        </div>
+                    </div>
+
+                    <div className={classNames('row', style.colRow)}>                        
+                        <div className={classNames('col-md-2 offset-md-4', style.colMd)}>
+                            <Icon name={'paperclip'}/> Attach File
+                        </div>
+                        <div className={classNames('col-md-6', style.colMd)}>
+                            <input type='checkbox' />
+                            I agree with the use of my personal data and information by Elinext as it is said in the Privacy and Cookie Policy.
+                        </div>
+                    </div>
+
+                    <div className={classNames('row', style.colRow)}>
+                        <div className={classNames('col-md-12 offset-md-6', style.colMd)}>
+                            <button type="button" className="btn btn-outline-primary" data-mdb-ripple-color="dark">
+                                <Icon name={'paper-plane'}/>
+                                Send Message
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </React.Fragment>
         );
