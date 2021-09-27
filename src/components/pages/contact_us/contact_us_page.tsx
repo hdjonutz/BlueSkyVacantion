@@ -1,55 +1,68 @@
 import * as React from 'react';
 import 'reflect-metadata';
-import {CounterService} from '../../../services/CounterService';
 import { resolve } from 'inversify-react';
 import {Logger} from '../../../util/logger';
 import ReactTooltip from 'react-tooltip';
 import {AuthenticationService} from '../../../services/authentication_service';
 import {LocalConfigurationService} from "../../../services/local_configuration_service";
-import {ApiService} from "../../../services/api_service";
+import {encodePostBody, ApiService} from "../../../services/api_service";
 import {VersionService} from "../../../services/version_service";
-import {HttpClient} from "../../../services/http_client";
+import {AuthorizedApiService} from "../../../services/authorized_api_service";
 import {SnackbarService} from "../../../services/snackbar_service";
 import classNames from 'classnames';
 import style from './contact_us.less';
-import {MDBInput} from 'mdb-react-ui-kit';
+import {MDBBtn, MDBInput, MDBModal,
+    MDBModalDialog,
+    MDBModalContent,
+    MDBModalHeader,
+    MDBModalTitle,
+    MDBModalBody,
+    MDBModalFooter} from 'mdb-react-ui-kit';
+import {Observable} from 'rxjs';
 import Icon from '../ui/utils/icon';
 
-export default class ConatctUs extends React.PureComponent<{}, {}> {
+export default class ConatctUs extends React.PureComponent<{}, {displayModal: boolean}> {
+    
+    @resolve(AuthorizedApiService)      private authorizedApiService: AuthorizedApiService;
+    @resolve(ApiService)                private apiService: ApiService;
 
-    @resolve(CounterService)        private counterService: CounterService;
-    @resolve(AuthenticationService) private authenticationService: AuthenticationService;
-
-    @resolve(ApiService)                private ApiService: ApiService;
-    @resolve(VersionService)            private VersionService: VersionService;
-    @resolve(HttpClient)                private HttpClient: HttpClient;
-    @resolve(SnackbarService)           private SnackbarService: SnackbarService;
-    @resolve(LocalConfigurationService) private LocalConfigurationService: LocalConfigurationService;
+    private contentEmail: any = {};
 
     constructor(props: any) {
         super(props);
-        this.state = {};
-    }
-
-    componentDidMount() {
-        // this.authenticationService.login('daniel', 'pass')
-        //     .subscribe((res: any) => {
-        //         // debugger;
-        //         console.log(res);
-        //     });
-    }
-
-    componentDidUpdate(prevProps, prevState) {
-        // logger.info('Example of logger');
-        // this._counterService.getData().subscribe((res) => {
-        //     console.log("RESULT: ", res);
-        // });
+        this.state = {
+            displayModal: false
+        };
     }
 
     onChangeInput(ev: React.ReactEventHandler<InputEvent>): void {
         const target = ev.target;
         const value = target.value;
-        console.log(value);
+        const id = target.getAttribute('id');
+        this.contentEmail[id] = value;
+    }
+
+    onClickSubmitValues(): void{
+        // if (checkUS) {
+        //     this.formFirstName 
+        //     this.formLastName
+        //     this.formEmail
+        //     this.formMessage
+        // }
+        
+        const tmp = Object.keys(this.contentEmail).map((k) => ({key: k, value: this.contentEmail[k]}));
+        debugger;
+
+            const observable = Observable
+                .from([this.contentEmail].map((item: any) => encodePostBody(item)) as Array<string>)
+                .mergeMap((payload: string) => this.apiService
+                    .post<any>('sendEmail', {}, payload)
+                    .catch((error) => Observable.of(null))
+                ).subscribe((res: any) => {
+                    if (res.data.result) {
+                        this.setState({displayModal: true});
+                    }
+                });
     }
 
     public render() {
@@ -72,22 +85,28 @@ export default class ConatctUs extends React.PureComponent<{}, {}> {
                     <div className={classNames('row', style.colRow)}>
                         <div className={classNames('col-md-4 col-lg-4 offset-md-2 offset-lg-2', style.colMd)}>
                             <div className={'icon'}><Icon name={'user'}/></div>
-                            <MDBInput label='First Name' id='formFirstNmae' type='text' onChange={(ev: any) => this.onChangeInput(ev)}/>
+                            <MDBInput label='First Name' id='formFirstName' type='text' onChange={(ev: any) => this.onChangeInput(ev)} /*className={'is-valid was-validated'}*/ >
+                                <div className='valid-feedback'>Looks good. | Please enter First Name.</div>
+                            </MDBInput>
                         </div>
                         <div className={classNames('col-md-4 col-lg-4', style.colMd)}>
                             <div className={'icon'}><Icon name={'user'}/></div>
-                            <MDBInput label='Last Number' id='formLastName' type='text' onChange={(ev: any) => this.onChangeInput(ev)}/>
+                            <MDBInput label='Last Number' id='formLastName' type='text' onChange={(ev: any) => this.onChangeInput(ev)} className={'invalid was-validated'} >
+                                <div className='invalid-feedback'>Please enter Last Number.</div>
+                            </MDBInput>
                         </div>
                     </div>
 
                     <div className={classNames('row', style.colRow)}>
                         <div className={classNames('col-md-4 col-lg-4 offset-md-2 offset-lg-2', style.colMd)}>
                             <div className={'icon'}><Icon name={'envelope'}/></div>
-                            <MDBInput label='E-mail' id='formEnvelope' type='text' onChange={(ev: any) => this.onChangeInput(ev)}/>
+                            <MDBInput label='E-mail' id='formEmail' type='text' onChange={(ev: any) => this.onChangeInput(ev)} >
+                                <div className='invalid-feedback'>Please enter E-mail.</div>
+                            </MDBInput>
                         </div>
                         <div className={classNames('col-md-4 col-lg-4', style.colMd)}>
-                            <div className={'icon'}><Icon name={'phone-alt'}/></div>
-                            <MDBInput label='Company Name' id='formPhoneNumber' type='text' onChange={(ev: any) => this.onChangeInput(ev)}/>
+                            <div className={'icon'}><Icon name={'city'}/></div>
+                            <MDBInput label='Company Name' id='formCompanyName' type='text' onChange={(ev: any) => this.onChangeInput(ev)} />
                         </div>
                     </div>
 
@@ -98,7 +117,7 @@ export default class ConatctUs extends React.PureComponent<{}, {}> {
                         </div>
                         <div className={classNames('col-md-4 col-lg-4', style.colMd)}>
                             <div className={'icon'}><Icon name={'pencil-alt'}/></div>
-                            <MDBInput label='Message' type="textarea" id='formPhoneNumber' onChange={(ev: any) => this.onChangeInput(ev)}/>
+                            <MDBInput label='Message' id='formMessage' rows="4" style={{paddingLeft: '40px'}} type='textarea' onChange={(ev: any) => this.onChangeInput(ev)} textarea/>
                         </div>
                     </div>
 
@@ -107,17 +126,19 @@ export default class ConatctUs extends React.PureComponent<{}, {}> {
                             <Icon name={'paperclip'}/> Attach File
                         </div>
                         <div className={classNames('col-md-6', style.colMd)}>
-                            <input type='checkbox' />
-                            I agree with the use of my personal data and information by Elinext as it is said in the Privacy and Cookie Policy.
+                            <fieldset className="form-group">
+                                <input type="checkbox" className="filled-in" id="checkbox2" />
+                                <label htmlFor="checkbox2">I agree with the use of my personal data and information by Elinext as it is said in the Privacy and Cookie Policy.</label>
+                            </fieldset>
                         </div>
                     </div>
 
                     <div className={classNames('row', style.colRow)}>
                         <div className={classNames('col-md-12 offset-md-6', style.colMd)}>
-                            <button type="button" className="btn btn-outline-primary" data-mdb-ripple-color="dark">
-                                <Icon name={'paper-plane'}/>
-                                Send Message
-                            </button>
+                        <MDBBtn outline className='mx-2' color='secondary'  onClick={() => this.onClickSubmitValues()}>
+                            <Icon name={'paper-plane'}/>
+                            Send Message
+                        </MDBBtn>
                         </div>
                     </div>
                 </div>

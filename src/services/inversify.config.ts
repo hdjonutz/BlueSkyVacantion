@@ -9,6 +9,7 @@ import {HttpClient} from "./http_client";
 import {SnackbarService} from "./snackbar_service";
 import {LocalConfigurationService} from "./local_configuration_service";
 import {ApiService} from "./api_service";
+import {AuthorizedApiService} from './authorized_api_service';
 import getDecorators from "inversify-inject-decorators";
 
 const container: Container = new Container();
@@ -22,8 +23,11 @@ const container: Container = new Container();
     container.bind(SnackbarService).toSelf().inSingletonScope();
     container.bind<SnackbarService>('SnackbarService').to(SnackbarService);
     
-    // container.bind(ApiService).toSelf().inSingletonScope();
+    container.bind(ApiService).toSelf().inSingletonScope();
     container.bind<ApiService>('ApiService').to(ApiService);
+
+    container.bind(AuthorizedApiService).toSelf().inSingletonScope();
+    container.bind<AuthorizedApiService>('AuthorizedApiService').to(AuthorizedApiService);
 
     container.bind(LocalConfigurationService).toSelf().inSingletonScope();
     container.bind<LocalConfigurationService>('LocalConfigurationService').to(LocalConfigurationService);
