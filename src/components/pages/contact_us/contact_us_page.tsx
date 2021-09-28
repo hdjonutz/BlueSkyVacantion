@@ -18,56 +18,110 @@ import {MDBBtn, MDBInput, MDBModal,
     MDBModalTitle,
     MDBModalBody,
     MDBModalFooter} from 'mdb-react-ui-kit';
-import {Observable} from 'rxjs';
+import {Observable, Subscription} from 'rxjs';
 import Icon from '../ui/utils/icon';
+import { Form } from 'reactstrap';
+import { off } from 'local-storage';
 
-export default class ConatctUs extends React.PureComponent<{}, {displayModal: boolean}> {
+interface IContactUsStates {
+    displayModal:   boolean;
+    contentEmail:   any;
+    file:           File;
+    wasChecked:     boolean;
+    credintials:    boolean;
+}
+
+export default class ConatctUs extends React.Component<{}, IContactUsStates> {
     
     @resolve(AuthorizedApiService)      private authorizedApiService: AuthorizedApiService;
     @resolve(ApiService)                private apiService: ApiService;
-
-    private contentEmail: any = {};
+    private inputUpload:                any;
+    private observable:                 Subscription;
 
     constructor(props: any) {
         super(props);
         this.state = {
-            displayModal: false
+            displayModal:   false,
+            contentEmail:   {},
+            file:           null,
+            wasChecked:     false,
+            credintials:    false,
         };
+        this.onClickSubmitValues = this.onClickSubmitValues.bind(this);
+    }
+
+    componentWillUnmount() {
+        if (this.observable) {
+            this.observable.unsubscribe();
+        }
     }
 
     onChangeInput(ev: React.ReactEventHandler<InputEvent>): void {
         const target = ev.target;
         const value = target.value;
         const id = target.getAttribute('id');
-        this.contentEmail[id] = value;
+        const contentEmail = this.state.contentEmail;
+        contentEmail[id] = target.type === 'checkbox' ? target.checked : value;
+        this.setState({contentEmail: contentEmail}, () => console.log(this.state));
     }
 
-    onClickSubmitValues(): void{
-        // if (checkUS) {
-        //     this.formFirstName 
-        //     this.formLastName
-        //     this.formEmail
-        //     this.formMessage
-        // }
-        
-        const tmp = Object.keys(this.contentEmail).map((k) => ({key: k, value: this.contentEmail[k]}));
-        debugger;
+    onClickSubmitValues(): void{        
+        const tmp = Object.keys(this.state.contentEmail).map((k) => ({key: k, value: this.state.contentEmail[k]}));
+        this.setState({wasChecked: true});
+        if (this.state.contentEmail && this.state.contentEmail.privacy) {} else {
+            return;
+        }
 
-            const observable = Observable
-                .from([this.contentEmail].map((item: any) => encodePostBody(item)) as Array<string>)
-                .mergeMap((payload: string) => this.apiService
-                    .post<any>('sendEmail', {}, payload)
-                    .catch((error) => Observable.of(null))
-                ).subscribe((res: any) => {
-                    if (res.data.result) {
-                        this.setState({displayModal: true});
-                    }
-                });
+        this.observable = Observable
+            .from([this.state.contentEmail].map((item: any) => encodePostBody(item)) as Array<string>)
+            .mergeMap((payload: string) => this.apiService
+                .post<any>('sendEmail', {}, payload)
+                .catch((error) => Observable.of(null))
+            ).subscribe((res: any) => {
+                if (res.data.result) {
+                    this.setState({displayModal: true, contentEmail: {}, wasChecked: false});
+                }
+            });
+    }
+
+    toggleShow() {
+        this.setState({displayModal: false, contentEmail: {}});
+    }
+
+    onFileSelected(file: File) {
+        if (!!file) {
+            const fileReader = new FileReader();
+            fileReader.onload = () => {
+                // nothing
+            };
+            fileReader.readAsText(file.slice());
+        }
+        this.setState({file: file});
+    }
+
+    renderFormRow (idValue: string, icon: string, label: string, ok?: string, error?: string, offset?: string): JSX.Element {
+        const stateEmail = this.state.contentEmail;
+        const classNameValue = stateEmail && stateEmail[idValue] && stateEmail[idValue] != '' ? 'is-valid': 'is-invalid';
+        const messageValue = classNameValue === 'is-valid' ? 'valid-feedback' : 'invalid-feedback';
+        const messageText = classNameValue === 'is-valid' ? ok : error;
+
+        return <div className={classNames('col-md-4 col-lg-4 ' + offset, style.colMd)}>
+                            <div className={'icon'}><Icon name={icon}/></div>
+                            <MDBInput   label={label}
+                                        id={idValue}
+                                        type='text'
+                                        value={stateEmail && stateEmail[idValue] || ''}
+                                        onChange={(ev: any) => this.onChangeInput(ev)}
+                                        className={this.state.wasChecked ? classNameValue: ''} >
+                                {this.state.wasChecked && <div className={messageValue}>{!ok ? '' : messageText}</div>}
+                            </MDBInput>
+                        </div>
     }
 
     public render() {
+        const stateEmail = this.state.contentEmail;
         return (
-            <React.Fragment>
+            <React.Fragment>                
                 <div className={classNames('container d-flex justify-content-center flex-column bg-image', style.debugContainer)}
                     style={{backgroundImage:'url(assets/images/contact_us_world_3d.jpg)'}} >
 
@@ -83,52 +137,36 @@ export default class ConatctUs extends React.PureComponent<{}, {displayModal: bo
                     </div>
 
                     <div className={classNames('row', style.colRow)}>
-                        <div className={classNames('col-md-4 col-lg-4 offset-md-2 offset-lg-2', style.colMd)}>
-                            <div className={'icon'}><Icon name={'user'}/></div>
-                            <MDBInput label='First Name' id='formFirstName' type='text' onChange={(ev: any) => this.onChangeInput(ev)} /*className={'is-valid was-validated'}*/ >
-                                <div className='valid-feedback'>Looks good. | Please enter First Name.</div>
-                            </MDBInput>
-                        </div>
-                        <div className={classNames('col-md-4 col-lg-4', style.colMd)}>
-                            <div className={'icon'}><Icon name={'user'}/></div>
-                            <MDBInput label='Last Number' id='formLastName' type='text' onChange={(ev: any) => this.onChangeInput(ev)} className={'invalid was-validated'} >
-                                <div className='invalid-feedback'>Please enter Last Number.</div>
-                            </MDBInput>
-                        </div>
+                        {this.renderFormRow('formFirstName', 'user', 'First Name', 'Looks good.', 'Please enter First Name.', 'offset-md-2 offset-lg-2')}
+                        {this.renderFormRow('formLastName', 'user', 'Last Name', 'Looks good.', 'Please enter Last Number.')}
                     </div>
 
                     <div className={classNames('row', style.colRow)}>
-                        <div className={classNames('col-md-4 col-lg-4 offset-md-2 offset-lg-2', style.colMd)}>
-                            <div className={'icon'}><Icon name={'envelope'}/></div>
-                            <MDBInput label='E-mail' id='formEmail' type='text' onChange={(ev: any) => this.onChangeInput(ev)} >
-                                <div className='invalid-feedback'>Please enter E-mail.</div>
-                            </MDBInput>
-                        </div>
-                        <div className={classNames('col-md-4 col-lg-4', style.colMd)}>
-                            <div className={'icon'}><Icon name={'city'}/></div>
-                            <MDBInput label='Company Name' id='formCompanyName' type='text' onChange={(ev: any) => this.onChangeInput(ev)} />
-                        </div>
+                        {this.renderFormRow('formEmail', 'envelope', 'E-mail', 'Looks good.', 'Please enter E-mail.', 'offset-md-2 offset-lg-2')}
+                        {this.renderFormRow('formCompanyName', 'city', 'Company Name')}
                     </div>
 
                     <div className={classNames('row', style.colRow)}>
-                        <div className={classNames('col-md-4 col-lg-4 offset-md-2 offset-lg-2', style.colMd)}>
-                            <div className={'icon'}><Icon name={'phone-alt'}/></div>
-                            <MDBInput label='Phone Number' id='formPhoneNumber' type='text' onChange={(ev: any) => this.onChangeInput(ev)}/>
-                        </div>
+                        {this.renderFormRow('formPhoneNumber', 'phone-alt', 'Phone Number', 'Looks good.', 'Please enter Phone Number.', 'offset-md-2 offset-lg-2')}
                         <div className={classNames('col-md-4 col-lg-4', style.colMd)}>
                             <div className={'icon'}><Icon name={'pencil-alt'}/></div>
-                            <MDBInput label='Message' id='formMessage' rows="4" style={{paddingLeft: '40px'}} type='textarea' onChange={(ev: any) => this.onChangeInput(ev)} textarea/>
+                            <MDBInput label='Message' id='formMessage' rows="4" style={{paddingLeft: '40px'}} type='textarea' value={stateEmail && stateEmail.formMessage || ''} onChange={(ev: any) => this.onChangeInput(ev)} textarea/>
                         </div>
                     </div>
 
                     <div className={classNames('row', style.colRow)}>                        
-                        <div className={classNames('col-md-2 offset-md-4', style.colMd)}>
-                            <Icon name={'paperclip'}/> Attach File
+                        <div className={classNames('col-md-2 offset-md-4', style.colMd)} onClick={() => this.inputUpload.click()}>
+                            <Icon name={'paperclip'}/> Attach File 
+                            <span>{this.inputUpload && this.inputUpload.files && this.inputUpload.files[0] && ': ' + this.inputUpload.files[0].name}</span>
+                            <input ref={(ref: any) => this.inputUpload = ref}
+                                   type={'file'}
+                                   multiple={false} onChange={(e: any) => {this.onFileSelected(e.target.files[0])}}
+                                   style={{display: 'none'}} />
                         </div>
                         <div className={classNames('col-md-6', style.colMd)}>
                             <fieldset className="form-group">
-                                <input type="checkbox" className="filled-in" id="checkbox2" />
-                                <label htmlFor="checkbox2">I agree with the use of my personal data and information by Elinext as it is said in the Privacy and Cookie Policy.</label>
+                                <input type="checkbox" id="privacy" onChange={(ev: any) => this.onChangeInput(ev)} />
+                                <label htmlFor="privacy" className={this.state.wasChecked && !this.state.contentEmail.privacy ? 'invalid-feedback-privacy' : ''}>I agree with the use of my personal data and information by Elinext as it is said in the Privacy and Cookie Policy.</label>
                             </fieldset>
                         </div>
                     </div>
@@ -136,12 +174,31 @@ export default class ConatctUs extends React.PureComponent<{}, {displayModal: bo
                     <div className={classNames('row', style.colRow)}>
                         <div className={classNames('col-md-12 offset-md-6', style.colMd)}>
                         <MDBBtn outline className='mx-2' color='secondary'  onClick={() => this.onClickSubmitValues()}>
-                            <Icon name={'paper-plane'}/>
+                            <Icon name={'paper-plane'} />
                             Send Message
                         </MDBBtn>
                         </div>
                     </div>
                 </div>
+                {this.state.displayModal && 
+                    <MDBModal staticBackdrop tabIndex='-1' show={this.state.displayModal}>
+                    <MDBModalDialog>
+                      <MDBModalContent>
+                        <MDBModalHeader>
+                          <MDBModalTitle>Modal title</MDBModalTitle>
+                          <MDBBtn className='btn-close' color='none' onClick={this.toggleShow.bind(this)}></MDBBtn>
+                        </MDBModalHeader>
+                        <MDBModalBody>The E-mail was send!</MDBModalBody>
+              
+                        <MDBModalFooter>
+                          <MDBBtn color='secondary' onClick={this.toggleShow.bind(this)}>
+                            Close
+                          </MDBBtn>
+                        </MDBModalFooter>
+                      </MDBModalContent>
+                    </MDBModalDialog>
+                  </MDBModal>
+                }
             </React.Fragment>
         );
     }
