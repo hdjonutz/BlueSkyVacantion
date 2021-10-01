@@ -11,7 +11,7 @@ import Page_two from "../page_two/page_two";
 import Page_three from "../page_three/page_three";
 import LoginPage from "../login_page/login_page";
 import {NavLink} from 'react-router-dom';
-import * as classNames from 'classnames';
+import classNames from 'classnames';
 import { MDBBtn } from 'mdb-react-ui-kit';
 
 interface AppViewProps {
@@ -110,7 +110,7 @@ export default class AppView extends React.Component<AppViewProps, AppViewState>
                 <NavLink className={classNames(style.link)}
                          activeClassName={style.activeRoute}
                          to={item.path}>
-                             <MDBBtn outline className='mx-2' color='secondary'>
+                             <MDBBtn className='mx-2' color='info'>
                                 {item.title}{item.titleI18n}
                             </MDBBtn>
                          </NavLink>
@@ -239,7 +239,7 @@ export default class AppView extends React.Component<AppViewProps, AppViewState>
         return (
             <React.Fragment>
                 <div className={style.layout}>
-                    <div style={{position: 'absolute', top:'20px', }}>{this.renderGroups(gruppen)}</div>
+                    <div style={{position: 'absolute', top:'20px', zIndex: 999}}>{this.renderGroups(gruppen)}</div>
                     <div className={style.main}>
                         {this.state.menuRoutes && <Switch>
                             <Route exact path='/' component={HomePage} />

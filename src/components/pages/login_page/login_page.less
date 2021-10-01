@@ -1,0 +1,157 @@
+/*background: linear-gradient(to right, #667eea, #764ba2); */
+
+.view{
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    position: relative;
+    overflow: hidden;
+    cursor: default;
+    display: flex;
+    flex: 1;
+}
+.container{
+    background-color: rgba(62,69,81,.7);
+}
+.card{
+    box-shadow: 0 2px 5px 0 rgb(0 0 0 / 16%), 0 2px 10px 0 rgb(0 0 0 / 12%);
+    border: 0;
+    font-weight: 400;
+    background-color: rgba(229,228,255,.2);
+    margin-top: 30px;
+    color: white;
+    border-radius: 4px;
+    .cardBody{
+        flex: 1 1 auto;
+        padding: 1.25rem;
+        
+
+        .formHeader{
+            box-shadow: 0 5px 11px 0 rgb(0 0 0 / 18%), 0 4px 15px 0 rgb(0 0 0 / 15%);
+            color: #fff;
+            text-align: center;
+            margin-top: -3.13rem;
+            margin-bottom: 3rem;
+            padding: 2rem !important;
+            border-radius: .125rem;
+            font-size: 26px !important;
+            font-weight: bold !important;
+            justify-content: center !important;
+            align-items: center !important;
+            display: flex !important;
+            flex: 1 !important;
+        }
+
+        input{
+            color: white;
+        }
+        .plumPlate {
+            background: linear-gradient(40deg,#ff6ec4,#7873f5)!important;
+        }
+        .btn {
+            text-transform: uppercase;
+            vertical-align: bottom;
+            border: 0;
+            box-shadow: 0 2px 5px 0 rgb(0 0 0 / 20%), 0 2px 10px 0 rgb(0 0 0 / 10%);
+            font-weight: 500;
+            padding: .625rem 1.5rem .5rem;
+            font-size: .75rem;
+            line-height: 1.5;
+            border-radius: 4px;
+            
+            &.up{
+                padding: 1rem !important;
+                font-size: 15px;
+                justify-content: center;
+                align-items: center;
+                display: flex;
+                margin: 25px;
+            }
+        }
+
+        :global {
+            .form-control {
+                &:focus{
+                    color: white !important;
+                    &~.form-label {
+                        color: white !important;
+                    }
+                    &~.form-notch .form-notch-leading {
+                        border-top: .125rem solid white !important;
+                        border-bottom: .125rem solid white !important;
+                        border-left: .125rem solid white !important;
+                    }
+                    &~.form-notch .form-notch-trailing {
+                        border-top: .125rem solid white !important;
+                        border-bottom: .125rem solid white !important;
+                        border-right: .125rem solid white !important;
+                    }
+                    &~.form-notch .form-notch-middle {
+                        border-bottom: .125rem solid;
+                        border-color: white !important;
+                    }
+                }
+                &~.form-label {
+                    color: rgb(255 255 255 / 80%) !important;
+                }
+                
+            }
+        }
+        .driver{
+            margin: 0.3em 0 !important;
+            background-color: #b1b2b3;
+            height: 1px;
+        }
+        .passwordForgot{
+            text-align: end;
+            a{  
+                color:white;              
+                &:hover{
+                    color:#f9b6df;
+                    text-align: end;
+                }
+            }
+            &.centerRegister{
+                text-align: center;
+                a{
+                    color:white;
+                    &:hover{
+                        color:#f9b6df;
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+:global{
+    .row{
+        .col-md, .col-md-12, .col-lg-12, .col-md-6, .col-lg-6{
+            padding: 0.3em !important;
+            .form-outline{
+                input{
+                    padding-left: 40px;
+                }
+                label{
+                    margin-left: 30px;
+                }
+                .form-control~.form-notch .form-notch-leading {
+                    width: 2.5rem;
+                }
+            }
+            .icon{
+                display: flex;
+                padding: 6px 1px;
+                border-right: 1px solid #d6d6d6;
+                flex: 1;
+                height: 36px;
+                width: 37px;
+                position: absolute;
+                svg{
+                    flex: 1;
+                }
+            }
+        }
+    }
+}

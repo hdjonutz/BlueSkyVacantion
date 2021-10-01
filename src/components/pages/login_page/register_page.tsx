@@ -5,54 +5,44 @@ import {AuthenticationService} from '../../../services/authentication_service';
 import Icon from '../ui/utils/icon';
 import style from './login_page.less';
 import classNames from 'classnames';
-import {Subscription} from 'rxjs';
 
-import { MDBBtn, MDBInput } from 'mdb-react-ui-kit';
-import { NavLink } from 'react-router-dom';
-
+import {
+    MDBBtn,
+    MDBInput
+  } from 'mdb-react-ui-kit';
+  
  
-export default class LoginPage extends React.PureComponent<{}, {email: string, password: string}> {
-    private subscription: Subscription;
-    private goHome: 'http://localhost:81/BlueSkyVacantion/dist/#/online/page1';
+export default class RegisterPage extends React.PureComponent<{}, {}> {
 
     @resolve(AuthenticationService) private authenticationService: AuthenticationService;
 
     constructor(props: any) {
         super(props);
-        this.state = {
-            email:      '',
-            password:   '',
-        };
+        this.state = {};
     }
-    componentWillUnmount() {
-        if (this.subscription) {
-            this.subscription.unsubscribe();
+
+    componentDidMount() {
+
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+
+    }
+
+    regexForm(pass: string) {
+        const regexEmail = /^\S{3,}@\S{3,}.\S{3,}$/;
+        const regexPass = /^\S{3,}@\S{3,}.\S{3,}$/;
+        
+        const regexObj = new RegExp(regex);
+        
+        if (pass.match(regexObj)){
+            const parts = regexObj.exec(pass);
+            console.log('true IST OK');
+        } else {
+            console.log('false ---not OK');
         }
     }
 
-    login() {
-        this.subscription = this.authenticationService.login(this.state.email, this.state.password)
-            .subscribe((res: any) => {
-                if (res) {
-                    this.setState({email: '', password: ''});
-                    location.href = this.goHome;
-                    alert('everithing are ok');
-                } else {
-                    alert('somthing was bad!!! password or email');
-                }
-            });
-    }
-
-    onChangeInput(ev: React.SyntheticEvent) {
-        const target:any = ev.target;
-        const value = target.value;
-        const attName = target.getAttribute('id');
-        if (attName === 'formEmail') {
-            this.setState({Email: value});
-        } else if( attName === 'formPassword') {
-            this.setState({password: value});
-        }
-    }
 
     public render() {
         
@@ -71,13 +61,19 @@ export default class LoginPage extends React.PureComponent<{}, {email: string, p
                                 <div className={style.cardBody}>
                                     <div className={classNames('row', style.colRow)}>
                                         <div className={classNames('col-md-12 col-lg-12', style.colMd)}>
-                                            <div className={classNames(style.plumPlate, style.btn, style.formHeader)} ><Icon name={'user'} />Log In</div>
+                                            <div className={classNames(style.plumPlate, style.btn, style.formHeader)} ><Icon name={'user'} />Register</div>
                                         </div>
                                     </div>
                                     
                                     <div className={classNames('row', style.colRow)}>
                                         <div className={classNames('col-md-12 col-lg-12', style.colMd)}>
                                             <div className={'icon'}><Icon name={'user'}/></div>
+                                            <MDBInput label='User' id='formUser' style={{paddingLeft: '40px'}} onChange={(ev: any) => this.onChangeInput(ev)}/>
+                                        </div>
+                                    </div>
+                                    <div className={classNames('row', style.colRow)}>
+                                        <div className={classNames('col-md-12 col-lg-12', style.colMd)}>
+                                            <div className={'icon'}><Icon name={'envelope'}/></div>
                                             <MDBInput label='E-mail' id='formEmail' style={{paddingLeft: '40px'}} onChange={(ev: any) => this.onChangeInput(ev)}/>
                                         </div>
                                     </div>
@@ -87,42 +83,33 @@ export default class LoginPage extends React.PureComponent<{}, {email: string, p
                                             <MDBInput label='Password' id='formPassword' style={{paddingLeft: '40px'}} onChange={(ev: any) => this.onChangeInput(ev)}/>
                                         </div>
                                     </div>
-
-                                    <div className={classNames('row', style.colRow, style.passwordForgot)}>
-                                        <div className={classNames('col-md-5 col-lg-5 offset-md-7 offset-lg-7', style.colMd)}>
-                                            <NavLink to={'ForgotPasswordPage'}><b>&nbsp; Forgot password?</b></NavLink>
+                                    <div className={classNames('row', style.colRow)}>
+                                        <div className={classNames('col-md-12 col-lg-12', style.colMd)}>
+                                            <div className={'icon'}><Icon name={'key'}/></div>
+                                            <MDBInput label='Retype password' id='formPassword_' style={{paddingLeft: '40px'}} onChange={(ev: any) => this.onChangeInput(ev)}/>
                                         </div>
                                     </div>
+
                                     <div className={classNames('row', style.colRow)}>
                                         <div className={classNames('d-grid gap-2')}>
-                                            <MDBBtn outline className={classNames('mx-2', style.plumPlate, style.btn, style.up)} color='white' onClick={this.login.bind(this)}>
-                                                Log In
+                                            <MDBBtn outline className={classNames('mx-2', style.plumPlate, style.btn, style.up)} color='white' >
+                                                Register
                                             </MDBBtn>
                                         </div>
                                     </div>
+{/*
                                     <div className={classNames('row', style.colRow)}>
                                         <div className={classNames('col-md-12 col-lg-12', style.colMd)}>
                                             <div className={style.driver}></div>
                                         </div>    
                                     </div>
-{/*
+
                                     <div className={classNames('row', style.colRow)}>
                                         <div className={classNames('col-md-4 col-lg-4 offset-md-4 offset-lg-4', style.colMd)} style={{justifyContent: 'space-between', display: 'flex'}}>
                                             <Icon name={'twitter'} /><Icon name={'linkedin-in'} /><Icon name={'instagram'} />
                                         </div>
                                     </div>
-                                    <div className={classNames('row', style.colRow)}>
-                                        <div className={classNames('col-md-12 col-lg-12', style.colMd)}>
-                                            <div className={style.driver}></div>
-                                        </div>    
-                                    </div> 
 */}
-                                    <div className={classNames('row', style.colRow, style.passwordForgot, style.centerRegister)}>
-                                        <div className={classNames('col-md-12 col-lg-12', style.colMd)}>
-                                            Don't have an account?
-                                            <NavLink to={'RegisterPage'}><b>&nbsp; Register here</b></NavLink>
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                         </div>

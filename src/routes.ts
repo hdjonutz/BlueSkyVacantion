@@ -3,6 +3,9 @@ import Page_one from './components/pages/page_one/page_one';
 import Page_two from './components/pages/page_two/page_two';
 import Page_theree from './components/pages/page_three/page_three';
 import ConatctUs from './components/pages/contact_us/contact_us_page';
+import LoginPage from './components/pages/login_page/login_page';
+import RegisterPage from './components/pages/login_page/register_page';
+import ForgotPasswordPage from './components/pages/login_page/forgot_password_page';
 
 /**
  * Routen-Definition der Anwendung.
@@ -64,6 +67,32 @@ const routes: ReadonlyArray<MenuGroup> = [
                 permissions: (p) => p.hasPermission('plan'),
                 component: ConatctUs,
             },
+        ]
+    },
+    {
+        titleI18n: 'Login',
+        icon: 'LogIn_icon',
+        path: '/logIn',
+        defaultPath: '/logIn/logIn',
+        items: [
+            {
+                title: 'Login',
+                path: '/logIn/logIn',
+                icon: 'LogIn_icon',
+                component: LoginPage,
+            },
+            {
+                title: 'Register',
+                path: '/logIn/RegisterPage',
+                icon: 'RegisterPage_icon',
+                component: RegisterPage,
+            },
+            {
+                title: 'ForgotPassword',
+                path: '/logIn/ForgotPasswordPage',
+                icon: 'ForgotPasswordPage_icon',
+                component: ForgotPasswordPage,
+            }
         ]
     },
 ];

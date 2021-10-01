@@ -163,7 +163,6 @@ export class AuthenticationService {
      * Applies a legacy login (e.g. the old cookie from Tomcat, or a login via local config) with mandant and username,
      * however this mean that no access token is available and requires the API & co to work without one. Otherwise the
      * user can't do anything.
-     * @param mndNr
      * @param accessToken
      */
     applyExternalLegacyLogin(username: string, permissions?: ReadonlyArray<string>): Observable<Authentication> {
@@ -177,7 +176,6 @@ export class AuthenticationService {
 
     /**
      * Performs a login with mndNr, username and password.
-     * @param mndNr
      * @param username
      * @param password
      * @return {any}
