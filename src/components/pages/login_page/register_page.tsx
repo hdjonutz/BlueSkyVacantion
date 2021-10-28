@@ -1,24 +1,40 @@
 import * as React from 'react';
 import 'reflect-metadata';
 import { resolve } from 'inversify-react';
-import {AuthenticationService} from '../../../services/authentication_service';
+import { AuthorizedApiService } from '../../../services/authorized_api_service';
 import Icon from '../ui/utils/icon';
 import style from './login_page.less';
 import classNames from 'classnames';
 
 import {
     MDBBtn,
-    MDBInput
-  } from 'mdb-react-ui-kit';
-  
- 
-export default class RegisterPage extends React.PureComponent<{}, {}> {
+    MDBInput, MDBModal, MDBModalBody, MDBModalContent, MDBModalDialog, MDBModalFooter, MDBModalHeader, MDBModalTitle
+} from 'mdb-react-ui-kit';
+import {ApiService} from '../../../services/api_service';
+import { Observable } from 'rxjs';
+import {Logger} from '../../../util/logger';
+const logger = Logger.create('RegisterPage');
 
-    @resolve(AuthenticationService) private authenticationService: AuthenticationService;
+interface RegisterPageState {
+    data:           {[key: string]: string};
+    displayModal:   boolean;
+}
+
+export default class RegisterPage extends React.Component<{}, RegisterPageState> {
+
+    @resolve(ApiService)                private apiService: ApiService;
+    @resolve(AuthorizedApiService)      private authorizedApiService: AuthorizedApiService;
+
+    private data: {[key: string]: string} = {};
 
     constructor(props: any) {
         super(props);
-        this.state = {};
+        this.state = {
+            data: {},
+            displayModal: false,
+        };
+
+        this.registerUser = this.registerUser.bind(this);
     }
 
     componentDidMount() {
@@ -29,20 +45,69 @@ export default class RegisterPage extends React.PureComponent<{}, {}> {
 
     }
 
-    regexForm(pass: string) {
+    checkData(): boolean {
+        const _state: any = this.state.data;
         const regexEmail = /^\S{3,}@\S{3,}.\S{3,}$/;
-        const regexPass = /^\S{3,}@\S{3,}.\S{3,}$/;
+        // Minimum eight characters, at least one letter, one number and one special character:
+        const regexPass = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
         
-        const regexObj = new RegExp(regex);
+        const objEmail = new RegExp(regexEmail);
+        const objPass = new RegExp(regexPass);
+        const pass = _state.pass;
+        const email = _state.email;
         
-        if (pass.match(regexObj)){
-            const parts = regexObj.exec(pass);
-            console.log('true IST OK');
+        if (email.match(objEmail) && pass.match(objPass) && _state.pass && _state.new_pass) {
+            const partsEmail = objEmail.exec(email) || [];
+            const partsPass = objPass.exec(pass) || [];
+            return partsEmail.length > 0 && partsPass.length > 0;
         } else {
-            console.log('false ---not OK');
+            return false;
+        }
+        return true;
+    }
+
+    onChangeInput(event: React.BaseSyntheticEvent) {
+        const target = event.target; 
+        const id = target.getAttribute('id');
+        const value = target.value;
+        const data = this.state.data;
+        data[id] = value;
+        this.setState({ data });
+    }
+
+    registerUser() {
+        if (true || this.checkData()) {
+            const data: any = this.state.data;
+            data.isAdmin    = 1; // 0-Admin, 1-Benutzer
+
+            const payload = JSON.stringify(this.state.data);
+            this.apiService
+                .post<any>('setUser', {}, payload) /*formid: Ids.USERS*/
+                .subscribe((response: any) => {
+
+                    if (response.data['email_sended'] === true) {
+                        logger.info('Register in successfully', response.data['access_token']);
+                        this.setState({
+                            displayModal: true
+                        })
+                    } else {
+                        logger.warn('Email was send to Activate account!');
+                        return Observable.of(null);
+                    }
+                });
+            // this.authorizedApiService
+            //     .post<any>('setFormItem', {formid: Ids.USERS}, payload)
+            //     .subscribe((res) => {
+            //         console.log(res);
+            //     });
+        } else {
+
         }
     }
 
+    toggleShow() {
+        this.setState({displayModal: false});
+    }
 
     public render() {
         
@@ -68,31 +133,37 @@ export default class RegisterPage extends React.PureComponent<{}, {}> {
                                     <div className={classNames('row', style.colRow)}>
                                         <div className={classNames('col-md-12 col-lg-12', style.colMd)}>
                                             <div className={'icon'}><Icon name={'user'}/></div>
-                                            <MDBInput label='User' id='formUser' style={{paddingLeft: '40px'}} onChange={(ev: any) => this.onChangeInput(ev)}/>
+                                            <MDBInput label='Nachname' id='name' style={{paddingLeft: '40px'}} onChange={(ev: any) => this.onChangeInput(ev)}/>
+                                        </div>
+                                    </div>
+                                    <div className={classNames('row', style.colRow)}>
+                                        <div className={classNames('col-md-12 col-lg-12', style.colMd)}>
+                                            <div className={'icon'}><Icon name={'user'}/></div>
+                                            <MDBInput label='Vorname' id='vorname' style={{paddingLeft: '40px'}} onChange={(ev: any) => this.onChangeInput(ev)}/>
                                         </div>
                                     </div>
                                     <div className={classNames('row', style.colRow)}>
                                         <div className={classNames('col-md-12 col-lg-12', style.colMd)}>
                                             <div className={'icon'}><Icon name={'envelope'}/></div>
-                                            <MDBInput label='E-mail' id='formEmail' style={{paddingLeft: '40px'}} onChange={(ev: any) => this.onChangeInput(ev)}/>
+                                            <MDBInput label='E-mail' id='email' style={{paddingLeft: '40px'}} onChange={(ev: any) => this.onChangeInput(ev)}/>
                                         </div>
                                     </div>
                                     <div className={classNames('row', style.colRow)}>
                                         <div className={classNames('col-md-12 col-lg-12', style.colMd)}>
                                             <div className={'icon'}><Icon name={'key'}/></div>
-                                            <MDBInput label='Password' id='formPassword' style={{paddingLeft: '40px'}} onChange={(ev: any) => this.onChangeInput(ev)}/>
+                                            <MDBInput label='Password' id='pass' style={{paddingLeft: '40px'}} onChange={(ev: any) => this.onChangeInput(ev)}/>
                                         </div>
                                     </div>
                                     <div className={classNames('row', style.colRow)}>
                                         <div className={classNames('col-md-12 col-lg-12', style.colMd)}>
                                             <div className={'icon'}><Icon name={'key'}/></div>
-                                            <MDBInput label='Retype password' id='formPassword_' style={{paddingLeft: '40px'}} onChange={(ev: any) => this.onChangeInput(ev)}/>
+                                            <MDBInput label='Retype password' id='new_pass' style={{paddingLeft: '40px'}} onChange={(ev: any) => this.onChangeInput(ev)}/>
                                         </div>
                                     </div>
 
                                     <div className={classNames('row', style.colRow)}>
                                         <div className={classNames('d-grid gap-2')}>
-                                            <MDBBtn outline className={classNames('mx-2', style.plumPlate, style.btn, style.up)} color='white' >
+                                            <MDBBtn outline className={classNames('mx-2', style.plumPlate, style.btn, style.up)} color='white' onClick={this.registerUser}>
                                                 Register
                                             </MDBBtn>
                                         </div>
@@ -114,7 +185,26 @@ export default class RegisterPage extends React.PureComponent<{}, {}> {
                             </div>
                         </div>
                     </div>
-                </div>                
+                </div>
+                {this.state.displayModal &&
+                <MDBModal staticBackdrop tabIndex='-1' show={this.state.displayModal}>
+                    <MDBModalDialog>
+                        <MDBModalContent>
+                            <MDBModalHeader>
+                                <MDBModalTitle>Information</MDBModalTitle>
+                                <MDBBtn className='btn-close' color='none' onClick={this.toggleShow.bind(this)}></MDBBtn>
+                            </MDBModalHeader>
+                            <MDBModalBody>An E-Mail to activate the account has been sent!</MDBModalBody>
+
+                            <MDBModalFooter>
+                                <MDBBtn color='secondary' onClick={this.toggleShow.bind(this)}>
+                                    Close
+                                </MDBBtn>
+                            </MDBModalFooter>
+                        </MDBModalContent>
+                    </MDBModalDialog>
+                </MDBModal>
+                }
             </React.Fragment>
         );
     }

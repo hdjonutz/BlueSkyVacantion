@@ -13,7 +13,6 @@ import {ApiServiceState, ApiServiceStatus} from './api_service_status';
 import {showApiErrorDialog} from '../components/common/api-error-dialog';
 import {SnackbarService, SnackbarStyle} from './snackbar_service';
 import {inject, injectable} from "inversify";
-import { isThisTypeNode } from 'typescript';
 
 const logger = Logger.create('ApiService', LogLevel.Info);
 
@@ -150,12 +149,15 @@ export class ApiService {
 
     buildUrl(key: string, parameters?: Parameters, format: ResponseFormat = 'json'): Observable<string> {
         return Observable
-            .combineLatest(this.localConfigurationService.get().filter((c) => c != null),
-                this.versionService.getCurrentVersion())
+            .combineLatest(
+                this.localConfigurationService.get().filter((c) => c != null),
+                this.versionService.getCurrentVersion()
+            )
             .map(([localConfig, versionInfo]) => {
                 // First only add the key name and mandant to the query object, because getting the parameter order
                 // right helps while debugging. But we have add the other global level parameters too, so that
                 // everything that is added on the higher layers comes last (like the access token)
+
                 const query: Parameters = {
                     key: key,
                     // This is the case that we don't have a authorized call, these calls never have a mndNr

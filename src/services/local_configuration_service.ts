@@ -57,6 +57,6 @@ export class LocalConfigurationService {
             apiServerPort, apiServerApiBase, enableEventPush, eventsServerViaProxy, eventsServerProtocol,
             eventsServerHost, eventsServerPort, eventsServerApiBase, appType, defaultUsername, defaultPassword);
 
-        return Observable.of(localConfig);
+        return Observable.of<LocalConfigurationService>(localConfig);
     }
 }

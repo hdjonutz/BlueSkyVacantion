@@ -1,18 +1,17 @@
+///<reference path="../../node_modules/inversify/lib/annotation/injectable.d.ts"/>
 import 'reflect-metadata';
 import {Logger} from '../util/logger';
 import {Observable} from 'rxjs';
 import {AuthenticationService} from './authentication_service';
 import {ApiService, Parameters, ApiResponse, ResponseFormat} from './api_service';
-import { injectable, inject} from "inversify";
+import { injectable, inject} from 'inversify';
 const logger = Logger.create('AuthorizedApiService');
 
 @injectable()
 export class AuthorizedApiService {
-
-    constructor(
-        @inject('ApiService')             private apiService: ApiService,
-        @inject('AuthenticationService')  private authenticationService: AuthenticationService
-    ) {}
+    private constructor(
+        @inject('ApiService')               private apiService: ApiService,
+        @inject('AuthenticationService')    private authenticationService: AuthenticationService) {}
 
     get<T = any>(key: string, parameters?: Parameters, format: ResponseFormat = 'json',
                  type: XMLHttpRequestResponseType = 'text'): Observable<ApiResponse<T>> {
@@ -72,3 +71,4 @@ export class AuthorizedApiService {
             }));
     }
 }
+

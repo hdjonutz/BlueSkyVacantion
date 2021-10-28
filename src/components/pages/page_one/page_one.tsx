@@ -5,6 +5,7 @@ import { resolve } from 'inversify-react';
 import {Logger} from '../../../util/logger';
 import ReactTooltip from 'react-tooltip';
 import {AuthenticationService} from '../../../services/authentication_service';
+import {AuthorizedApiService} from '../../../services/authorized_api_service';
 import {LocalConfigurationService} from "../../../services/local_configuration_service";
 import {ApiService} from "../../../services/api_service";
 import {VersionService} from "../../../services/version_service";
@@ -17,14 +18,15 @@ import style from './page_one.less';
 
 export default class Page_one extends React.PureComponent<{}, {selected: number}> {
 
-    @resolve(CounterService)        private counterService: CounterService;
-    @resolve(AuthenticationService) private authenticationService: AuthenticationService;
+    @resolve(CounterService)            private counterService: CounterService;
+    @resolve(AuthenticationService)     private authenticationService: AuthenticationService;
 
     @resolve(ApiService)                private ApiService: ApiService;
     @resolve(VersionService)            private VersionService: VersionService;
     @resolve(HttpClient)                private HttpClient: HttpClient;
     @resolve(SnackbarService)           private SnackbarService: SnackbarService;
     @resolve(LocalConfigurationService) private LocalConfigurationService: LocalConfigurationService;
+    @resolve(AuthorizedApiService)      private authorizedApiService: AuthorizedApiService;
 
 
     // @lazyInject("counterService") private readonly counterService: ICounterService<string>;
@@ -38,7 +40,7 @@ export default class Page_one extends React.PureComponent<{}, {selected: number}
 
     componentDidMount() {
         // console.log(this);
-
+debugger;
         this.authenticationService.login('daniel', 'pass')
             .subscribe((res: any) => {
                 // debugger;

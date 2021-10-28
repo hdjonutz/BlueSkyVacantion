@@ -15,7 +15,9 @@ import getDecorators from "inversify-inject-decorators";
 const container: Container = new Container();
 
     container.bind(CounterService).toSelf().inSingletonScope();
+
     container.bind(AuthenticationService).toSelf().inSingletonScope();
+    container.bind<AuthenticationService>('AuthenticationService').to(AuthenticationService);
     
     container.bind(HttpClient).toSelf().inSingletonScope();
     container.bind<HttpClient>('HttpClient').to(HttpClient);

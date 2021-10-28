@@ -26,3 +26,9 @@ https://github.com/supasate/connected-react-router/blob/master/examples/basic/pa
 02.09.2021
 React-router urls don't work when refreshing or writing manually
 https://stackoverflow.com/questions/27928372/react-router-urls-dont-work-when-refreshing-or-writing-manually
+
+27.10.2021
+react-table
+https://react-table.tanstack.com/docs/quick-start
+secure-server authentification
+https://blog.logrocket.com/how-to-secure-react-app-login-authentication/

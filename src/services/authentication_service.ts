@@ -54,12 +54,12 @@ export class AuthenticationService {
 
     // @resolve(ApiService)             private apiService: ApiService;
     // @resolve(VersionService)         private versionService: VersionService;
-    
-    private apiService: ApiService;
 
-    private constructor(@inject('ApiService') apiService: ApiService) {
-        this.apiService = apiService;
-        
+    // private apiService: ApiService;
+
+    private constructor(@inject('ApiService') private apiService: ApiService) {
+        // this.apiService = apiService;
+
         // https://www.youtube.com/watch?v=nk3wUKxVDAg&ab_channel=ProgrammingwithKarthik
         
         window.addEventListener('storage', (e) => {
@@ -121,6 +121,7 @@ export class AuthenticationService {
         // We can't check here if the token is valid, as we don't know the secret on client side because it is secret 😉,
         // but we need to parse the token to get the mndNr and the username.
         // Checking the experience time would be possible, but isn't a big help here. Just let it fail at the api.
+
         try {
             const parsedAccessToken = KJUR.jws.JWS.parse(accessToken);
 
@@ -159,6 +160,27 @@ export class AuthenticationService {
         }
     }
 
+    activateAccount(accessToken: string): Observable<any> {
+        try {
+            const parsedAccessToken = KJUR.jws.JWS.parse(accessToken);
+            const obj: any  = parsedAccessToken.payloadObj;
+            const expirate  = new Date(obj.exp * 1000);
+            const create    = new Date(obj.iat * 1000);
+            const info      = window.atob(obj.sub).split('#-#');
+            const detail = {
+                expirate:   expirate,
+                create:     create,
+                tid:        window.atob(info[0]),
+                name:       window.atob(info[1]),
+                vorname:    window.atob(info[2]),
+                email:      window.atob(info[3])
+            };
+            return Observable.of(detail);
+        } catch (err) {
+            return Observable.of(null);
+        }
+    }
+
     /**
      * Applies a legacy login (e.g. the old cookie from Tomcat, or a login via local config) with mandant and username,
      * however this mean that no access token is available and requires the API & co to work without one. Otherwise the
@@ -184,7 +206,7 @@ export class AuthenticationService {
         console.log(this);
         
         return this.apiService
-            .post('getAuthenticationUser', {user: username, pass: password})
+            .post('getAuthenticationUser', {email: username, pass: password})
             .switchMap((response) => {
                 if (+response.data['granted'] === 1) {
                     logger.info('Logged in successfully', response.data['access_token']);

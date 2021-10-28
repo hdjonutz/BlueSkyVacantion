@@ -73,7 +73,7 @@ class PageLayout extends React.Component<PageLayoutProps & RouteComponentProps<a
                                 {missingI18n('Mandant: {langname}', {langname: this.state.mandantenInfo.langname})}
                             </span>}
                     </Link>
-                </div>}
+                </div>
             </div>
         );
     }

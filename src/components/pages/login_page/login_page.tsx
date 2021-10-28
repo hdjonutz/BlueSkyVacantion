@@ -2,6 +2,7 @@ import * as React from 'react';
 import 'reflect-metadata';
 import { resolve } from 'inversify-react';
 import {AuthenticationService} from '../../../services/authentication_service';
+import {ApiService} from '../../../services/api_service';
 import Icon from '../ui/utils/icon';
 import style from './login_page.less';
 import classNames from 'classnames';
@@ -9,21 +10,63 @@ import {Subscription} from 'rxjs';
 
 import { MDBBtn, MDBInput } from 'mdb-react-ui-kit';
 import { NavLink } from 'react-router-dom';
-
+import {Logger} from '../../../util/logger';
+import {showDialogInfo} from "../../common/modal-info-dialog";
+const logger = Logger.create('LoginPage');
  
-export default class LoginPage extends React.PureComponent<{}, {email: string, password: string}> {
+interface LoginPageStates {
+    email:              string;
+    password:           string;
+    displayModal:       boolean;
+    messageToDisplay:   string;
+}
+
+export default class LoginPage extends React.PureComponent<{}, LoginPageStates> {
     private subscription: Subscription;
-    private goHome: 'http://localhost:81/BlueSkyVacantion/dist/#/online/page1';
+    private goHome = 'http://localhost:81/BlueSkyVacantion/dist/';
 
     @resolve(AuthenticationService) private authenticationService: AuthenticationService;
+    @resolve(ApiService)            private apiService: ApiService;
+    
 
     constructor(props: any) {
         super(props);
         this.state = {
-            email:      '',
-            password:   '',
+            email:              '',
+            password:           '',
+            displayModal:       false,
+            messageToDisplay:   '',
         };
+        this.callback   = this.callback.bind(this);
+        this.login      = this.login.bind(this);
     }
+
+    componentDidMount() {
+        const arr = window.location.hash.split('&');
+        if (arr) {
+            const str = arr.find((a) => a.indexOf('access_token') >= 0);
+            if (str) {
+                const token = str.replace('access_token=','');
+                this.authenticationService.activateAccount(token).subscribe((res) => {                    
+                    if (new Date().getTime() > res.expirate) {
+                        const info = 'token has expired, pleace make a new request for activation';
+                        this.setState({displayModal: true, messageToDisplay: info});
+                    } else {
+                        const data = JSON.stringify({ access_token: token});
+                        this.apiService.post<any>('activateAccount', {}, data)
+                        .subscribe((response: any) => {
+                            if (response.data['activated'] === true) {
+                                logger.info('Register in successfully!');
+                                const info = 'Your account has been successfully activated!';
+                                this.setState({displayModal: true, messageToDisplay: info});
+                            }
+                        });
+                    }
+                });
+            }
+        }
+    }
+
     componentWillUnmount() {
         if (this.subscription) {
             this.subscription.unsubscribe();
@@ -31,16 +74,17 @@ export default class LoginPage extends React.PureComponent<{}, {email: string, p
     }
 
     login() {
+        const _that = this;
         this.subscription = this.authenticationService.login(this.state.email, this.state.password)
             .subscribe((res: any) => {
                 if (res) {
                     this.setState({email: '', password: ''});
-                    location.href = this.goHome;
-                    alert('everithing are ok');
+                    location.href = _that.goHome;
                 } else {
-                    alert('somthing was bad!!! password or email');
+                    this.setState({displayModal: true, messageToDisplay: 'somthing was bad!!! password or email'});
                 }
             });
+        
     }
 
     onChangeInput(ev: React.SyntheticEvent) {
@@ -48,14 +92,17 @@ export default class LoginPage extends React.PureComponent<{}, {email: string, p
         const value = target.value;
         const attName = target.getAttribute('id');
         if (attName === 'formEmail') {
-            this.setState({Email: value});
+            this.setState({email: value});
         } else if( attName === 'formPassword') {
             this.setState({password: value});
         }
     }
 
+    callback() {
+        this.setState({displayModal: false, messageToDisplay: ''});
+    }
+
     public render() {
-        
         return (
             <React.Fragment>
                 <div className={style.view} style={{backgroundImage:'url(assets/images/login2.jpg)'}}>
@@ -78,13 +125,13 @@ export default class LoginPage extends React.PureComponent<{}, {email: string, p
                                     <div className={classNames('row', style.colRow)}>
                                         <div className={classNames('col-md-12 col-lg-12', style.colMd)}>
                                             <div className={'icon'}><Icon name={'user'}/></div>
-                                            <MDBInput label='E-mail' id='formEmail' style={{paddingLeft: '40px'}} onChange={(ev: any) => this.onChangeInput(ev)}/>
+                                            <MDBInput label='E-mail' id='formEmail' style={{paddingLeft: '40px'}} value={this.state.email} onChange={(ev: any) => this.onChangeInput(ev)}/>
                                         </div>
                                     </div>
                                     <div className={classNames('row', style.colRow)}>
                                         <div className={classNames('col-md-12 col-lg-12', style.colMd)}>
                                             <div className={'icon'}><Icon name={'key'}/></div>
-                                            <MDBInput label='Password' id='formPassword' style={{paddingLeft: '40px'}} onChange={(ev: any) => this.onChangeInput(ev)}/>
+                                            <MDBInput label='Password' id='formPassword' style={{paddingLeft: '40px'}} value={this.state.password} onChange={(ev: any) => this.onChangeInput(ev)}/>
                                         </div>
                                     </div>
 
@@ -127,7 +174,8 @@ export default class LoginPage extends React.PureComponent<{}, {email: string, p
                             </div>
                         </div>
                     </div>
-                </div>                
+                </div>
+                {this.state.displayModal && <div>{showDialogInfo(this.state.messageToDisplay, this.state.displayModal, this.callback)}</div>}
             </React.Fragment>
         );
     }
