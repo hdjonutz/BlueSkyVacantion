@@ -8,6 +8,7 @@ import { resolve } from 'inversify-react';
 import {AuthorizedApiService} from '../../services/authorized_api_service';
 import {ApiService} from '../../services/api_service';
 import {encodePostBody} from '../../services/api_service';
+import DialogEditRow from "./dialogEdit";
 
 interface TableProps {
     data:           any;
@@ -20,6 +21,7 @@ interface TableStates {
     data:           Array<any>,
     orig_data:      Array<any>,
     configForms:    any;
+    editData:       any;
 }
 
 export default class Table extends React.Component<TableProps, TableStates> {
@@ -34,9 +36,11 @@ export default class Table extends React.Component<TableProps, TableStates> {
             data:           this.props.data,
             orig_data:      this.props.data,
             configForms:    this.props.configForms,
+            editData:       null,
         };
         this.onClickDelete  = this.onClickDelete.bind(this);
         this.onClickAddEdit = this.onClickAddEdit.bind(this);
+        this.saveCallback   = this.saveCallback.bind(this);
     }
 
     componentDidMount() {}
@@ -80,41 +84,57 @@ export default class Table extends React.Component<TableProps, TableStates> {
             });
     }
 
-    onClickAddEdit() {
-        alert('Add');
+    onClickAddEdit(data?: any) {
+
     }
+
+    saveCallback(action: boolean) {
+        if (action === true) {
+            // save
+            this.setState({editData: null});
+        } else {
+            this.setState({editData: null});
+        }
+    }
+
 
     render() {
         return(
-            <div className={classNames(style.container, style.column)}>
-                <table>
-                    <thead>
-                        <tr>
-                            {this.state.configForms && this.state.configForms[this.props.formId].ATTS
-                                .map((kName: string, m: number) =>
-                                <th key={m} className={style.th}>
-                                    <div>{i18n(kName.NAME_I18N)}</div><div><input /></div>
-                                </th>)
-                            }
-                            <th className={style.th}>Count: {this.state.data.length} <br/>
-                                <span onClick={() => this.onClickAddEdit}>Add</span>
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {this.state.data.map((tr, i: number) =>
-                            <tr key={i}>
+            <React.Fragment>
+                <div className={classNames(style.container, style.column)}>
+                    <table>
+                        <thead>
+                            <tr>
                                 {this.state.configForms && this.state.configForms[this.props.formId].ATTS
-                                    .map((k, m: number) => <td key={i + '_' + m}>{tr[k.KEY+'Display']}</td>)}
-                                <td key={i + '_'}>
-                                    <span onClick={() => this.onClickAddEdit(tr)} >Edit &nbsp;</span>
-                                    | <span onClick={() => this.onClickDelete(tr)}>&nbsp;Delete</span>
-                                </td>
+                                    .map((kName: string, m: number) =>
+                                    <th key={m} className={style.th}>
+                                        <div>{i18n(kName.NAME_I18N)}</div><div><input /></div>
+                                    </th>)
+                                }
+                                <th className={style.th}>Count: {this.state.data.length} <br/>
+                                    <span onClick={() => this.setState({editData: []})}>Add</span>
+                                </th>
                             </tr>
-                        )}
-                    </tbody>
-                </table>
-            </div>
+                        </thead>
+                        <tbody>
+                            {this.state.data.map((tr, i: number) =>
+                                <tr key={i}>
+                                    {this.state.configForms && this.state.configForms[this.props.formId].ATTS
+                                        .map((k, m: number) => <td key={i + '_' + m}>{tr[k.KEY+'Display']}</td>)}
+                                    <td key={i + '_'}>
+                                        <span onClick={() => this.setState({editData: tr})} >Edit &nbsp;</span>
+                                        | <span onClick={() => this.onClickDelete(tr)}>&nbsp;Delete</span>
+                                    </td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
+                </div>
+                {this.state.editData && <DialogEditRow title={this.state.editData ? 'Edit': 'Add'}
+                                                       data={this.state.editData}
+                                                       isOpen={this.state.editData !== null}
+                                                       callback={this.saveCallback} />}
+            </React.Fragment>
         )
     }
 }

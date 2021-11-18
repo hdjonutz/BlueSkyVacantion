@@ -1,0 +1,26 @@
+.flex {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 4px;
+
+  flex: 1;
+  .full{
+    flex: 1;
+  }
+}
+
+.container {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  min-width: 0;
+
+  &.column {
+    flex-direction: column;
+  }
+}
+
+.notValid {
+  border: 1px solid red;
+
+}
