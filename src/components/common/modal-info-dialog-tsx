@@ -7,21 +7,21 @@ import {
 
 interface ModalInfoDialogProps {
     message:        string;
-    displayModal:   boolean;
+    displayModal?:   boolean;
 }
 
 export default class ModalInfoDialog extends React.PureComponent<ModalInfoDialogProps, {displayModal: boolean}> {
 
     constructor(props: any) {
         super(props);
-        this.state={displayModal: this.props.};
+        this.state={displayModal: this.props.displayModal};
     }
     toggleShow() {
         this.state={displayModal: false};
     }
     public render() {
         return (
-                <MDBModal staticBackdrop tabIndex='-1' show={this.state.displayModal}>
+                <MDBModal staticBackdrop tabIndex={'-1'} show={this.state.displayModal}>
                     <MDBModalDialog>
                         <MDBModalContent>
                             <MDBModalHeader>
@@ -31,9 +31,7 @@ export default class ModalInfoDialog extends React.PureComponent<ModalInfoDialog
                             <MDBModalBody>{this.props.message}</MDBModalBody>
 
                             <MDBModalFooter>
-                                <MDBBtn color='secondary' onClick={this.toggleShow.bind(this)}>
-                                    Close
-                                </MDBBtn>
+                                <MDBBtn color='secondary' onClick={this.toggleShow.bind(this)}> Close </MDBBtn>
                             </MDBModalFooter>
                         </MDBModalContent>
                     </MDBModalDialog>

@@ -77,6 +77,7 @@ export default class LoginPage extends React.PureComponent<{}, LoginPageStates> 
         const _that = this;
         this.subscription = this.authenticationService.login(this.state.email, this.state.password)
             .subscribe((res: any) => {
+                debugger;
                 if (res) {
                     this.setState({email: '', password: ''});
                     location.href = _that.goHome;

@@ -3,16 +3,14 @@ import {Route, Switch, Redirect} from 'react-router-dom';
 import style from './app-view.less';
 import {i18n, missingI18n} from '../../../i18n/i18n';
 import NotFoundPage from './not-found-page';
-import HomePage from './home-page';
+import LayoutPage from './layout-page';
 import {MenuRoutes, RoutesService} from '../../services/routes_service';
 import {ChildRoute, MenuGroup, MenuItem} from '../ui/navigation/routes';
-import Page_one from "../page_one/page_one";
-import Page_two from "../page_two/page_two";
-import Page_three from "../page_three/page_three";
-import LoginPage from "../login_page/login_page";
 import {NavLink} from 'react-router-dom';
 import classNames from 'classnames';
 import { MDBBtn } from 'mdb-react-ui-kit';
+import Footer from '../../footer/Footer';
+import Header from '../../header/Header';
 
 interface AppViewProps {
     routes: ReadonlyArray<MenuGroup>;
@@ -107,7 +105,7 @@ export default class AppView extends React.Component<AppViewProps, AppViewState>
     renderGroups(groups: ReadonlyArray<MenuGroup>): ReadonlyArray<JSX.Element<any>> {
         // debugger;
         return groups.map((g) => g.items.map((item) =>
-                <NavLink className={classNames(style.link)}
+                <NavLink className={classNames(style.link, item.display_btn === false ? style.hide : '')}
                          activeClassName={style.activeRoute}
                          to={item.path}>
                              <MDBBtn className='mx-2' color='info'>
@@ -167,7 +165,6 @@ export default class AppView extends React.Component<AppViewProps, AppViewState>
                 routes.push(this.renderRoute(i));
             });
         });
-
         return routes;
     }
 
@@ -215,44 +212,43 @@ export default class AppView extends React.Component<AppViewProps, AppViewState>
         ));
     }
 
-    renderLogo() {
-        return (
-            <div>
-                <MediaQuery maxHeight={800}>
-                    {(matches: boolean) =>
-                        <TabbedSidebarLink
-                            title={missingI18n('Startseite')}
-                            icon='interautomation'
-                            iconSize={matches ? 30 : 38}
-                            className={style.logo}
-                            path='/'
-                        />
-                    }
-                </MediaQuery>
-            </div>
-        );
-    }
+    // renderLogo() {
+    //     return (
+    //         <div>
+    //             <MediaQuery maxHeight={800}>
+    //                 {(matches: boolean) =>
+    //                     <TabbedSidebarLink
+    //                         title={missingI18n('Startseite')}
+    //                         icon='interautomation'
+    //                         iconSize={matches ? 30 : 38}
+    //                         className={style.logo}
+    //                         path='/'
+    //                     />
+    //                 }
+    //             </MediaQuery>
+    //         </div>
+    //     );
+    // }
 
     render() {
-        const gruppen = this.state.menuRoutes ? this.state.menuRoutes.groups : [];
+        const gruppen   = this.state.menuRoutes ? this.state.menuRoutes.groups : [];
+        const paths = [].concat.apply([], this.props.routes.map((m) => m.items.map((p) => p.path)));
+        const foundPath = paths.indexOf(location.hash.replace('#', '').replace('/', '')) >= 0;
+        const notFound = !foundPath && location.hash.replace('#', '').replace('/', '') !== '';
 
         return (
             <React.Fragment>
                 <div className={style.layout}>
-                    <div style={{position: 'absolute', top:'20px', zIndex: 999}}>{this.renderGroups(gruppen)}</div>
+                    <div style={{position: 'absolute', top:'200px', zIndex: 999}}>{this.renderGroups(gruppen)}</div>
                     <div className={style.main}>
+                        <Header />
                         {this.state.menuRoutes && <Switch>
-                            <Route exact path='/' component={HomePage} />
-                            <Route exact path='/page1' component={Page_one} />
-                            <Route exact path='/page2' component={Page_two} />
-                            <Route exact path='/page3' component={Page_three} />
-                            <Route exact path='/login' component={LoginPage} />
-                            {/* <Route path='/slave/' component={SlaveHomePage} /> */}
-
                             {this.renderRoutes(this.state.menuRoutes.groups)}
-
-                            <Route component={NotFoundPage} />
+                            {notFound && <Route component={NotFoundPage} />}
+                            {!notFound && <Route component={LayoutPage} />}
                         </Switch>}
+                        <Footer />
+
                     </div>
                 </div>
             </React.Fragment>

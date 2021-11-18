@@ -1,0 +1,60 @@
+@import '../../assets/css/colors_global.less';
+@import '../../assets/css/global.less';
+@import '../../assets/fonts/style_font.less';
+
+.anvelope{
+  padding: 8px;
+  display: flex;
+  flex: 1;
+}
+.container{
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  min-width: 0;
+
+  &.column{
+    flex-direction: column;
+  }
+
+  overflow: auto;
+  height: 100px;
+
+  border: 1px solid #c1c1c1;
+  box-shadow: 0 2px 5px 0 rgb(0 0 0 / 20%), 0 2px 10px 0 rgb(0 0 0 / 10%);
+
+  thead {
+    th {
+      position: sticky;
+      top: 0;
+      z-index: 1;
+      &.th{
+        width: 170px;
+        text-align: center;
+        div, input{
+          width: 100%;
+        }
+      }
+
+    }
+  }
+
+  tbody {
+    tr:nth-child(odd){
+      background-color: #f6f7fe;
+    }
+    tr:hover{
+      background-color: #e4e6f8;
+    }
+    th {
+      position: sticky;
+      left: 0;
+    }
+  }
+
+
+  /* Just common table stuff. Really. */
+  table  { border-collapse: collapse; width: 100%; }
+  th, td { padding: 2px; white-space: nowrap; border-right: 1px solid #eeeeee; border-bottom: 1px solid #eeeeee;}
+  th     { background:#eee; }
+}

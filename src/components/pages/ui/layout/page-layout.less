@@ -1,9 +1,4 @@
-@font-color-dark: red;
-@font-color-secondary:blue;
-@interautomation-yellow: yellow;
-
 .header {
-    color: @font-color-dark;
     height: 48px;
     padding: 7px;
     box-sizing: border-box;
@@ -14,17 +9,6 @@
     flex-shrink: 0;
 }
 
-.title {
-    padding: 3px 5px 3px 3px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-
-    input {
-        height: 20px;
-    }
-}
-
 .page {
     flex: 1;
     display: flex;
@@ -32,78 +16,9 @@
     min-height: 0;
 }
 
-.info {
-    position: absolute;
-    right: 5px;
-    top: 5px;
-    font-size: 10px;
-    color: @font-color-secondary;
-
-    span {
-        padding-left: 5px;
-    }
-
-    span.badge {
-        background-color: #767676;
-        color: #fff;
-        background-image: repeating-linear-gradient(45deg,transparent,transparent 15px,@interautomation-yellow 0,@interautomation-yellow 30px);
-        border: 1px solid black;
-        border-radius: 3px;
-        text-shadow: 0 0 2px black;
-        padding: 2px;
-    }
-}
-
 .toolbar {
-    display: flex;
-    align-items: center;
 
-    button {
-        display: inline-block;
-    }
-
-    a {
-        padding: 0px 5px;
-    }
 }
 .toolbarFlex{
     flex:1;
-}
-
-.pageContent {
-    flex: 1;
-    margin-top: 5px;
-    min-height: 0;
-
-    @media print {
-        display: block;
-    }
-
-    &.scrollable {
-        overflow-y: auto;
-    }
-
-    &.fullscreen {
-        margin-top: 0px;
-
-        &.notScrollable {
-            padding-bottom: 0px;
-        }
-    }
-
-    &.notScrollable {
-        display: flex;
-        flex-direction: column;
-
-        padding-bottom: 15px;
-    }
-
-    &.defaultPadding {
-        padding: 5px 15px 15px 5px;
-
-        @media print {
-            /* No padding in print mode*/
-            padding: 0;
-        }
-    }
 }

@@ -19,7 +19,7 @@ import { container } from "./services/inversify.config";
 
 import AppRouter from './AppRouter';
 
-console.log(`%c🛳 BlueSkyVacantion %c\n name: ${info.name} \n version: ${info.id} \n date: ${info.build} \n branch: ${info.branch} %c\n Copyright © Daniel-Ionut Hariga`,
+console.log(`%c🛳 Meandro Jachting LTD %c\n name: ${info.name} \n version: ${info.id} \n date: ${info.build} \n branch: ${info.branch} %c\n Copyright © Daniel-Ionut Hariga`,
     'font-size: 40px; color: #2196f3; font-family: "Segoe UI Symbol";',
     'font-size: 16px; color: #ab0000; font-family: "Segoe UI Symbol";',
     'font-size: 16px; color: #000; font-family: "Segoe UI Symbol";',);

@@ -4,6 +4,7 @@ import {RoutesService} from '../../../services/routes_service';
 import MenuTile from '../../ui/navigation/menu-tile';
 import {RouteComponentProps, withRouter} from 'react-router';
 import {MenuEntry, MenuGroup} from './../../../../routes';
+import {Subscription} from 'rxjs';
 
 interface NavigationTilesProps {
     groupPath?: string;

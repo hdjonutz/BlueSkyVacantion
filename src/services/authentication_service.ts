@@ -202,9 +202,7 @@ export class AuthenticationService {
      * @param password
      * @return {any}
      */
-    login(username: string, password: string): any /*Observable<Authentication>*/ {
-        console.log(this);
-        
+    login(username: string, password: string): Observable<Authentication> {
         return this.apiService
             .post('getAuthenticationUser', {email: username, pass: password})
             .switchMap((response) => {

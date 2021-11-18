@@ -20,8 +20,6 @@ import {MDBBtn, MDBInput, MDBModal,
     MDBModalFooter} from 'mdb-react-ui-kit';
 import {Observable, Subscription} from 'rxjs';
 import Icon from '../ui/utils/icon';
-import { Form } from 'reactstrap';
-import { off } from 'local-storage';
 
 interface IContactUsStates {
     displayModal:   boolean;

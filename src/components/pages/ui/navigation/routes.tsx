@@ -88,6 +88,8 @@ interface WithComponent {
      * angeben wird.
      */
     render?: never;
+
+    display_btn?:   boolean;
 }
 
 interface WithRender {

@@ -2,7 +2,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import style from './Home.less';
-import {i18n} from "../i18n/i18n";
+import {i18n} from "../../../i18n/i18n";
 
 const Home = () => (
     <div className={style.container}>

@@ -33,3 +33,21 @@ tabs_name:
   server: Server
   notification: Notification
   information: Information
+
+tid: Id
+
+forms:
+  user:
+    name: Name
+    vorname: Vorname
+    email: E-Mail
+    pass: Pass
+    new_pass: New Pass
+    isAdmin: Is Administrator
+    activated: Aktivated
+    admin: Administrator
+    user: User
+    activate: Aktivate
+    deactivate: Deactivate
+    no: No
+    yes: Yes
