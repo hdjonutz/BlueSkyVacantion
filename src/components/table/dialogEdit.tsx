@@ -7,16 +7,20 @@ import 'reflect-metadata';
 
 import ModalYesNoDialog from '../common/modal-yes-no-dialog';
 import GridRow from './grid-row';
+import {IConfigForms, IRowAttendands} from './forms';
 
 interface DialogEditRowProps {
-    title:      string;
-    data:       any;
-    isOpen:     boolean;
-    callback:   Function;
+    title:          string;
+    data:           any;
+    isOpen:         boolean;
+    callback:       Function;
+    configForms:    IConfigForms;
+    formId:         string;
 }
 
 interface DialogEditRowStates {
     object: any;
+    config: IRowAttendands;
 }
 
 export default class DialogEditRow extends React.Component<DialogEditRowProps, DialogEditRowStates> {
@@ -25,33 +29,46 @@ export default class DialogEditRow extends React.Component<DialogEditRowProps, D
         super(props);
 
         this.state = {
-            object: JSON.parse(JSON.stringify(this.props.data)),
+            object:         JSON.parse(JSON.stringify(this.props.data)),
+            config:         this.props.configForms[this.props.formId],
         };
+
+        this.onChangeValue = this.onChangeValue.bind(this);
     }
 
-    onChangeValue(value: any) {
-        debugger;
+    onChangeValue(newData: any) {
+        const object = this.state.object;
+        object[newData.target] = newData.value;
+        this.setState({ object });
     }
 
     getDates(): JSX.Element {
         return (
             <div className={classNames(style.container, style.column)}>
-                <GridRow label={'tid'} value={this.state.object['tid']} onChange={this.onChangeValue} />
-                <GridRow label={'tid2'} value={this.state.object['name']} onChange={this.onChangeValue} />
-                <GridRow label={'tid3'} value={this.state.object['vorname']} onChange={this.onChangeValue} />
-                <GridRow label={'tid4'} value={this.state.object['email']} onChange={this.onChangeValue} />
-                <GridRow label={'tid5'} value={this.state.object['pass']} onChange={this.onChangeValue} />
+                {this.state.config.ATTS.map((r, idx: number) =>
+                    <GridRow label={i18n(r.NAME_I18N)}
+                             value={this.state.object[r.KEY]}
+                             onChange={this.onChangeValue}
+                             configForms={this.props.configForms}
+                             configItem={r}
+                             options={r.OPTS}
+                             readOnly={r.READONLY}
+                             key={idx}
+                    />
+                )}
             </div>
         )
     }
 
     render() {
+        console.log(this.state);
+        debugger;
         const component = this.getDates();
         return(
             <ModalYesNoDialog title={this.props.title}
                               component={component}
                               displayModal={this.props.isOpen}
-                              callback={this.props.callback} />
+                              callback={(action: boolean) => this.props.callback(action ? this.state.object : null)} />
         )
     }
 }

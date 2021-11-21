@@ -32,8 +32,10 @@ export default class Table extends React.Component<TableProps, TableStates> {
     constructor(props: TableProps) {
         super(props);
 
+
+        const data_formated = this.parseData(this.props.data, this.props.configForms, this.props.formId);
         this.state = {
-            data:           this.props.data,
+            data:           data_formated,
             orig_data:      this.props.data,
             configForms:    this.props.configForms,
             editData:       null,
@@ -56,21 +58,29 @@ export default class Table extends React.Component<TableProps, TableStates> {
             });
         }
     }
+
     parseData(data: any, allConfigs: any, formId: string): Array<any> {
+        if (!data || !allConfigs) {
+            return [];
+        }
         const currentConf = allConfigs[formId];
 
-        const dataFormated = data.map((d: any) => {
+        const dataFormated = JSON.parse(JSON.stringify(data));
+        dataFormated.map((d: any) => {
             Object.keys(d).map((k) => {
+                if (d && !d.DisplayTranslatedData) {
+                    d.DisplayTranslatedData = {};
+                }
                 const keyConf = currentConf.ATTS.find((a: any) => a.KEY === k);
                 if (keyConf && keyConf.OPTS) {
                     const opt = keyConf.OPTS.find((f: any) => f.VALUE.toString() === d[k].toString());
-                    d[`${k}Display`] = i18n(opt.TITEL_I18N);
+                    d['DisplayTranslatedData'][k] = i18n(opt.TITEL_I18N);
                 } else {
-                    d[`${k}Display`] = d[k];
+                    d['DisplayTranslatedData'][k] = d[k];
                 }
             });
         });
-        return data;
+        return dataFormated;
     }
 
     onClickDelete(data: any) {
@@ -89,8 +99,9 @@ export default class Table extends React.Component<TableProps, TableStates> {
     }
 
     saveCallback(action: boolean) {
-        if (action === true) {
+        if (action) {
             // save
+            debugger;
             this.setState({editData: null});
         } else {
             this.setState({editData: null});
@@ -120,7 +131,7 @@ export default class Table extends React.Component<TableProps, TableStates> {
                             {this.state.data.map((tr, i: number) =>
                                 <tr key={i}>
                                     {this.state.configForms && this.state.configForms[this.props.formId].ATTS
-                                        .map((k, m: number) => <td key={i + '_' + m}>{tr[k.KEY+'Display']}</td>)}
+                                        .map((k: any, m: number) => <td key={i + '_' + m}>{tr.DisplayTranslatedData[k.KEY]}</td>)}
                                     <td key={i + '_'}>
                                         <span onClick={() => this.setState({editData: tr})} >Edit &nbsp;</span>
                                         | <span onClick={() => this.onClickDelete(tr)}>&nbsp;Delete</span>
@@ -133,7 +144,10 @@ export default class Table extends React.Component<TableProps, TableStates> {
                 {this.state.editData && <DialogEditRow title={this.state.editData ? 'Edit': 'Add'}
                                                        data={this.state.editData}
                                                        isOpen={this.state.editData !== null}
-                                                       callback={this.saveCallback} />}
+                                                       callback={this.saveCallback}
+                                                       configForms={this.props.configForms}
+                                                       formId={this.props.formId}
+                />}
             </React.Fragment>
         )
     }
