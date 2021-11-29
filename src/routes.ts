@@ -10,6 +10,7 @@ import ForgotPasswordPage from './components/pages/login_page/forgot_password_pa
 import UsersPage from './components/pages/admin_page/users_page';
 import CategoriesPage from './components/pages/admin_page/categories_page';
 import ProductsPage from './components/pages/admin_page/products_page';
+import JsonViewerPage from './components/pages/admin_page/json_viewer_page';
 
 
 /**
@@ -132,6 +133,11 @@ const routes: ReadonlyArray<MenuGroup> = [
                         titleI18n: 'Products',
                         path: '/admin/administrator/:filename_page',
                         component: ProductsPage,
+                    },
+                    {
+                        titleI18n: 'JsonConfig',
+                        path: '/admin/administrator/:filename_page',
+                        component: JsonViewerPage,
                     },
                 ],
             },

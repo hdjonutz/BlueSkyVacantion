@@ -10,12 +10,14 @@ import {MDBBtn} from "mdb-react-ui-kit";
 
 import CategoriesPage from './categories_page';
 import ProductsPage from './products_page';
+import JsonViewerPage from './json_viewer_page';
+
 import classNames from 'classnames';
 import {Observable} from 'rxjs';
 import {Ids} from '../../../formsIds';
 import {AuthorizedApiService} from '../../../services/authorized_api_service';
 import {ApiService} from '../../../services/api_service';
-import Table from "../../table/table";
+import Table from '../../table/table';
 
 interface UsersPageStates {
     users:          any,
@@ -89,15 +91,25 @@ export default class UsersPage extends React.Component<RouteComponentProps<{}>, 
                       />
     }
 
+    getComponent(filter: string): JSX.Element {
+        switch (filter) {
+            case 'Categories':
+                return <CategoriesPage />;
+            case 'Products':
+                return <ProductsPage />;
+            case 'JsonConfig':
+                return <JsonViewerPage />;
+            default:
+                return this.tableUsers()
+        }
+    }
     render() {
         const filter = this.props.match.params.filename_page;
         return (
             <div className={classNames(style.container, style.column)}>
                 {this.state.group && <div>{this.renderGroups(this.state.group)}</div>}
                 <div className={classNames(style.container, style.column)}>
-                    {filter !== 'Categories' && filter !== 'Products' && this.tableUsers()}
-                    {filter === 'Categories' && <CategoriesPage />}
-                    {filter === 'Products' && <ProductsPage />}
+                    {this.getComponent(filter)}
                 </div>
             </div>
         )

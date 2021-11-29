@@ -1,9 +1,10 @@
 import * as React from 'react';
 import style from './dialog-edit.less';
 // import classNames from 'classnames';
-import {i18n} from "../../i18n/i18n";
+import {i18n} from '../../i18n/i18n';
 import {IConfigForms, validityFormLength} from './forms';
-import classNames from "classnames";
+import classNames from 'classnames';
+import IAttendands from './forms';
 
 interface GridRowProps {
     label:      string;
