@@ -1,6 +1,6 @@
 import * as React from 'react';
 import 'reflect-metadata';
-import {MDBBtn, MDBInput, MDBModal,
+import {MDBBtn, MDBModal,
     MDBModalDialog,
     MDBModalContent,
     MDBModalHeader,
@@ -12,6 +12,7 @@ interface ModalYesNoDialogProps {
     title:          string;
     component:      any;
     displayModal:   boolean;
+    disabled:       boolean;
     callback:       Function;
 }
 
@@ -19,7 +20,7 @@ export default class ModalYesNoDialog extends React.PureComponent<ModalYesNoDial
 
     constructor(props: any) {
         super(props);
-        this.state={
+        this.state ={
             displayModal:   this.props.displayModal
         };
         this.toggleShow = this.toggleShow.bind(this);
@@ -39,7 +40,7 @@ export default class ModalYesNoDialog extends React.PureComponent<ModalYesNoDial
                     <MDBModalContent>
                         <MDBModalHeader>
                             <MDBModalTitle>{this.props.title}</MDBModalTitle>
-                            <MDBBtn className='btn-close' color='none' onClick={this.toggleShow.bind(this)}></MDBBtn>
+                            <MDBBtn className='btn-close' color='none' onClick={() => this.toggleShow()}></MDBBtn>
                         </MDBModalHeader>
                         <MDBModalBody>{this.props.component}</MDBModalBody>
 
@@ -47,7 +48,7 @@ export default class ModalYesNoDialog extends React.PureComponent<ModalYesNoDial
                             <MDBBtn color='secondary' onClick={() => this.toggleShow()}>
                                 Close
                             </MDBBtn>
-                            <MDBBtn color='secondary' onClick={() => this.toggleShow(true)}>
+                            <MDBBtn color='secondary' disabled={this.props.disabled} onClick={() => this.toggleShow(true)}>
                                 Save
                             </MDBBtn>
                         </MDBModalFooter>

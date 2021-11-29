@@ -19,8 +19,9 @@ interface DialogEditRowProps {
 }
 
 interface DialogEditRowStates {
-    object: any;
-    config: IRowAttendands;
+    object:     any;
+    config:     IRowAttendands;
+    disabled:   boolean;
 }
 
 export default class DialogEditRow extends React.Component<DialogEditRowProps, DialogEditRowStates> {
@@ -28,18 +29,29 @@ export default class DialogEditRow extends React.Component<DialogEditRowProps, D
     constructor(props: DialogEditRowProps) {
         super(props);
 
+        const data      = this.props.data ? JSON.parse(JSON.stringify(this.props.data)) : []    ;
+        const config    = this.props.configForms[this.props.formId];
+
         this.state = {
-            object:         JSON.parse(JSON.stringify(this.props.data)),
-            config:         this.props.configForms[this.props.formId],
+            object:         data,
+            config:         config,
+            disabled:       true,
         };
 
-        this.onChangeValue = this.onChangeValue.bind(this);
+        this.onChangeValue      = this.onChangeValue.bind(this);
+        this.areDifferentValues = this.areDifferentValues.bind(this);
     }
 
-    onChangeValue(newData: any) {
+    areDifferentValues(): boolean {
+        return Object.entries(this.props.data).toString() !== Object.entries(this.state.object).toString();
+    }
+
+    onChangeValue(newData: any, isValid: boolean) {
         const object = this.state.object;
         object[newData.target] = newData.value;
-        this.setState({ object });
+        const differentValues = this.areDifferentValues();
+        const changed = isValid && differentValues;
+        this.setState({ object, disabled: !changed });
     }
 
     getDates(): JSX.Element {
@@ -61,13 +73,12 @@ export default class DialogEditRow extends React.Component<DialogEditRowProps, D
     }
 
     render() {
-        console.log(this.state);
-        debugger;
         const component = this.getDates();
         return(
             <ModalYesNoDialog title={this.props.title}
                               component={component}
                               displayModal={this.props.isOpen}
+                              disabled={this.state.disabled}
                               callback={(action: boolean) => this.props.callback(action ? this.state.object : null)} />
         )
     }

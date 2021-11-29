@@ -5,7 +5,7 @@
 .footer{
   display: flex;
   width: 100%;
-  padding: 40px 0 5px;;
+  padding: 15px 0 5px;;
   background-color: @gray_dark;
 }
 .container{
@@ -19,11 +19,12 @@
       flex-direction: column;
       ul {
         padding: 0;
+        margin-bottom: 1px;
         li{
           list-style-type: none;
           color: @footer_column_li_color;
           font-size: @footer_column_li_size;
-          margin-bottom: 5px;
+          margin-bottom: 1px;
           font-weight: @footer_column_li_weight;
           /*center icons and text*/
           align-items: center;
@@ -45,6 +46,10 @@
             border: 1px solid @gray_lighter;
             font-family: @fontfamily_text;
             font-weight: @footer_column_li_weight;
+          }
+          img{
+            height: 26px;
+            width: 26px;
           }
         }
       }

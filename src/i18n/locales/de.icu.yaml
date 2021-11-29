@@ -53,3 +53,4 @@ forms:
     rolle:  Rolle
     no: Nein
     yes: Ja
+    null: ---

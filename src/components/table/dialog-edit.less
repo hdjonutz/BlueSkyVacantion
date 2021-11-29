@@ -25,7 +25,26 @@
   }
 }
 
-.notValid {
-  border: 1px solid red;
 
+input, select {
+  border: 1px solid #757575;
+  border-radius: 2px;
+  padding-right: 8px;
+
+  &.changed{
+    background: linear-gradient(to right, #ffffff 98%, #1000ff 2%);
+    border: 1px solid #757575;
+    border-radius: 2px;
+  }
+  &.notValid {
+    border: 1px solid red;
+    border-radius: 2px;
+    &:focus{
+      outline: none !important;
+      border: 2px solid red;
+      border-radius: 2px;
+    }
+  }
 }
+
+

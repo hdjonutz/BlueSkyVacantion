@@ -51,3 +51,4 @@ forms:
     deactivate: Deactivate
     no: No
     yes: Yes
+    null: ---

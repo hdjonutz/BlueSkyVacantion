@@ -41,13 +41,12 @@ export default class Table extends React.Component<TableProps, TableStates> {
             editData:       null,
         };
         this.onClickDelete  = this.onClickDelete.bind(this);
-        this.onClickAddEdit = this.onClickAddEdit.bind(this);
         this.saveCallback   = this.saveCallback.bind(this);
     }
 
     componentDidMount() {}
 
-    componentWillUpdate(nextProps, nextState) {
+    componentWillUpdate(nextProps: TableProps, nextState: TableStates) {
         if (nextProps.data && JSON.stringify(nextProps.data) !== JSON.stringify(this.props.data)
                 || JSON.stringify(nextProps.configForms) !== JSON.stringify(this.props.configForms)) {
             const data_formated = this.parseData(nextProps.data, nextProps.configForms, nextProps.formId);
@@ -86,7 +85,7 @@ export default class Table extends React.Component<TableProps, TableStates> {
     onClickDelete(data: any) {
         const body = this.state.orig_data.find((f) => f.tid === data.tid);
         const payload = encodePostBody(body);
-        this.authorizedApiService.post('delFormItem', {formid: this.props.formId}, payload)
+        this.apiService.post('delFormItem', {formid: this.props.formId}, payload)
             .subscribe((res) => {
                 if (this.props.callback) {
                     this.props.callback();
@@ -94,14 +93,19 @@ export default class Table extends React.Component<TableProps, TableStates> {
             });
     }
 
-    onClickAddEdit(data?: any) {
-
-    }
-
-    saveCallback(action: boolean) {
-        if (action) {
+    saveCallback(data: any) {
+        if (data) {
             // save
-            debugger;
+            let payload = data;
+            payload.tid = payload.tid || 0;
+            payload = encodePostBody(payload);
+            this.authorizedApiService.post('setFormItem', {formid: this.props.formId}, payload)
+                .subscribe((res) => {
+                    if (this.props.callback) {
+                        this.props.callback();
+                    }
+                });
+
             this.setState({editData: null});
         } else {
             this.setState({editData: null});
@@ -117,7 +121,7 @@ export default class Table extends React.Component<TableProps, TableStates> {
                         <thead>
                             <tr>
                                 {this.state.configForms && this.state.configForms[this.props.formId].ATTS
-                                    .map((kName: string, m: number) =>
+                                    .map((kName: any, m: number) =>
                                     <th key={m} className={style.th}>
                                         <div>{i18n(kName.NAME_I18N)}</div><div><input /></div>
                                     </th>)
