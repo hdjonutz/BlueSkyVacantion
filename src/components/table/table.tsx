@@ -9,6 +9,7 @@ import {AuthorizedApiService} from '../../services/authorized_api_service';
 import {ApiService} from '../../services/api_service';
 import {encodePostBody} from '../../services/api_service';
 import DialogEditRow from "./dialogEdit";
+import {IAttendands} from "./forms";
 
 interface TableProps {
     data:           any;
@@ -22,9 +23,12 @@ interface TableStates {
     orig_data:      Array<any>,
     configForms:    any;
     editData:       any;
+    referenceData:  any;
 }
 
 export default class Table extends React.Component<TableProps, TableStates> {
+
+    private formIdData = {};
 
     @resolve(ApiService)                private apiService: ApiService;
     @resolve(AuthorizedApiService)      private authorizedApiService: AuthorizedApiService;
@@ -39,43 +43,80 @@ export default class Table extends React.Component<TableProps, TableStates> {
             orig_data:      this.props.data,
             configForms:    this.props.configForms,
             editData:       null,
+            referenceData:  null,
         };
         this.onClickDelete  = this.onClickDelete.bind(this);
         this.saveCallback   = this.saveCallback.bind(this);
     }
 
-    componentDidMount() {}
+    componentDidUpdate(prevProps: TableProps, prevState: TableStates, snapshot) {
 
-    componentWillUpdate(nextProps: TableProps, nextState: TableStates) {
-        if (nextProps.data && JSON.stringify(nextProps.data) !== JSON.stringify(this.props.data)
-                || JSON.stringify(nextProps.configForms) !== JSON.stringify(this.props.configForms)) {
-            const data_formated = this.parseData(nextProps.data, nextProps.configForms, nextProps.formId);
-            this.setState({
-                orig_data:  nextProps.data,
-                data:       data_formated,
-                configForms: nextProps.configForms,
-            });
+        if (prevProps.data && JSON.stringify(prevProps.data) !== JSON.stringify(this.props.data)
+            || JSON.stringify(prevProps.configForms) !== JSON.stringify(this.props.configForms)) {
+
+            const data_formated = this.parseData(this.props.data, this.props.configForms, this.props.formId);
+
+            if (this.props.configForms) {
+                const currentConfig = this.props.configForms[this.props.formId];
+                const formsIdReference: Array<string> = currentConfig.ATTS
+                    .filter((f: IAttendands) => f.REFERENCE)
+                    .map((m: IAttendands) => m.REFERENCE.formid);
+
+                formsIdReference.map((formId: string, idx: number) => {
+                    Observable.combineLatest(
+                        this.apiService.get('getFormData', {formid: formId}).map((res) => res.data || []),
+                    ).subscribe((items) => {
+                        this.formIdData[formId] = items[0];
+                        debugger;
+                        if (formsIdReference.length === idx + 1) {
+                            this.setState({
+                                orig_data:      this.props.data,
+                                data:           data_formated,
+                                configForms:    this.props.configForms,
+                                referenceData:  this.formIdData,
+                            });
+                        }
+                    });
+                })
+            }
         }
     }
+
+    // componentWillUpdate(nextProps: TableProps, nextState: TableStates) {}
 
     parseData(data: any, allConfigs: any, formId: string): Array<any> {
         if (!data || !allConfigs) {
             return [];
         }
         const currentConf = allConfigs[formId];
-
         const dataFormated = JSON.parse(JSON.stringify(data));
+
         dataFormated.map((d: any) => {
             Object.keys(d).map((k) => {
+                const isMultiSelect = currentConf.ATTS.find((att: IAttendands) => att.KEY === k).TYPE === 22;
+                const keyConf       = currentConf.ATTS.find((a: any) => a.KEY === k);
+
                 if (d && !d.DisplayTranslatedData) {
                     d.DisplayTranslatedData = {};
                 }
-                const keyConf = currentConf.ATTS.find((a: any) => a.KEY === k);
+
                 if (keyConf && keyConf.OPTS) {
                     const opt = keyConf.OPTS.find((f: any) => f.VALUE.toString() === d[k].toString());
-                    d['DisplayTranslatedData'][k] = i18n(opt.TITEL_I18N);
+                    if ( isMultiSelect ) {
+                        d[k].toString().split('').map((e: string, idx: number) => {
+                            if (e === '1') {
+                                d.DisplayTranslatedData[k] = d.DisplayTranslatedData[k] ? d.DisplayTranslatedData[k] : '';
+                                d.DisplayTranslatedData[k] += keyConf.OPTS[idx].TITEL_I18N
+                                    ? i18n(keyConf.OPTS[idx].TITEL_I18N)
+                                    : opt.TITEL;
+                                d.DisplayTranslatedData[k] += ', \n';
+                            }
+                        });
+                    } else {
+                        d.DisplayTranslatedData[k] = i18n(opt.TITEL_I18N) || opt.TITEL;
+                    }
                 } else {
-                    d['DisplayTranslatedData'][k] = d[k];
+                    d.DisplayTranslatedData[k] = d[k];
                 }
             });
         });
@@ -147,6 +188,7 @@ export default class Table extends React.Component<TableProps, TableStates> {
                 </div>
                 {this.state.editData && <DialogEditRow title={this.state.editData ? 'Edit': 'Add'}
                                                        data={this.state.editData}
+                                                       referenceData={this.state.referenceData}
                                                        isOpen={this.state.editData !== null}
                                                        callback={this.saveCallback}
                                                        configForms={this.props.configForms}

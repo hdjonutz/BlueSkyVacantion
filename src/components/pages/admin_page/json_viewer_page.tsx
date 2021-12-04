@@ -56,7 +56,7 @@ export default class JsonViewerPage extends React.PureComponent<RouteComponentPr
             });
     }
 
-    getIconStyleInput(iconStyle) {
+    getIconStyleInput(iconStyle: any) {
         return (
             <ReactSelect
                 name="icon-style"

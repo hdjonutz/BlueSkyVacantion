@@ -1,5 +1,5 @@
 export const Ids = {
     'USERS':            '1001',
-    'CATEGORIES':       '1002',
-    'PRODUCTS':         '1003',
+    'PRODUCTS':         '1002',
+    'CATEGORIES':       '1003',
 };

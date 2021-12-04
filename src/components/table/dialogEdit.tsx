@@ -7,26 +7,27 @@ import 'reflect-metadata';
 
 import ModalYesNoDialog from '../common/modal-yes-no-dialog';
 import GridRow from './grid-row';
-import {IConfigForms, IRowAttendands} from './forms';
+import {IAttendands, IConfigForms, IRowAttendands} from './forms';
 
-interface DialogEditRowProps {
+interface IDialogEditRowProps {
     title:          string;
     data:           any;
     isOpen:         boolean;
     callback:       Function;
     configForms:    IConfigForms;
     formId:         string;
+    referenceData:  Array<IConfigForms>;
 }
 
-interface DialogEditRowStates {
+interface IDialogEditRowStates {
     object:     any;
     config:     IRowAttendands;
     disabled:   boolean;
 }
 
-export default class DialogEditRow extends React.Component<DialogEditRowProps, DialogEditRowStates> {
+export default class DialogEditRow extends React.Component<IDialogEditRowProps, IDialogEditRowStates> {
 
-    constructor(props: DialogEditRowProps) {
+    constructor(props: IDialogEditRowProps) {
         super(props);
 
         const data      = this.props.data ? JSON.parse(JSON.stringify(this.props.data)) : []    ;
@@ -57,7 +58,7 @@ export default class DialogEditRow extends React.Component<DialogEditRowProps, D
     getDates(): JSX.Element {
         return (
             <div className={classNames(style.container, style.column)}>
-                {this.state.config.ATTS.map((r, idx: number) =>
+                {this.state.config.ATTS.map((r: IAttendands, idx: number) =>
                     <GridRow label={i18n(r.NAME_I18N)}
                              value={this.state.object[r.KEY]}
                              onChange={this.onChangeValue}
@@ -65,6 +66,7 @@ export default class DialogEditRow extends React.Component<DialogEditRowProps, D
                              configItem={r}
                              options={r.OPTS}
                              readOnly={r.READONLY}
+                             referenceData={r.REFERENCE ? this.props.referenceData[r.REFERENCE.formid] : null}
                              key={idx}
                     />
                 )}
@@ -74,6 +76,7 @@ export default class DialogEditRow extends React.Component<DialogEditRowProps, D
 
     render() {
         const component = this.getDates();
+        console.log(this.state, this.props);
         return(
             <ModalYesNoDialog title={this.props.title}
                               component={component}

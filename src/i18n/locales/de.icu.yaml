@@ -54,3 +54,24 @@ forms:
     no: Nein
     yes: Ja
     null: ---
+
+  product:
+    name: Name
+    group:  Group
+    sub_grup: Sub Group
+    price: Price
+    price-item: Price Item
+    description: Description
+    rent: Rent
+    inclusive_services: Service included
+    service: Service pick Up
+    person: Person
+    day: Day
+    week: Week
+    month: Month
+    hotel: Hotel
+    shipping: Shipping
+    airport: Airport
+    train: Train
+    bus: Bus
+    null: ---

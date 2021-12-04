@@ -139,6 +139,7 @@ export class ApiService {
             ? JSON.stringify(normalizeJson(body))
             : body;
 
+        debugger;
         return this
             .buildUrl(key, parameters, format)
             .first()
@@ -157,7 +158,7 @@ export class ApiService {
                 // First only add the key name and mandant to the query object, because getting the parameter order
                 // right helps while debugging. But we have add the other global level parameters too, so that
                 // everything that is added on the higher layers comes last (like the access token)
-
+debugger;
                 const query: Parameters = {
                     key: key,
                     // This is the case that we don't have a authorized call, these calls never have a mndNr

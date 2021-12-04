@@ -1,10 +1,22 @@
+interface IReferenceFilter {
+    "f_name_":      string;
+    "f_value":      string;
+    "f_operator" :  string;
+}
+interface IReference {
+    "formid":       string;
+    "saveKey":      string;
+    "displayKey":   string;
+    "filter":       Array<IReferenceFilter>;
+}
+
 interface IOpts {
     TITEL:          string;
     TITEL_I18N:     string;
     VALUE:          string;
 }
 
-interface IAttendands {
+export interface IAttendands {
     Info:       string;
     KEY:        string
     NAME:       string;
@@ -14,6 +26,7 @@ interface IAttendands {
     REQUIRED:   string;
     TYPE:       number;
     UNIQUE:     string;
+    REFERENCE:  IReference;
 }
 
 interface ISrc {
@@ -78,6 +91,8 @@ export function validityFormLength(value: number) {
             return {input: 'input', type: 'Minutes'};   // TIMESPAN
         case 21:
             return {input: 'input', type: 'DateTime'};  // DATETIME
+        case 22:
+            return {input: 'input', type: 'binary'};  // MULTISELECT AS BINARY
         default:
             return {input: 'input', type: 100};
     }
