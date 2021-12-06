@@ -19,14 +19,15 @@ import {AuthorizedApiService} from '../../../services/authorized_api_service';
 import {ApiService} from '../../../services/api_service';
 import Table from '../../table/table';
 
-interface UsersPageStates {
-    users:          any,
-    categories:     any,
-    products:       any,
-    configForms:    any
+interface IUsersPageStates {
+    users:          any;
+    categories:     any;
+    products:       any;
+    configForms:    any;
+    group:          Array<{path: string, component: JSX.Element}>;
 }
 
-export default class UsersPage extends React.Component<RouteComponentProps<{}>, UsersPageStates> {
+export default class UsersPage extends React.Component<RouteComponentProps<{}>, IUsersPageStates> {
     private routes: any = routes;
 
     @resolve(AuthorizedApiService)      private authorizedApiService: AuthorizedApiService;
@@ -35,46 +36,39 @@ export default class UsersPage extends React.Component<RouteComponentProps<{}>, 
     constructor(props: any) {
         super(props);
         this.state = {
-            users:      [],
-            categories: [],
-            products:   [],
+            users:       [],
+            categories:  [],
+            products:    [],
+            configForms: null,
+            group:       null,
         };
     }
 
     componentDidMount() {
-        if (routes) {
-            const items = [].concat.apply([], this.routes.map((r: any) => r.items)) as Array<any>;
-            const adminChildren = items.find((r) => r.title === 'Users').children;
-            this.setState({
-                group: adminChildren,
-            });
-        }
-        this.apiService.get('getFormConfig')
-            .map((res) => res.data || [])
-            .subscribe((configForms) => {
-                this.setState({ configForms });
-            });
         this.refresh();
     }
 
-    refresh() {
+    refresh(only_data?: boolean) {
+        let adminChildren: Array<{path: string, component: JSX.Element}> = [];
+        if (routes) {
+            const items = [].concat.apply([], this.routes.map((r: any) => r.items)) as Array<any>;
+            adminChildren = items.find((r) => r.title === 'Users').children;
+        }
         Observable.combineLatest(
+            only_data ? Observable.of(null) : this.apiService.get('getFormConfig').map((res) => res.data || []),
             this.apiService.get('getFormData', {formid: Ids.USERS}).map((res) => res.data || []),
-            // this.authorizedApiService.get(Ids.CATEGORIES),
-            // this.authorizedApiService.get(Ids.PRODUCTS),
-        ).subscribe(([users, categories, products]) => {
+        ).subscribe(([configForms, users]) => {
             this.setState({
-                users: users,
-                categories,
-                products,
+                configForms: configForms || this.state.configForms,
+                users,
+                group: adminChildren,
             });
-            console.log(users, categories, products);
+            console.log(users);
         });
     }
 
-    renderGroups(groups: Array<{path: string, component: JSX.Element}>): ReadonlyArray<JSX.Element<any>> {
-        // debugger;
-        return groups.map((item) =>
+    renderGroups(groups: Array<{path: string, component: JSX.Element}>): ReadonlyArray<any> {
+        return groups.map((item: any) =>
             <NavLink to={"/admin/administrator/" + item.titleI18n} key={item.titleI18n}>
                 <MDBBtn className='mx-2' color='info'>
                     {item.title}{item.titleI18n}
@@ -84,10 +78,14 @@ export default class UsersPage extends React.Component<RouteComponentProps<{}>, 
     }
 
     tableUsers(): JSX.Element {
+        console.log("data: ", this.state.users, Ids.USERS, this.state.configForms);
         return <Table data={this.state.users}
                       formId={Ids.USERS}
                       configForms={this.state.configForms}
-                      callback = {() => this.refresh()}
+                      callback = {() => {
+                          const only_data = true;
+                          this.refresh(only_data);
+                      }}
                       />
     }
 
@@ -99,12 +97,15 @@ export default class UsersPage extends React.Component<RouteComponentProps<{}>, 
                 return <ProductsPage />;
             case 'JsonConfig':
                 return <JsonViewerPage />;
+            case 'Admin':
+                return this.tableUsers();
             default:
-                return this.tableUsers()
+                return this.tableUsers();
         }
     }
     render() {
         const filter = this.props.match.params.filename_page;
+        console.log('router FILTER: ' + filter);
         return (
             <div className={classNames(style.container, style.column)}>
                 {this.state.group && <div>{this.renderGroups(this.state.group)}</div>}

@@ -7,11 +7,11 @@ import ReactJson from 'react-json-view';
 import {RouteComponentProps} from 'react-router';
 import {ApiService} from '../../../services/api_service';
 
-export default class JsonViewerPage extends React.PureComponent<RouteComponentProps<{}>, {}> {
+class JsonViewerPage extends React.Component<{}, {}> {
 
     @resolve(ApiService) private apiService: ApiService;
 
-    private defaultProps = {
+    static defaultProps = {
         theme:              'monokai',
         configForms:        {init: true},
         collapsed:          false,
@@ -29,18 +29,18 @@ export default class JsonViewerPage extends React.PureComponent<RouteComponentPr
     constructor(props: any) {
         super(props);
         this.state = {
-            configForms: null,
-            collapseStringsAfter:   this.defaultProps.collapseStringsAfter,
-            onAdd:                  this.defaultProps.onAdd,
-            onEdit:                 this.defaultProps.onEdit,
-            onDelete:               this.defaultProps.onDelete,
-            displayObjectSize:      this.defaultProps.displayObjectSize,
-            enableClipboard:        this.defaultProps.enableClipboard,
-            theme:                  this.defaultProps.theme,
-            iconStyle:              this.defaultProps.iconStyle,
-            collapsed:              this.defaultProps.collapsed,
-            indentWidth:            this.defaultProps.indentWidth,
-            displayDataTypes:       this.defaultProps.displayDataTypes,
+            configForms:            [],
+            collapseStringsAfter:   this.props.collapseStringsAfter,
+            onAdd:                  this.props.onAdd,
+            onEdit:                 this.props.onEdit,
+            onDelete:               this.props.onDelete,
+            displayObjectSize:      this.props.displayObjectSize,
+            enableClipboard:        this.props.enableClipboard,
+            theme:                  this.props.theme,
+            iconStyle:              this.props.iconStyle,
+            collapsed:              this.props.collapsed,
+            indentWidth:            this.props.indentWidth,
+            displayDataTypes:       this.props.displayDataTypes,
         };
     }
 
@@ -339,3 +339,5 @@ export default class JsonViewerPage extends React.PureComponent<RouteComponentPr
         )
     }
 }
+
+export default JsonViewerPage;

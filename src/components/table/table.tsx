@@ -62,27 +62,34 @@ export default class Table extends React.Component<TableProps, TableStates> {
                     .filter((f: IAttendands) => f.REFERENCE)
                     .map((m: IAttendands) => m.REFERENCE.formid);
 
-                formsIdReference.map((formId: string, idx: number) => {
-                    Observable.combineLatest(
-                        this.apiService.get('getFormData', {formid: formId}).map((res) => res.data || []),
-                    ).subscribe((items) => {
-                        this.formIdData[formId] = items[0];
-                        debugger;
-                        if (formsIdReference.length === idx + 1) {
-                            this.setState({
-                                orig_data:      this.props.data,
-                                data:           data_formated,
-                                configForms:    this.props.configForms,
-                                referenceData:  this.formIdData,
-                            });
-                        }
+                if (formsIdReference && formsIdReference.length > 0) {
+                    formsIdReference.map((formId: string, idx: number) => {
+                        Observable.combineLatest(
+                            this.apiService.get('getFormData', {formid: formId}).map((res) => res.data || []),
+                        ).subscribe(([items]) => {
+                            this.formIdData[formId] = items;
+
+                            if (formsIdReference.length === idx + 1) {
+                                this.setState({
+                                    orig_data:      this.props.data,
+                                    data:           data_formated,
+                                    configForms:    this.props.configForms,
+                                    referenceData:  this.formIdData,
+                                });
+                            }
+                        });
+                    })
+                } else {
+                    this.setState({
+                        orig_data:      this.props.data,
+                        data:           data_formated,
+                        configForms:    this.props.configForms,
                     });
-                })
+                }
+
             }
         }
     }
-
-    // componentWillUpdate(nextProps: TableProps, nextState: TableStates) {}
 
     parseData(data: any, allConfigs: any, formId: string): Array<any> {
         if (!data || !allConfigs) {
