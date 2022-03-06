@@ -7,6 +7,7 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 const ProgressBarPlugin = require('progress-bar-webpack-plugin');
 const SvgoTransformer = require('./src/tools/webpack/svgo-transformer');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 const argv = require('yargs').argv;
 const git = require('git-rev-sync');
@@ -17,12 +18,12 @@ const buildDate = moment().format('YYYYMMDD');
 // const gitHash = git.long();
 // const gitBranch = process.env['BRANCH_NAME'] || git.branch();
 
-const isProduction = !(argv && argv.mode !== 'development');
+const isProduction = (argv && argv.mode == 'production');
 console.log('**********************************************');
-console.log(argv);
+console.log(argv, argv.mode);
 console.log('isProduction: ', isProduction);
 console.log('**********************************************');
-module.exports = {
+module.exports = Object.assign({
     entry: { index: path.resolve(__dirname, "src", "index.tsx") },
     output: {
         filename: isProduction ? '[name].js' : 'bundle.js',
@@ -214,14 +215,25 @@ module.exports = {
             ],
         }),
     ],
-    mode: 'development',
+    mode: isProduction ? 'production': 'development',
 	watchOptions: {
 		ignored: /node_modules/,
 	},
+    optimization: isProduction ? {
+        minimizer: [new UglifyJsPlugin({
+            uglifyOptions: {
+                compress: {
+                    drop_console: true,
+                }
+            }
+        })],
+        splitChunks: {
+            chunks: 'all',
+        },
+    } : {},
     devServer: {
         compress: true,
         port: 8086,
         hot: true,
     },
-    devtool: 'source-map'  // devtool: 'inline-source-map',
-};
+}, !isProduction ? {devtool: 'source-map'} : {});

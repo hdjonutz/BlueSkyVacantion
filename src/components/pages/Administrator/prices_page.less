@@ -1,0 +1,187 @@
+/*body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+  'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}*/
+.container{
+  display: flex;
+  flex: 1;
+  position: relative;
+  margin: 0;
+  padding: 0;
+  flex-direction: column;
+  .action{
+    flex-direction: row;
+    flex: 1;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    width: 520px;
+    margin: 0 auto;
+  }
+}
+
+.displayNone{
+  display: none;
+}
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  monospace;
+}
+
+.pdf-page {
+  position: relative;
+  margin: 0 auto;
+  padding: 0.4in 0.3in;
+  color: #333;
+  background-color: #fff;
+  box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.3);
+  box-sizing: border-box;
+  margin: 20px auto;
+}
+
+.pdf-header {
+  padding-bottom: 0.2in;
+  margin-bottom: 0.3in;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+/*.invoice-number {
+  padding-top: 0.1in;
+  float: right;
+}*/
+
+.pdf-footer {
+  position: absolute;
+  bottom: 0.25in;
+  left: 0.3in;
+  right: 0.3in;
+  padding-top: 0.05in;
+  border-top: 1px solid #e5e5e5;
+  font-size: 12px;
+  text-align: left;
+  color: #787878;
+}
+.inner-page{
+  /* do not delete left right will not be working enymore*/
+  background-color: inherit;
+}
+.addresses {
+  font-size: 12px;
+}
+
+.addresses:after {
+  display: block;
+  content: '';
+  clear: both;
+}
+
+.for {
+  float: left;
+  &.red{
+    color: #c53b3b;
+  }
+  h3{
+    margin-bottom: 2px;
+  }
+  p{
+    margin-top: 2px;
+  }
+}
+
+.from {
+  float: right;
+  font-size: 12px;
+  margin-top: 0;
+}
+
+.addresses p {
+  color: #787878;
+  padding: 0.05in 0;
+  border-top: 1px solid #e5e5e5;
+}
+
+.addresses p:first-of-type {
+  border-top: 0;
+}
+.leftBold{
+  display: flex;
+  justify-content: end;
+  font-weight: bold;
+}
+
+.pdf-body {
+  margin-top: 0.3in;
+}
+
+.company-logo {
+  font-size: 1.8em;
+  font-weight: bold;
+  color: #3aabf0;
+}
+
+.signature {
+  padding-top: 0.3in;
+}
+
+/* Dimensions other than px and em should be divided by 1.33 for the proper PDF output */
+
+.size-a4 {
+  width: 210mm; /*6.2in;*/
+  height: 297mm; /*8.7in;*/
+}
+
+.size-letter {
+  width: 6.3in;
+  height: 8.2in;
+}
+
+.size-executive {
+  width: 5.4in;
+  height: 7.8in;
+  font-size: 12px;
+}
+
+.size-executive .pdf-header {
+  margin-bottom: 0.1in;
+}
+
+.box {
+  padding: 1em;
+  background-color: rgba(20, 53, 80, 0.038);
+  border: 1px solid rgba(20, 53, 80, 0.05);
+}
+
+
+.pdf-page {
+  table {
+    font-size: 11px;
+    border-spacing: initial;
+    width: 100%;
+  }
+  table tr td,
+  table th td {
+    border-bottom: 1px solid #3aabf0;
+    border-right: 1px solid #3aabf0;
+    margin: 0;
+    padding: 5px;
+  }
+  table tr:first-child th {
+    border: 1px solid #3aabf0;
+    border-left: 0;
+    padding: 5px;
+  }
+  table tr:first-child th:first-child {
+    border: 1px solid #3aabf0;
+    padding: 5px;
+  }
+
+  table tr td:first-child {
+    border-left: 1px solid #3aabf0;
+  }
+}
+

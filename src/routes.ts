@@ -24,6 +24,7 @@ import ContactUsPage from './components/pages/ContactUs/ContactUs';
 
 import CheckoutPage from './components/pages/checkout/Checkout';
 import TestTablePage from './components/pages/Administrator/test_table_page';
+import PricesPage from './components/pages/Administrator/prices_page';
 
 
 /**
@@ -62,6 +63,7 @@ const routes: ReadonlyArray<MenuGroup> = [
                         path: '/online/home/:products/:product_detail',
                         component: UsersPage,
                     }*/
+
                 ]
             },
         ],
@@ -79,6 +81,23 @@ const routes: ReadonlyArray<MenuGroup> = [
                 licenses: (l: any) => l.hasModule('inline3.planung.fahrzeugeinsatzplanung') || l.hasModule('inline3.planung.dispo'),
                 permissions: (p: any) => p.hasPermission('plan'),
                 component: ContactUsPage,
+                display_btn: false,
+            },
+        ]
+    },
+    {
+        title: 'Prices',
+        icon: 'Prices_icon',
+        path: '/prices',
+        defaultPath: '/prices/prices',
+        items: [
+            {
+                title: 'Prices',
+                path: '/prices/prices',
+                icon: 'Prices_icon',
+                // licenses: (l: any) => l.hasModule('inline3.planung.fahrzeugeinsatzplanung') || l.hasModule('inline3.planung.dispo'),
+                // permissions: (p: any) => p.hasPermission('plan'),
+                component: PricesPage,
                 display_btn: false,
             },
         ]
@@ -171,7 +190,7 @@ const routes: ReadonlyArray<MenuGroup> = [
                         titleI18n: 'TestTable',
                         path: '/admin/administrator/:filename_page',
                         component: TestTablePage,
-                    },
+                    }
                 ],
             },
         ]

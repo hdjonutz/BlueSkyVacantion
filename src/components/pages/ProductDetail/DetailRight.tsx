@@ -28,32 +28,35 @@ import Paper from '@mui/material/Paper';
 
 import themeMeandro from '../../Layout/Theme';
 import { ThemeProvider } from '@mui/material/styles';
-import ListRight from "../Products/ListRight";
+import ListRight from '../Products/ListRight';
+import Slider from '@mui/material/Slider';
+import Button from '@mui/material/Button';
+import {NavLink} from 'react-router-dom';
+import LocationDetails from './location_details';
 
 export default class DetailRight extends React.Component<{}, {value: string}> {
 
     private _algemeine = [
-        {name: 'Modell', detail: 'CAMPER & NICHOLSONS WHITE HEATHER'},
-        {name: 'Rumpflänge (m)', detail: '\t35,00'},
-        {name: 'Breite (m)', detail: '6,10'},
-        {name: 'Durchfahrtshöhe (m)', detail: '33,30'},
-        {name: 'Baujahr', detail: '1995'},
-        {name: 'Deckmaterial', detail: 'Holtz'},
-        {name: 'Deck Finish Aufbauten', detail: 'Teak'},
+        {name: 'Double bed cabins', detail: '3'},
+        {name: 'Cabins', detail: '3'},
+        {name: 'Berths', detail: '6-8'},
+        {name: 'Wardrobes in cabins for clothes arrangement', detail: ''},
+        {name: 'Living Room', detail: 'Large & Spacious'},
+        {name: 'Equipment Kitchen', detail: 'full with gas'},
+        {name: 'Lifejackets', detail: 'ok'},
         {name: 'Fenster Material', detail: 'Glas'},
-        {name: 'Füllstandsanzeige (Treibstoftank)', detail: 'total 6000 liters in 4 tanks'},
-
+        {name: 'Cabins', detail: '3'}
     ];
     private _algemeine2 = [
-        {name2: 'Typ', detail2: 'Segelyacht '},
-        {name2: 'Wasserlinienlänge (m)', detail2: '21,52'},
+        {name2: 'Double sofa', detail2: 'becomes double bed '}
+        /*{name2: 'Wasserlinienlänge (m)', detail2: '21,52'},
         {name2: 'Tiefgang (m)', detail2: '3,96'},
         {name2: 'Stehhöhe (m)', detail2: '2,10'},
         {name2: 'Lancierung', detail2: '2004 after last refit'},
         {name2: 'Gewicht (t)', detail2: '227'},
         {name2: 'Rumpfmaterial', detail2: 'Holtz'},
         {name2: 'Decksluke', detail2: '4'},
-        {name2: 'Treibstoftank (Liter)', detail2: 'ja'},
+        {name2: 'Treibstoftank (Liter)', detail2: 'ja'},*/
     ];
 
     private unterkunft = [
@@ -75,6 +78,61 @@ export default class DetailRight extends React.Component<{}, {value: string}> {
         {name2: 'Toilette System', detail2: 'elektrisch  1'}
     ];
 
+    private details = [
+        {name: 'Marker', detail: 'BENETEAU 41.1'},
+        {name: 'Year Model', detail: '2016'},
+        {name: 'Sleeping places (Bearths)', detail: '6'},
+        {name: 'Capacity', detail: '8'}
+    ];
+
+    private marks = [
+        {
+            value: 0,
+            label: 'Volos Base',
+            hints: '',
+        },
+        {
+            value: 14,
+            label: '**Agios Ioannis',
+            hints: '(MAMA MIA Movie)',
+        },
+        {
+            value: 28,
+            label: 'Arkos',
+            hints: '',
+        },
+        {
+            value: 45,
+            label: '**Blue Cave Dasia',
+            hints: '(The Cave of the Seal)',
+        },
+        {
+            value: 60,
+            label: '**Kastani Beach',
+            hints: '(Mama Mia Movie)',
+        },
+        {
+            value: 75,
+            label: 'Lalaria',
+            hints: '',
+        },
+        {
+            value: 52,
+            label: 'Loutraki',
+            hints: '',
+        },
+        {
+            value: 64,
+            label: 'Panormos',
+            hints: '',
+        },
+        {
+            value: 100,
+            label: 'Tsougrias',
+            hints: '',
+        },
+    ];
+
     constructor(props: any) {
         super(props);
 
@@ -82,18 +140,48 @@ export default class DetailRight extends React.Component<{}, {value: string}> {
             value: '1'
         };
         this.handleChange = this.handleChange.bind(this);
-
+        this.marks = this.marks.map((f, i) => Object.assign(f, {value: (100 / (this.marks.length - 1)) * i}));
     }
 
     handleChange(event: React.SyntheticEvent, newValue: string) {
         this.setState({value: newValue});
     };
 
+    getTabContainerSimple(all) {
+        return <div style={{display: 'flex', flex: 1, flexDirection: 'row'}}>
+            <TableContainer component={Paper} style={{background: 'none', borderRadius: 0, boxShadow: 'none'}}>
+                <Table sx={{ minWidth: 410 }} aria-label='simple table'>
+                    <TableBody>
+                        {all.map((row) => (
+                            <TableRow key={row.name} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                                <TableCell style={{'padding': '5px', width: '25%'}}>{row.name}</TableCell>
+                                <TableCell style={{'padding': '5px', width: '25%'}}>{row.detail}</TableCell>
+                            </TableRow>
+                        ))}
+                        <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                            <TableCell style={{'padding': '5px', width: '25%'}}>
+                                <NavLink to={'/prices/prices'}>
+                                    <Button variant='contained' className='mx-2' color='info' style={{textDecoration: 'none'}}>
+                                        See Prices
+                                    </Button>
+                                </NavLink>
+                            </TableCell>
+                            <TableCell style={{'padding': '5px', width: '25%'}}>
+                                <Button variant='contained' className='mx-2' color='info'>
+                                    Add To Basket
+                                </Button>
+                            </TableCell>
+                        </TableRow>
+                    </TableBody>
+                </Table>
+            </TableContainer>
+        </div>
+    }
 
     getTabContainer(all) {
         return <div style={{display: 'flex', flex: 1, flexDirection: 'row'}}>
             <TableContainer component={Paper} style={{background: 'none', borderRadius: 0, boxShadow: 'none'}}>
-                <Table sx={{ minWidth: 410 }} aria-label="simple table">
+                <Table sx={{ minWidth: 410 }} aria-label='simple table'>
                     <TableBody>
                         {all.map((row) => (
                             <TableRow key={row.name} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
@@ -108,6 +196,87 @@ export default class DetailRight extends React.Component<{}, {value: string}> {
                 </Table>
             </TableContainer>
         </div>
+    }
+
+    valuetext(value: number): string {
+        return `${value} dsdsd`;
+    }
+
+    getOrte() {
+        /* Volos Base, Agios Ioannis (MAMA MIA Movie), Arkos, Blue Cave Dasia (The Cave of the Seal), Kastani Beach (Mama Mia Movie),
+        Kastro, Lalaria, Loutraki, Panormos, Tsougrias */
+
+        let marks = [
+            {
+                value: 0,
+                label: 'Volos Base',
+                hints: '',
+            },
+            {
+                value: 14,
+                label: '**Agios Ioannis',
+                hints: '(MAMA MIA Movie)',
+            },
+            {
+                value: 28,
+                label: 'Arkos',
+                hints: '',
+            },
+            {
+                value: 45,
+                label: '**Blue Cave Dasia',
+                hints: '(The Cave of the Seal)',
+            },
+            {
+                value: 60,
+                label: '**Kastani Beach',
+                hints: '(Mama Mia Movie)',
+            },
+            {
+                value: 75,
+                label: 'Lalaria',
+                hints: '',
+            },
+            {
+                value: 52,
+                label: 'Loutraki',
+                hints: '',
+            },
+            {
+                value: 64,
+                label: 'Panormos',
+                hints: '',
+            },
+            {
+                value: 100,
+                label: 'Tsougrias',
+                hints: '',
+            },
+        ];
+
+        marks = marks.map((f, i) => Object.assign(f, {value: (100 / (marks.length - 1)) * i}));
+
+        const valueLabelFormat = (value: number) => {
+            const found = marks.find((mark) => mark.value === value);
+            return found ? found.hints : '';
+        };
+
+        return (
+            <Box sx={{ margin: '0 35px' }}>
+                <Typography id='track-false-range-slider' gutterBottom>
+                    ** Something spectacular happened in some locations **
+                </Typography>
+                <Slider
+                    track={false}
+                    valueLabelDisplay='auto'
+                    valueLabelFormat={valueLabelFormat}
+                    aria-labelledby='track-false-range-slider'
+                    getAriaValueText={this.valuetext}
+                    defaultValue={marks.map((f) => f.value)}
+                    marks={marks}
+                />
+            </Box>
+        )
     }
 
     render() {
@@ -137,18 +306,40 @@ export default class DetailRight extends React.Component<{}, {value: string}> {
                             />
                             <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                                 <CardContent sx={{ flex: '1 0 auto' }}>
-                                    <Typography component="div" variant="h4">
-                                        Live From Space
+                                    <Typography component='div' variant='h4'>
+                                        KOS 41.1
                                     </Typography>
-                                    <Typography variant="subtitle1" color="text.secondary" component="div">
-                                        Mac Miller
+                                    <Typography variant='subtitle1' color='text.secondary' component='div'>
+                                        Oceanis 41.1
                                     </Typography>
+                                    {this.getTabContainerSimple(this.details)}
                                 </CardContent>
-
                             </Box>
                         </Card>
                         <hr />
-                        <h2>Detail Offer</h2>
+                        <h2>Locations</h2>
+                        <Box sx={{ width: '100%', typography: 'body1' }}>
+                            {/* this.getOrte() */}
+                            <LocationDetails locations={this.marks} />
+                        </Box>
+                        <hr />
+                        <Box>
+                            <Grid item xs={12} sm={12} xl={12}>
+                                <Card variant={'special'}>
+                                    <CardContent>
+                                        <Typography variant='body2' color='text.secondary'>
+                                            The Oceanis 41.1 sets the highest standard for mid-sized yachts. She offers the most in comfort,
+                                             performance and customizable space at an even more competitive price.
+                                            Our boat is equipped with comfortable cushions ideal for your sunbathing,
+                                             two toilets with showers, three cabins and a living room which can host up to 8 people.
+                                            Your sailing trips are scheduled in a very unique and pleasant way.
+                                        </Typography>
+                                    </CardContent>
+                                </Card>
+                            </Grid>
+                        </Box>
+                        <hr />
+                        <h2>Detail yachts {'Oceanis 41.1'}</h2>
                         <Box sx={{ width: '100%', typography: 'body1' }}>
                             <TabContext value={this.state.value}>
                                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
