@@ -1,4 +1,4 @@
-import {MenuGroup, MenuItem} from '../../components/pages/ui/navigation/routes';
+import {MenuGroup, MenuItem} from '../../components/ui/navigation/routes';
 
 export class MenuRoutes {
     constructor(public readonly groups: ReadonlyArray<MenuGroup>,

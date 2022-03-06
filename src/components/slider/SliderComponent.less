@@ -1,0 +1,158 @@
+.absolute{
+    min-width: 100%;
+    /*position: absolute;*/
+    top: 94px;
+    left: 0;
+    padding: 0!important;
+}
+.content{
+    display: flex;
+    flex: 1;
+    background-color: red;
+    .container{
+        width: 100%;
+        overflow: hidden;
+        position: relative;
+        .imagesSlider{
+            display: flex;
+            img{
+                width: 100%;
+                height: auto;
+            }
+        }
+    
+        .buttonsSlider{
+            position: absolute;
+            top: 0;
+            width: 100%;
+            display: flex;
+            flex: 1;
+            height: 100%;
+            justify-content: space-between;
+            .leftSlider{
+                left: 0;
+                padding: 15px;
+                justify-content: center;
+                align-items: center;
+                justify-items: center;
+                display: flex;
+                opacity: 0.3;
+                z-index: 1;
+                &:hover{
+                  opacity: 0.7;
+                  cursor: pointer;
+                }
+            }
+            .rightSlider{
+                right: 0;
+                padding: 15px;
+                justify-content: center;
+                align-items: center;
+                justify-items: center;
+                display: flex;
+                opacity: 0.3;
+                z-index: 1;
+                &:hover{
+                  opacity: 0.7;
+                  cursor: pointer;
+                }
+            }
+        }
+    
+        .timeSlider{
+            position: absolute;
+            bottom: 0;
+            height: 7px;
+            width: 100%;
+            background: #ffffff4f;
+            .colorTimer{
+                height: 100%;
+                width: 1px;
+                background: #e6e6e6de;
+                transition: all 10s ease 0s;
+                &.start{
+                  width: 100%;
+                }
+            }
+            .nothing{
+              transition: none;
+              width: 1px;
+            }
+        }     
+        .textContext{
+            position: absolute;
+            height: 100%;
+            width: 100%;
+            top: 0;
+            display: flex;
+            flex: 1;
+            .leftSide{
+                width: 29%;
+                background: rgb(255 255 255 / 38%);
+                position: relative;
+                .textLeftSide{
+                    position: absolute;
+                    right: 0;
+                    top: 25%;
+                    padding: 20px;
+                    background: black;
+                    color: white;
+                }
+            }
+            .rightSide{
+                width: 70%;
+                position: relative;
+                .textRightSide{
+                    position: absolute;
+                    left: 0;
+                    top: 25%;
+                    padding: 20px;
+                    background: red;
+                    color: white;
+                }
+            }
+        }   
+    }
+}
+
+.slider-container {
+    width: 100%;
+    position: relative;
+    margin: 0;
+    padding: 0;
+    vertical-align: bottom;   
+    height: 500px;
+}
+:global {
+  @media only screen and (min-width: 1401px) {
+    .slider-container {
+      height: 500px;
+    }
+  }
+  @media only screen and (max-width: 1400px) {
+    .slider-container {
+      height: 500px;
+    }
+  }
+
+  @media only screen and (max-width: 1024px) {
+    .slider-container {
+      height: 450px;
+    }
+  }
+
+  @media only screen and (max-width: 640px) {
+    .slider-container {
+      height: 400px;
+    }
+  }
+  @media only screen and (max-width: 480px) {
+    .slider-container {
+      height: 300px;
+    }
+  }
+}
+
+
+
+

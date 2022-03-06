@@ -12,10 +12,9 @@ import {environment} from './enviroment/enviroment';
 import ApplicationVersion from './version';
 const info = ApplicationVersion();
 
-import 'mdb-react-ui-kit/dist/css/mdb.min.css';
-
 import { Provider } from "inversify-react";
 import { container } from "./services/inversify.config";
+import { AppContainer } from 'react-hot-loader';
 
 import AppRouter from './AppRouter';
 
@@ -23,8 +22,6 @@ console.log(`%c🛳 Meandro Jachting LTD %c\n name: ${info.name} \n version: ${i
     'font-size: 40px; color: #2196f3; font-family: "Segoe UI Symbol";',
     'font-size: 16px; color: #ab0000; font-family: "Segoe UI Symbol";',
     'font-size: 16px; color: #000; font-family: "Segoe UI Symbol";',);
-
-import {AppContainer} from 'react-hot-loader';
 
 const App = () => (
     <Provider container={container}>
@@ -34,4 +31,4 @@ const App = () => (
     </Provider>
 );
 
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render( <App />, document.getElementById('root'));

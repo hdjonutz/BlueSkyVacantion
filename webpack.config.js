@@ -17,9 +17,10 @@ const buildDate = moment().format('YYYYMMDD');
 // const gitHash = git.long();
 // const gitBranch = process.env['BRANCH_NAME'] || git.branch();
 
-const isProduction = argv && argv.mode !== 'development';
+const isProduction = !(argv && argv.mode !== 'development');
 console.log('**********************************************');
 console.log(argv);
+console.log('isProduction: ', isProduction);
 console.log('**********************************************');
 module.exports = {
     entry: { index: path.resolve(__dirname, "src", "index.tsx") },
@@ -29,10 +30,18 @@ module.exports = {
         chunkFilename: '[chunkhash].js',
         publicPath: ''
     },
-    devtool: 'inline-source-map',
     target: 'web',
     module: {
         rules: [
+            {
+                // At some places (e.g. inline onclick handlers in HTML code) we use jquery without importing the
+                // module. For these cases we have to define it globally.
+                test: require.resolve("moment"),
+                loader: "expose-loader",
+                options: {
+                  exposes: "moment"
+                },
+            },
             {
                 test: /\.(le|sc)ss?$/,
                 exclude: /node_modules/,
@@ -118,7 +127,7 @@ module.exports = {
                 test: /\.(png|jpe?g|gif|jp2|webp)$/,
                 loader: 'file-loader',
                 options: {
-                    name: '[name].[ext]',
+                    name: '[path][name].[ext]',
                 },
             },
             {
@@ -136,13 +145,13 @@ module.exports = {
                         {
                             search: /\{!NAME!\}/ig,
                             replace: function (match, p1, offset, string) {
-                                return pkg['name'];
+                                return pkg.name;
                             }
                         },
                         {
                             search: /\{!VERSION!\}/ig,
                             replace: function (match, p1, offset, string) {
-                                return pkg['version'];
+                                return pkg.version;
                             }
                         },
                         {
@@ -172,17 +181,28 @@ module.exports = {
         extensions: ['.tsx', '.ts', '.js', '.jsx', '.css', '.less', '.scss', '.svg'],
     },
     plugins: [
+        new webpack.ProvidePlugin({
+            moment: "moment"
+        }),
         new ProgressBarPlugin(),
         new MiniCssExtractPlugin(),
         new CleanWebpackPlugin(),
         new HtmlWebpackPlugin({
             template: path.resolve(__dirname, "src", "templates/index.html")
         }),
+        // new webpack.ProvidePlugin({
+        //     $: "jquery",
+        //     jQuery: "jquery"
+        // }),
         new CopyWebpackPlugin({
             patterns: [
                 { from: "src/assets/icons", to: "assets/icons" },
                 { from: "src/assets/images", to: "assets/images" },
                 { from: "src/assets/svg", to: "assets/svg" },
+                { from: "src/assets/slider/default", to: "assets/slider/default" },
+                { from: "src/assets/slider/images", to: "assets/slider/images" },
+                { from: "src/assets/slider/products", to: "assets/slider/products" },
+                // { from: "src/components/pages/Home/MasterSlideComponent/masterslider", to: "masterslider" },
                 // {
                 //     // Copy all svg asset files and run the svgo transformer over them (to make the svg files a lot
                 //     // smaller).
@@ -203,5 +223,5 @@ module.exports = {
         port: 8086,
         hot: true,
     },
-    devtool: 'source-map'
+    devtool: 'source-map'  // devtool: 'inline-source-map',
 };

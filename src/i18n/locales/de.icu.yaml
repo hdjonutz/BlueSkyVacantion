@@ -38,6 +38,7 @@ tid: Id
 
 forms:
   users:
+    title: Benutzer
     name: Name
     vorname: Vorname
     email: E-Mail

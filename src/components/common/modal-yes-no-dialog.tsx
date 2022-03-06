@@ -34,28 +34,33 @@ export default class ModalYesNoDialog extends React.PureComponent<ModalYesNoDial
     }
 
     public render() {
-        return (
-            <MDBModal staticBackdrop tabIndex='-1' show={this.state.displayModal}>
-                <MDBModalDialog>
-                    <MDBModalContent>
-                        <MDBModalHeader>
-                            <MDBModalTitle>{this.props.title}</MDBModalTitle>
-                            <MDBBtn className='btn-close' color='none' onClick={() => this.toggleShow()}></MDBBtn>
-                        </MDBModalHeader>
-                        <MDBModalBody>{this.props.component}</MDBModalBody>
+        // return (
+        //     <MDBModal staticBackdrop tabIndex='-1' show={this.state.displayModal}>
+        //         <MDBModalDialog>
+        //             <MDBModalContent>
+        //                 <MDBModalHeader>
+        //                     <MDBModalTitle>{this.props.title}</MDBModalTitle>
+        //                     <MDBBtn className='btn-close' color='none' onClick={() => this.toggleShow()}></MDBBtn>
+        //                 </MDBModalHeader>
+        //                 <MDBModalBody>{this.props.component}</MDBModalBody>
 
-                        <MDBModalFooter>
-                            <MDBBtn color='secondary' onClick={() => this.toggleShow()}>
-                                Close
-                            </MDBBtn>
-                            <MDBBtn color='secondary' disabled={this.props.disabled} onClick={() => this.toggleShow(true)}>
-                                Save
-                            </MDBBtn>
-                        </MDBModalFooter>
-                    </MDBModalContent>
-                </MDBModalDialog>
-            </MDBModal>
-        );
+        //                 <MDBModalFooter>
+        //                     <MDBBtn color='secondary' onClick={() => this.toggleShow()}>
+        //                         Close
+        //                     </MDBBtn>
+        //                     <MDBBtn color='secondary' disabled={this.props.disabled} onClick={() => this.toggleShow(true)}>
+        //                         Save
+        //                     </MDBBtn>
+        //                 </MDBModalFooter>
+        //             </MDBModalContent>
+        //         </MDBModalDialog>
+        //     </MDBModal>
+        // );
+        return(
+            <React.Fragment>
+                <span>GALLODOSADS</span>
+            </React.Fragment>
+        )
     }
 }
 

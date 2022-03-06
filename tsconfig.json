@@ -13,7 +13,7 @@
     "noEmit": true,
     "jsx": "react",
     "lib": [
-      "es2015",
+      "es2017",
       "dom",
       "es5",
       "es6"
@@ -23,9 +23,10 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "strictPropertyInitialization": false,
-    "typeRoots": ["./node_modules/@types",
-      "./src/typings"
-    ]
+    "typeRoots": ["./node_modules/@types", "./src/typings"],
+    "noImplicitReturns": true,
+    "strictNullChecks": true,
+    "noImplicitAny": false
   },
   "include": [
     "src"

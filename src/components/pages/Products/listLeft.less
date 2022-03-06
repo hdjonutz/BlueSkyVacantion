@@ -1,0 +1,140 @@
+.container {
+  width: 29% !important;
+  min-width: 29% !important;
+  max-width: 29% !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+.leftSide {
+  background-color: #1b1b1b;
+  color: #a6a6a6;
+  padding: 60px 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  height: 100%;
+
+  .latestPost {
+    width: 280px;
+    h2 {
+      color: #fff;
+      background-color: #262626;
+      border-left: 3px solid #da2f10;
+      margin-right: -40px;
+      padding: 15px;
+    }
+
+    .sidebarPosts {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: inline-block;
+      width: 100%;
+      vertical-align: bottom;
+      li {
+        border-bottom: 1px solid #262626;
+        position: relative;
+        margin: 0 0 20px;
+        padding: 0 0 20px 90px;
+        float: left;
+        width: 100%;
+        min-height: 91px;
+
+        .sidebarPostsImg {
+          position: absolute;
+          left: 0;
+          top: 0;
+          width: 70px;
+          border: 3px solid inherit;
+
+          a {
+            text-decoration: none;
+          }
+          img {
+            border: 3px solid #262626;
+            height: auto;
+            margin: 0;
+            padding: 0;
+            vertical-align: bottom;
+            width: 100%;
+          }
+          &:hover {
+            border: 3px solid white;
+            img{
+              border: 0 solid #262626;
+            }
+          }
+        }
+        .sidebarPostTitle {
+          color: #a6a6a6;
+          display: inline-block;
+          font-weight: 700;
+          text-decoration: none;
+          margin: 0 0 10px 0;
+        }
+        p {
+          color: #a6a6a6;
+          &.sidebarPostDate {
+            text-decoration: none;
+            margin-bottom: 0;
+            margin-top: 10px;
+            font-size: 13px;
+            font-style: italic;
+            opacity: .7;
+          }
+        }
+      }
+    }
+  }
+
+  .latestGallery {
+    width: 280px;
+    h2 {
+      color: #fff;
+      background-color: #262626;
+      border-left: 3px solid #da2f10;
+      margin-right: -40px;
+      padding: 15px;
+    }
+    .sidebarPosts {
+      position: relative;
+      margin: 0;
+      padding: 0;
+
+      .sidebarPostsImg {
+        width: 90px;
+        height: 90px;
+        float: left;
+        border: 2px solid inherit;
+        &:hover {
+          border: 2px solid white;
+        }
+
+        a {
+          color: #a6a6a6;
+          text-decoration: none;
+          img {
+            border: 3px solid #262626;
+            width: 100%;
+            height: auto;
+            margin: 0;
+            padding: 0;
+            vertical-align: bottom;
+          }
+        }
+      }
+    }
+  }
+}
+
+/*min 600, 900 1200, 1536px*/
+
+@media (max-width: 1200px){
+  .container {
+    display: none !important;
+  }
+  .leftSide{
+    display: none;
+  }
+}

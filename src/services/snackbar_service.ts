@@ -2,7 +2,7 @@
  * 🍔 Controls a SnackBar that is displayed at the bottom of the page and allow
  * do overlay a short notification text.
  */
-import style from '../components/pages/ui/utils/snackbar.less';
+// import style from '../components/pages/ui/utils/snackbar.less';
 import {injectable} from "inversify";
 
 const DISPLAY_DURATION = 10000;

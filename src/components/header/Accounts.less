@@ -1,0 +1,25 @@
+@import '../../assets/css/colors_global.less';
+@import '../../assets/css/global.less';
+@import '../../assets/fonts/style_font.less';
+
+.header{
+  display: flex;
+  align-items: center;
+}
+.container{
+    display: flex;
+    align-items: center;
+    .logo{
+      flex: 1;
+      img {
+        height: 40px;
+        &:hover{
+          backdrop-filter: drop-shadow(1px 1px 1px #999);
+          filter: drop-shadow(1px 1px 1px #999);
+        }
+      }
+    }
+    .sprache{
+      color: black;
+    }
+}

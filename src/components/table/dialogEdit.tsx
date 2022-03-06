@@ -5,7 +5,7 @@ import {i18n} from "../../i18n/i18n";
 import {Observable} from 'rxjs';
 import 'reflect-metadata';
 
-import ModalYesNoDialog from '../common/modal-yes-no-dialog';
+import ModalYesNoDialog from '../common/modal-yes-no-dialog.tsx';
 import GridRow from './grid-row';
 import {IAttendands, IConfigForms, IRowAttendands} from './forms';
 

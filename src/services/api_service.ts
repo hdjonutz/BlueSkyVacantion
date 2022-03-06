@@ -4,19 +4,20 @@ import ExtendableError from 'extendable-error-class';
 import { resolve } from 'inversify-react';
 import {HttpClient, HttpResponse} from './http_client';
 import {Logger, LogLevel} from '../util/logger';
-import {Observable, ReplaySubject} from 'rxjs';
+import {ReplaySubject, Observable} from 'rxjs';
 import {shortenText} from '../util/string_helper';
 import {VersionService} from './version_service';
 import {LocalConfigurationService} from './local_configuration_service';
 import {i18n} from '../i18n/i18n';
 import {ApiServiceState, ApiServiceStatus} from './api_service_status';
-import {showApiErrorDialog} from '../components/common/api-error-dialog';
+// import {showApiErrorDialog} from '../components/common/api-error-dialog';
 import {SnackbarService, SnackbarStyle} from './snackbar_service';
-import {inject, injectable} from "inversify";
+import {inject, injectable} from 'inversify';
 
 const logger = Logger.create('ApiService', LogLevel.Info);
 
 export type ResponseFormat = 'json' | 'text' | 'csv' | 'mime';
+const showApiErrorDialog = () => {alert('here')};
 
 export interface Parameters {
     [param: string]: any
@@ -75,14 +76,14 @@ export class ApiError extends ExtendableError {
 export class ApiService {
     private statusSubject: ReplaySubject<ApiServiceStatus> = new ReplaySubject<ApiServiceStatus>(1);
     private lastSuccess: Date = null;
-    
+
     private constructor(
         @inject('LocalConfigurationService')    private localConfigurationService: LocalConfigurationService,
         @inject('VersionService')               private versionService: VersionService,
         @inject('SnackbarService')              private snackbarService: SnackbarService,
         @inject('HttpClient')                   private httpClient: HttpClient
     ) {
-        
+
         this.localConfigurationService.get()
             .first()
             .subscribe(() => {
@@ -139,7 +140,6 @@ export class ApiService {
             ? JSON.stringify(normalizeJson(body))
             : body;
 
-        debugger;
         return this
             .buildUrl(key, parameters, format)
             .first()
@@ -158,7 +158,7 @@ export class ApiService {
                 // First only add the key name and mandant to the query object, because getting the parameter order
                 // right helps while debugging. But we have add the other global level parameters too, so that
                 // everything that is added on the higher layers comes last (like the access token)
-debugger;
+
                 const query: Parameters = {
                     key: key,
                     // This is the case that we don't have a authorized call, these calls never have a mndNr

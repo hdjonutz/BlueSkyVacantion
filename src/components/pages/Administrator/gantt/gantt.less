@@ -1,0 +1,103 @@
+@import '../../../../assets/css/colors_global.less';
+@import '../../../../assets/css/global.less';
+@import '../../../../assets/fonts/style_font.less';
+
+.container{
+    display: flex;
+    flex: 1;
+    min-height: 0;
+    min-width: 0;
+    font-size: @size_font;
+
+    &.column{
+        flex-direction: column;
+    }
+    .scrollDesign{
+        overflow: auto;
+        overflow-x: hidden;
+        flex: 1;
+    }
+
+    .left{
+        border: 1px solid black;
+    }
+    .right{
+        border: 1px solid black;
+    }
+
+    max-width: 100%;
+    max-height: 100%;
+    overflow: scroll;
+    position: relative;
+      
+    table {
+      position: relative;
+      border-collapse: collapse;
+      /* border-collapse: separate; */
+    }
+    
+    td,
+    th {
+      padding: 2px;
+    }
+    
+    thead th {
+      background: #c7dfff;
+      color: #5c5c5c;
+      border-right: 1px solid #cacaca;
+    }
+
+    thead {       
+      tr:first-child {
+        th {
+          position: -webkit-sticky; /* for Safari */
+          position: sticky;
+          top: 0;
+        }
+      }
+      tr:nth-child(2) {
+        th {
+          position: -webkit-sticky; /* for Safari */
+          position: sticky;
+          top: 22px;
+          border-top: 1px solid #cacaca;
+          height: 23px;
+          width: 26px;
+          min-width: 26px;
+          text-align: center;
+        }
+      }
+    }
+    
+    thead th:first-child {
+      left: 0;
+      z-index: 1;
+    }
+    
+    tbody th {
+      position: -webkit-sticky; /* for Safari */
+      position: sticky;
+      left: 0;
+      border-right: 1px solid #e1e1e1;
+    }
+    tr{
+      background-color: rgb(255, 255, 255);
+        >th:first-child{
+          background-color: #deedff;
+        }
+
+    }
+    tr:nth-child(2n+2){
+      background-color: rgb(240, 240, 240);
+        >th:first-child{
+          background-color: #c7dfff;
+        }
+    }
+    tr:hover{
+      background-color: rgb(255, 244, 145) !important;
+      cursor: pointer;
+      >th:first-child{
+        background-color: rgb(255, 244, 145) !important;
+      }
+    }
+}
