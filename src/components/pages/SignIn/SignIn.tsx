@@ -16,70 +16,98 @@ import { ThemeProvider } from '@mui/material/styles';
 import CopyrightPureComponent from '../../CopyRight/Copyright';
 import themeMeandro from '../../Layout/Theme';
 import styles from '../overwrite.less';
+import {Ids} from '../../../formsIds';
+import {resolve} from 'inversify-react';
+import {ApiService, encodePostBody} from '../../../services/api_service';
+import { Observable } from 'rxjs';
+import {AuthenticationService} from '../../../services/authentication_service';
+
+
 // import BorderColorOutlined from '@mui/base/border'
-import {
-  createStyles,
-  withStyles,
-  makeStyles,
-} from '@mui/styles';
+// import {
+//   createStyles,
+//   withStyles,
+//   makeStyles,
+// } from '@mui/styles';
 
-  const useStylesReddit = makeStyles((theme: any) =>
-    createStyles({
-      root: {
-        border: '1px solid #e2e2e1',
-        overflow: 'hidden',
-        borderRadius: 4,
-        backgroundColor: '#fcfcfb',
-        transition: theme.transitions.create(['border-color', 'box-shadow']),
-        '&:hover': {
-          backgroundColor: '#fff',
-        },
-        '&$focused': {
-          backgroundColor: '#fff',
-          borderColor: theme.palette.primary.main,
-        },
-      },
-      focused: {},
-    }),
-  );
-
-  const useStyles = makeStyles(theme =>
-    createStyles({
-      root: {
-        color: 'red',
-        "& .MuiOutlinedInput-root": {
-          "& fieldset": {
-            borderColor: "rgba(0, 0, 0, 0.23)" // default
-          },
-          "&.Mui-focused fieldset": {
-            border: "2px solid red" // customized
-          }
-        }
-      }
-    })
-  );
+  // const useStylesReddit = makeStyles((theme: any) =>
+  //   createStyles({
+  //     root: {
+  //       border: '1px solid #e2e2e1',
+  //       overflow: 'hidden',
+  //       borderRadius: 4,
+  //       backgroundColor: '#fcfcfb',
+  //       transition: theme.transitions.create(['border-color', 'box-shadow']),
+  //       '&:hover': {
+  //         backgroundColor: '#fff',
+  //       },
+  //       '&$focused': {
+  //         backgroundColor: '#fff',
+  //         borderColor: theme.palette.primary.main,
+  //       },
+  //     },
+  //     focused: {},
+  //   }),
+  // );
+  //
+  // const useStyles = makeStyles(theme =>
+  //   createStyles({
+  //     root: {
+  //       color: 'red',
+  //       "& .MuiOutlinedInput-root": {
+  //         "& fieldset": {
+  //           borderColor: "rgba(0, 0, 0, 0.23)" // default
+  //         },
+  //         "&.Mui-focused fieldset": {
+  //           border: "2px solid red" // customized
+  //         }
+  //       }
+  //     }
+  //   })
+  // );
 
 export default class SignInPage extends React.Component<{}, {}> {
-    
+
+    @resolve(AuthenticationService) private authenticationService: AuthenticationService;
+
     constructor(props: any) {
         super(props);
 
         this.state = {};
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     handleSubmit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        // eslint-disable-next-line no-console
-        console.log({
+        const creditials = {
           email: data.get('email'),
-          password: data.get('password'),
-        });
+          pass: data.get('password'),
+        };
+
+        this.authenticationService.login(data.get('email') + '', data.get('password') + '').subscribe((res) => {
+            if (res && res.accessToken) {
+                location.hash = '/online/home';
+            } else {
+                //
+            }
+        })
+
+        // Observable
+        //     .from([data].map((item: any) => encodePostBody(item)) as Array<string>)
+        //     .mergeMap((payload: string) => this.apiService
+        //         .get<any>('getFormData', Object.assign({formid: Ids.USERS}, creditials))
+        //         .catch((error) => Observable.of(null))
+        //     )
+        //     .subscribe((res) => {
+        //         console.log(res);
+        //         debugger;
+        //     });
     }
     render() {
       return (
         <ThemeProvider theme={themeMeandro}>
-            <Container component="main" maxWidth="xs" className={styles.overwrite}>
+            <Container component='main' maxWidth='xs' className={styles.overwrite}>
               <CssBaseline />
               <Box
                 sx={{
@@ -92,38 +120,38 @@ export default class SignInPage extends React.Component<{}, {}> {
                 <Avatar sx={{ m: 1, bgcolor: 'primary.main' }}>
                   <LockOutlinedIcon />
                 </Avatar>
-                <Typography component="h1" variant="h5">
+                <Typography component='h1' variant='h5'>
                   Sign in
                 </Typography>
-                <Box component="form" onSubmit={this.handleSubmit} noValidate sx={{ mt: 1 }}>
+                <Box component='form' onSubmit={this.handleSubmit} noValidate sx={{ mt: 1 }}>
                   <TextField
-                    margin="normal"
+                    margin='normal'
                     required
                     fullWidth
-                    id="email"
-                    label="Email Address"
-                    name="email"
-                    autoComplete="email"
+                    id='email'
+                    label='Email Address'
+                    name='email'
+                    autoComplete='email'
                     autoFocus
                   />
                   <TextField
-                    margin="normal"
+                    margin='normal'
                     required
                     fullWidth
-                    name="password"
-                    label="Password"
-                    type="password"
-                    id="password"
-                    autoComplete="current-password"
+                    name='password'
+                    label='Password'
+                    type='password'
+                    id='password'
+                    autoComplete='current-password'
                   />
                   <FormControlLabel
-                    control={<Checkbox value="remember" color="primary" />}
-                    label="Remember me"
+                    control={<Checkbox value='remember' color='primary' />}
+                    label='Remember me'
                   />
                   <Button
-                    type="submit"
-                    variant="contained"
-                    color="primary"
+                    type='submit'
+                    variant='contained'
+                    color='primary'
                     fullWidth
                     sx={{ mt: 3, mb: 2 }}
                   >
@@ -131,13 +159,13 @@ export default class SignInPage extends React.Component<{}, {}> {
                   </Button>
                     <Grid container>
                       <Grid item xs>
-                        <Link href={"#/logIn/ForgotPasswordPage"} variant="body2">
+                        <Link href={'#/logIn/ForgotPasswordPage'} variant='body2'>
                           Forgot password?
                         </Link>
                       </Grid>
                       <Grid item>
-                        <Link href="#/logIn/RegisterPage" variant="body2">
-                          {"Don't have an account? Sign Up"}
+                        <Link href='#/logIn/RegisterPage' variant='body2'>
+                          {'Don\'t have an account? Sign Up'}
                         </Link>
                       </Grid>
                     </Grid>

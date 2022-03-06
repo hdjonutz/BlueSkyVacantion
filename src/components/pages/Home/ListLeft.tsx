@@ -37,8 +37,8 @@ export default class ListLeft extends React.Component<{}, {}> {
                         <h2>Latest Post</h2>
                         <ul className={style.sidebarPosts}>
                             {
-                                [0, 1, 2, 3, 4].map(() =>
-                                <li>
+                                [0, 1, 2, 3, 4].map((i, k) =>
+                                <li key={k}>
                                     <NavLink to={'/online/home/products'} style={{textDecoration: 'none'}}>
                                         <div className={style.sidebarPostsImg}>
                                             <img src={'https://images.unsplash.com/photo-1589118949245-7d38baf380d6?w=164&h=164&fit=crop&auto=format'} />
@@ -53,15 +53,6 @@ export default class ListLeft extends React.Component<{}, {}> {
                     <div className={style.latestGallery}>
                         <h2>Latest Gallery </h2>
                         <div className={style.sidebarPosts}>
-                            {/*
-                                [0, 1, 2, 3, 4, 5].map(() =>
-                                    <div className={style.sidebarPostsImg}>
-                                        <a href={'https://themes.thememasters.club/oriel/cupidatat-est-esse/'}>
-                                            <img src={'https://themes.thememasters.club/oriel/wp-content/uploads/sites/5/2015/04/1-5-150x150.jpg'} />
-                                        </a>
-                                    </div>
-                                )
-                            */}
                             <ImageList sx={{height: 185 }} cols={3} rowHeight={70}>
                                     {[{
                                         img: 'https://images.unsplash.com/photo-1551963831-b3b1ca40c98e',
@@ -92,14 +83,14 @@ export default class ListLeft extends React.Component<{}, {}> {
                                         img: 'https://images.unsplash.com/photo-1558642452-9d2a7deb7f62',
                                         title: 'Honey',
                                         link: '/online/home/products/423232'
-                                    }].map((item) => (
-                                        <Link color="inherit" to={item.link}>
+                                    }].map((item, k) => (
+                                        <Link color="inherit" to={item.link} key={k}>
                                             <ImageListItem key={item.img} >
                                                 <img
                                                     src={`${item.img}?w=70&h=70&fit=crop&auto=format`}
                                                     srcSet={`${item.img}?w=70&h=70&fit=crop&auto=format&dpr=2 2x`}
                                                     alt={item.title}
-                                                    loading="lazy"
+                                                    loading='lazy'
                                                 />
                                             </ImageListItem>
                                         </Link>

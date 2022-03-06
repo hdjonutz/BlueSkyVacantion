@@ -34,6 +34,11 @@ import Button from '@mui/material/Button';
 import {NavLink} from 'react-router-dom';
 import LocationDetails from './location_details';
 
+import { Document, Page, pdfjs } from 'react-pdf';
+import samplePDF from '../../../assets/slider/products/423232/prices.pdf';
+import pdfjsWorker from 'pdfjs-dist/build/pdf.worker.entry';
+pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker;
+
 export default class DetailRight extends React.Component<{}, {value: string}> {
 
     private _algemeine = [
@@ -45,7 +50,6 @@ export default class DetailRight extends React.Component<{}, {value: string}> {
         {name: 'Equipment Kitchen', detail: 'full with gas'},
         {name: 'Lifejackets', detail: 'ok'},
         {name: 'Fenster Material', detail: 'Glas'},
-        {name: 'Cabins', detail: '3'}
     ];
     private _algemeine2 = [
         {name2: 'Double sofa', detail2: 'becomes double bed '}
@@ -84,7 +88,6 @@ export default class DetailRight extends React.Component<{}, {value: string}> {
         {name: 'Sleeping places (Bearths)', detail: '6'},
         {name: 'Capacity', detail: '8'}
     ];
-
     private marks = [
         {
             value: 0,
@@ -162,7 +165,8 @@ export default class DetailRight extends React.Component<{}, {value: string}> {
                             <TableCell style={{'padding': '5px', width: '25%'}}>
                                 <NavLink to={'/prices/prices'}>
                                     <Button variant='contained' className='mx-2' color='info' style={{textDecoration: 'none'}}>
-                                        See Prices
+                                        See Prices Administrator <br/>
+                                        will be removed
                                     </Button>
                                 </NavLink>
                             </TableCell>
@@ -322,6 +326,13 @@ export default class DetailRight extends React.Component<{}, {value: string}> {
                             {/* this.getOrte() */}
                             <LocationDetails locations={this.marks} />
                         </Box>
+                        {/*
+                        <Document file={samplePDF}>
+                            <Page pageNumber={1} />
+                            <Page pageNumber={2} />
+                        </Document> */}
+                        {/* <embed src={samplePDF} frameborder={0} width='100%' height='640px' title={'title PDF'} /> */}
+
                         <hr />
                         <Box>
                             <Grid item xs={12} sm={12} xl={12}>
@@ -351,14 +362,16 @@ export default class DetailRight extends React.Component<{}, {value: string}> {
                                         <Tab label='UNTERKUNFT' value='2' className={style.tabsStyle} />
                                         <Tab label='MOTOR(EN)' value='3' className={style.tabsStyle} />
                                         <Tab label='NAVIGATION' value='4' className={style.tabsStyle} />
-                                        <Tab label='AUSSTATTUNG' value='5' className={style.tabsStyle} />
+                                        <Tab label='PRICES' value='5' className={style.tabsStyle} />
                                     </TabList>
                                 </Box>
                                 <TabPanel value='1' className={style.table}>{this.getTabContainer(algemeineAll)}</TabPanel>
                                 <TabPanel value='2' className={style.table}>{this.getTabContainer(unterkunftAll)}</TabPanel>
                                 <TabPanel value='3' className={style.table}>MOTOR(EN)</TabPanel>
                                 <TabPanel value='4' className={style.table}>NAVIGATION</TabPanel>
-                                <TabPanel value='5' className={style.table}>AUSSTATTUNG</TabPanel>
+                                <TabPanel value='5' className={style.table}>
+                                    <embed src={samplePDF} frameBorder={0} width='100%' height='440px' title={'title PDF'} type="application/pdf"/>
+                                </TabPanel>
                             </TabContext>
                         </Box>
                         <hr />

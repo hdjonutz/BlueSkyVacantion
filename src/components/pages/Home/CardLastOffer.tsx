@@ -89,7 +89,7 @@ export default class CardLastOffer extends React.Component<{}, {expanded: boolea
                             </Tooltip>
 
                         </CardActions>
-                        <Collapse in={this.state.expanded} timeout="auto" unmountOnExit>
+                        <Collapse in={this.state.expanded} timeout='auto' unmountOnExit>
                             <CardContent>
                                 <Typography paragraph>Method:</Typography>
                                 <Typography paragraph>

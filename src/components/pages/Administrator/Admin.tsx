@@ -111,7 +111,7 @@ export default class AdministratorPage extends React.Component<RouteComponentPro
 
     renderGroups(groups: Array<{path: string, component: JSX.Element}>): ReadonlyArray<any> {
         return groups.map((item: any) =>
-            <NavLink to={"/admin/administrator/" + item.titleI18n} key={item.titleI18n}>
+            <NavLink to={'/admin/administrator/' + item.titleI18n} key={item.titleI18n}>
                 <Button className='mx-2' color='info'>
                     {item.title}{item.titleI18n}
                 </Button>
@@ -120,7 +120,7 @@ export default class AdministratorPage extends React.Component<RouteComponentPro
     }
 
     tableUsers(): JSX.Element {
-        console.log("data: ", this.state.users, Ids.USERS, this.state.configForms);
+        console.log('data: ', this.state.users, Ids.USERS, this.state.configForms);
         return <Table data={this.state.users}
                       formId={Ids.USERS}
                       configForms={this.state.configForms}
@@ -137,7 +137,7 @@ export default class AdministratorPage extends React.Component<RouteComponentPro
         console.log('router FILTER: ' + filter);
         return (
             <ThemeProvider theme={themeMeandro}>
-                <Container component="main" maxWidth="xl">
+                <Container component='main' maxWidth='xl'>
                     <CssBaseline />
                     <Box
                         sx={{

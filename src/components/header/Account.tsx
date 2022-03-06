@@ -72,15 +72,15 @@ export default class Account extends React.Component<{}, HeaderStates> {
             <ThemeProvider theme={themeMeandro}>
                 <div className={style.header}>
                     <div className={style.container}>
-                        {this.state.auth && <div className={style.sprache}>{this.state.auth[0]}-{this.state.auth[1]} &nbsp; </div>}                        
+                        {this.state.auth && <div className={style.sprache}>{this.state.auth[0]}-{this.state.auth[1]} &nbsp; </div>}
                         {!this.state.auth && <div> &nbsp;
-                            <Button variant="special" href={'#' + this.state.toLogin}>Login</Button>
+                            <Button variant='special' href={'#' + this.state.toLogin}>Login</Button>
                         </div>}
                         {this.state.auth && <div>
-                            <Button variant="special" onClick={() => this.LogOut()} href={this.state.toLogin}>Logout</Button>
+                            <Button variant='special' onClick={() => this.LogOut()} href={'#' + this.state.toLogin}>Logout</Button>
                         </div>}
                         <div>
-                            <Button variant="special" href={'#' + this.state.toContactUs}>Contact Us</Button>
+                            <Button variant='special' href={'#' + this.state.toContactUs}>Contact Us</Button>
                         </div>
                     </div>
                 </div>

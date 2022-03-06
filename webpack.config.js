@@ -132,6 +132,15 @@ module.exports = Object.assign({
                 },
             },
             {
+                test: /\.pdf$/,
+                use: {
+                    loader: "file-loader",
+                    options: {
+                        name: "[path][name].[ext]"
+                    }
+                }
+            },
+            {
                 // Transform the locale data into Javascript files
                 test: /\.icu\.yaml$/,
                 loader: './src/tools/webpack/i18n-loader'
@@ -189,7 +198,8 @@ module.exports = Object.assign({
         new MiniCssExtractPlugin(),
         new CleanWebpackPlugin(),
         new HtmlWebpackPlugin({
-            template: path.resolve(__dirname, "src", "templates/index.html")
+            template: path.resolve(__dirname, "src", "templates/index.html"),
+            favicon: 'src/assets/svg/logo_ico.ico',
         }),
         // new webpack.ProvidePlugin({
         //     $: "jquery",

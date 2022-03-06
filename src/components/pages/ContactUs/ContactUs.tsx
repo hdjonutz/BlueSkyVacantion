@@ -85,7 +85,7 @@ export default class ConatctUs extends React.Component<{}, IContactUsStates> {
         this.setState({contentEmail: contentEmail}, () => console.log(this.state));
     }
 
-    onClickSubmitValues(): void {        
+    onClickSubmitValues(): void {
         const tmp = Object.keys(this.state.contentEmail).map((k) => ({key: k, value: this.state.contentEmail[k]}));
         this.setState({wasChecked: true});
         if (this.state.contentEmail && this.state.contentEmail.privacy) {} else {

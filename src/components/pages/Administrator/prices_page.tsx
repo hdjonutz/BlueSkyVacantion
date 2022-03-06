@@ -63,7 +63,7 @@ export default class PricesPage extends React.Component<{}, PricesPageStates> {
                 <div style={{marginRight: '20px', width: `${size}px`, minWidth: `${size}px`, padding: 0, border: 0, margin: 0}}>
                     <p style={{padding: 0, margin: 0}}><b>{title}</b></p>
                 </div>
-                <div>{infos.map((p) => <p style={{padding: 0, border: 0, margin: 0}}>{p}</p>)}</div>
+                <div>{infos.map((p, k) => <p key={k} style={{padding: 0, border: 0, margin: 0}}>{p}</p>)}</div>
             </div>
         </div>
     }
@@ -186,3 +186,23 @@ export default class PricesPage extends React.Component<{}, PricesPageStates> {
         )
     }
 }
+
+// hints:
+// https://codesandbox.io/s/4foib?file=/src/App.js:1172-1189
+// displayPdf:
+// `<embed src="${path}" frameborder="0" width="100%" height="640px" title="${title}">`
+
+// html to pdf : html2pdf
+// html2pdf().from(document.getElementById('idName'))
+//     .set({
+//         margin:       [0.8, 1, 0, 1],
+//         filename:     'Zwangbremsung.pdf',
+//         image:        { type: 'jpeg', quality: 0.98 },
+//         html2canvas:  { scale: 2 },
+//         jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+//     })
+//     .save()
+//     .then(
+//         () => { ....},
+//         () => {....}
+//     );

@@ -21,8 +21,8 @@ export default class LocationDetails extends React.Component<ILocationDetails, {
             <div className={style.container}>
                 <div className={style.line}></div>
                 <div className={style.lineLocations}>
-                    {this.props.locations.map((l) =>
-                        <div className={style.location}>
+                    {this.props.locations.map((l, k) =>
+                        <div className={style.location} key={k}>
                             <div className={style.circle}></div>
                             <div>
                                 <div>{l.label}</div>
