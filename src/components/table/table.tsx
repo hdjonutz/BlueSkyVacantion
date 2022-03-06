@@ -11,14 +11,14 @@ import {encodePostBody} from '../../services/api_service';
 import DialogEditRow from "./dialogEdit";
 import {IAttendands} from "./forms";
 
-interface TableProps {
+interface ITableProps {
     data:           any;
     formId:         string;
     configForms:    any;
     callback?:      Function;
 }
 
-interface TableStates {
+interface ITableStates {
     data:           Array<any>,
     orig_data:      Array<any>,
     configForms:    any;
@@ -26,14 +26,14 @@ interface TableStates {
     referenceData:  any;
 }
 
-export default class Table extends React.Component<TableProps, TableStates> {
+export default class Table extends React.Component<ITableProps, ITableStates> {
 
-    private formIdData = {};
+    private formIdData: any = {};
 
     @resolve(ApiService)                private apiService: ApiService;
     @resolve(AuthorizedApiService)      private authorizedApiService: AuthorizedApiService;
 
-    constructor(props: TableProps) {
+    constructor(props: ITableProps) {
         super(props);
 
 
@@ -49,7 +49,7 @@ export default class Table extends React.Component<TableProps, TableStates> {
         this.saveCallback   = this.saveCallback.bind(this);
     }
 
-    componentDidUpdate(prevProps: TableProps, prevState: TableStates, snapshot) {
+    componentDidUpdate(prevProps: any, prevState: any, snapshot: any) {
 
         if (prevProps.data && JSON.stringify(prevProps.data) !== JSON.stringify(this.props.data)
             || JSON.stringify(prevProps.configForms) !== JSON.stringify(this.props.configForms)) {
