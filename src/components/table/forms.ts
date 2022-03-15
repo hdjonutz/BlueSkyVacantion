@@ -1,13 +1,13 @@
 interface IReferenceFilter {
-    "f_name_":      string;
-    "f_value":      string;
-    "f_operator" :  string;
+    'f_name_':      string;
+    'f_value':      string;
+    'f_operator':   string;
 }
-interface IReference {
-    "formid":       string;
-    "saveKey":      string;
-    "displayKey":   string;
-    "filter":       Array<IReferenceFilter>;
+export interface IReference {
+    'formid':       string;
+    'saveKey':      string;
+    'displayKey':   string;
+    'filter':       Array<IReferenceFilter>;
 }
 
 interface IOpts {
@@ -26,6 +26,8 @@ export interface IAttendands {
     REQUIRED:   string;
     TYPE:       number;
     UNIQUE:     string;
+    GENERATOR:  boolean;
+    HIDE_WEB:   boolean;
     REFERENCE:  IReference;
 }
 
@@ -48,7 +50,7 @@ export interface IConfigForms {
 }
 
 export function validityFormLength(value: number) {
-    switch(value) {
+    switch (value) {
         case 1:
             return {input: 'input', type: 25};
         case 2:
@@ -92,7 +94,7 @@ export function validityFormLength(value: number) {
         case 21:
             return {input: 'input', type: 'DateTime'};  // DATETIME
         case 22:
-            return {input: 'input', type: 'binary'};  // MULTISELECT AS BINARY
+            return {input: 'input', type: 'binary'};    // MULTISELECT AS BINARY
         default:
             return {input: 'input', type: 100};
     }

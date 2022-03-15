@@ -1,15 +1,20 @@
 import * as React from 'react';
 import style from './table.less';
 import classNames from 'classnames';
-import {i18n} from "../../i18n/i18n";
+import {i18n} from '../../i18n/i18n';
 import {Observable} from 'rxjs';
 import 'reflect-metadata';
 import { resolve } from 'inversify-react';
 import {AuthorizedApiService} from '../../services/authorized_api_service';
 import {ApiService} from '../../services/api_service';
 import {encodePostBody} from '../../services/api_service';
-import DialogEditRow from "./dialogEdit";
-import {IAttendands} from "./forms";
+import DialogEditRow from './dialogEdit';
+import {IAttendands} from './forms';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+
 
 interface ITableProps {
     data:           any;
@@ -50,11 +55,10 @@ export default class Table extends React.Component<ITableProps, ITableStates> {
     }
 
     componentDidUpdate(prevProps: any, prevState: any, snapshot: any) {
-
         if (prevProps.data && JSON.stringify(prevProps.data) !== JSON.stringify(this.props.data)
             || JSON.stringify(prevProps.configForms) !== JSON.stringify(this.props.configForms)) {
 
-            const data_formated = this.parseData(this.props.data, this.props.configForms, this.props.formId);
+            let data_formated = this.parseData(this.props.data, this.props.configForms, this.props.formId);
 
             if (this.props.configForms) {
                 const currentConfig = this.props.configForms[this.props.formId];
@@ -70,6 +74,8 @@ export default class Table extends React.Component<ITableProps, ITableStates> {
                             this.formIdData[formId] = items;
 
                             if (formsIdReference.length === idx + 1) {
+                                data_formated = this.parseData(this.props.data, this.props.configForms, this.props.formId);
+                                console.log('********************************************', data_formated);
                                 this.setState({
                                     orig_data:      this.props.data,
                                     data:           data_formated,
@@ -122,6 +128,15 @@ export default class Table extends React.Component<ITableProps, ITableStates> {
                     } else {
                         d.DisplayTranslatedData[k] = i18n(opt.TITEL_I18N) || opt.TITEL;
                     }
+                } else if (keyConf && keyConf.REFERENCE) {
+                    const formid = keyConf.REFERENCE.formid;
+                    const key = keyConf.REFERENCE.saveKey;
+                    if (this.formIdData && this.formIdData[formid]) {
+                        const tmp = this.formIdData[formid];
+                        const values = tmp.find((t) => t[key] === d[keyConf.KEY]);   // keyConf.REFERENCE.displayKey;
+                        const value = values ? values[keyConf.REFERENCE.displayKey] : '-?-';
+                        d.DisplayTranslatedData[k] = value;
+                    }
                 } else {
                     d.DisplayTranslatedData[k] = d[k];
                 }
@@ -153,13 +168,43 @@ export default class Table extends React.Component<ITableProps, ITableStates> {
                         this.props.callback();
                     }
                 });
-
             this.setState({editData: null});
         } else {
             this.setState({editData: null});
         }
     }
 
+    getBodyTable() {
+        // const formId = this.props.formId;
+        // const hasRef = this.state.configForms[formId].ATTS;
+        // const dat = this.state.data.map((d) => {
+        //
+        // })
+
+        debugger;
+        return <React.Fragment>
+            {this.state.data.map((tr, i: number) =>
+                <tr key={i}>
+                    {this.state.configForms && this.state.configForms[this.props.formId].ATTS
+                        .map((k: any, m: number) =>
+                            <td style={{display: k.HIDE_WEB ? 'none' : ''}} key={i + '_' + m}>
+                                {tr.DisplayTranslatedData[k.KEY]}
+                            </td>
+                        )}
+                    <td key={i + '_'}>
+                        <span onClick={() => this.setState({editData: tr})} >Edit &nbsp;</span>
+                        | <span onClick={() => this.onClickDelete(tr)}>&nbsp;Delete</span>
+                    </td>
+                </tr>
+            )}
+            {this.state.data.length === 0 && this.state.configForms && <tr>
+                <td colSpan={this.state.configForms[this.props.formId].ATTS.length + 1}
+                    style={{textAlign: 'center'}}>
+                    no data
+                </td>
+            </tr>}
+        </React.Fragment>
+    }
 
     render() {
         return(
@@ -170,7 +215,7 @@ export default class Table extends React.Component<ITableProps, ITableStates> {
                             <tr>
                                 {this.state.configForms && this.state.configForms[this.props.formId].ATTS
                                     .map((kName: any, m: number) =>
-                                    <th key={m} className={style.th}>
+                                    <th key={m} className={style.th} style={{display: kName.HIDE_WEB ? 'none' : ''}}>
                                         <div>{i18n(kName.NAME_I18N)}</div><div><input /></div>
                                     </th>)
                                 }
@@ -180,20 +225,11 @@ export default class Table extends React.Component<ITableProps, ITableStates> {
                             </tr>
                         </thead>
                         <tbody>
-                            {this.state.data.map((tr, i: number) =>
-                                <tr key={i}>
-                                    {this.state.configForms && this.state.configForms[this.props.formId].ATTS
-                                        .map((k: any, m: number) => <td key={i + '_' + m}>{tr.DisplayTranslatedData[k.KEY]}</td>)}
-                                    <td key={i + '_'}>
-                                        <span onClick={() => this.setState({editData: tr})} >Edit &nbsp;</span>
-                                        | <span onClick={() => this.onClickDelete(tr)}>&nbsp;Delete</span>
-                                    </td>
-                                </tr>
-                            )}
+                            {this.getBodyTable()}
                         </tbody>
                     </table>
                 </div>
-                {this.state.editData && <DialogEditRow title={this.state.editData ? 'Edit': 'Add'}
+                {this.state.editData && <DialogEditRow title={this.state.editData ? 'Edit' : 'Add'}
                                                        data={this.state.editData}
                                                        referenceData={this.state.referenceData}
                                                        isOpen={this.state.editData !== null}

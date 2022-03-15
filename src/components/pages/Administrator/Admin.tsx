@@ -20,11 +20,9 @@ import TablePage from './Tables';
 import CategoriesPage from './categories_page';
 import ProductsPage from './products_page';
 import JsonViewerPage from './json_viewer_page';
+import FormsPage from './forms_admin_table';
 
 import Box from '@mui/material/Box';
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
 
 import classNames from 'classnames';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -32,6 +30,7 @@ import Container from '@mui/material/Container';
 import { ThemeProvider } from '@mui/material/styles';
 import themeMeandro from '../../Layout/Theme';
 import Layout from '../../AppView/layout-page';
+
 
 interface IUsersPageStates {
     users:          any;
@@ -104,6 +103,8 @@ export default class AdministratorPage extends React.Component<RouteComponentPro
                 return <TestTablePage />;
             case 'Admin2':
                 return <TablePage />;
+            case 'FormsPage':
+                return <FormsPage />;
             default:
                 return this.tableUsers();
         }

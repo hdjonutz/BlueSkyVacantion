@@ -61,7 +61,7 @@ export class AuthenticationService {
         // this.apiService = apiService;
 
         // https://www.youtube.com/watch?v=nk3wUKxVDAg&ab_channel=ProgrammingwithKarthik
-        
+
         window.addEventListener('storage', (e) => {
             if (e.key === 'accessToken') {
                 this.isAuthenticated().first().subscribe((isAuthenticated) => {
@@ -155,7 +155,7 @@ export class AuthenticationService {
             localStorage.removeItem('logout_accessToken');
             localStorage.removeItem('logout');
             console.error('Error while parsing access token', accessToken, err);
-            this.authenticationSubject.next(null);
+            this.authenticationSubject.next( null as any);
             return this.getAuthentication().first();
         }
     }
@@ -212,7 +212,7 @@ export class AuthenticationService {
                     return this.applyExternalLogin(response.data['access_token']);
                 } else {
                     logger.warn('Login failed');
-                    return Observable.of(null);
+                    return Observable.of(null as any);
                 }
             });
     }

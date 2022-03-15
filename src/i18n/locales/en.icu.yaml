@@ -37,19 +37,51 @@ tabs_name:
 tid: Id
 
 forms:
-  user:
-    title: Users
+  users:
+    title: Benutzer
     name: Name
     vorname: Vorname
     email: E-Mail
+    benutzer: Benutzer
     pass: Pass
     new_pass: New Pass
     isAdmin: Is Administrator
     activated: Aktivated
     admin: Administrator
-    user: User
+    user: Benutzer
     activate: Aktivate
     deactivate: Deactivate
-    no: No
-    yes: Yes
+    rolle:  Rolle
+    no: Nein
+    yes: Ja
     null: ---
+
+  product:
+    id: Product Id
+    name: Name
+    type: Type
+    group:  Group
+    sub_grup: Sub Group
+    price: Price
+    price-item: Price Item
+    description: Description
+    rent: Rent
+    inclusive_services: Service included
+    service: Service pick Up
+    person: Person
+    day: Day
+    week: Week
+    month: Month
+    hotel: Hotel
+    shipping: Shipping
+    airport: Airport
+    train: Train
+    bus: Bus
+    null: ---
+
+  locations:
+    id: Id
+    name: Name
+    shortname: Short Name
+    hints: Hints
+

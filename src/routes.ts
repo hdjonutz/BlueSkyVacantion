@@ -25,6 +25,7 @@ import ContactUsPage from './components/pages/ContactUs/ContactUs';
 import CheckoutPage from './components/pages/checkout/Checkout';
 import TestTablePage from './components/pages/Administrator/test_table_page';
 import PricesPage from './components/pages/Administrator/prices_page';
+import FormsPage from './components/pages/Administrator/forms_admin_table';
 
 
 /**
@@ -190,6 +191,11 @@ const routes: ReadonlyArray<MenuGroup> = [
                         titleI18n: 'TestTable',
                         path: '/admin/administrator/:filename_page',
                         component: TestTablePage,
+                    },
+                    {
+                        titleI18n: 'FormsPage',
+                        path: '/admin/administrator/:filename_page',
+                        component: FormsPage,
                     }
                 ],
             },

@@ -8,8 +8,6 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
-import Typography from '@mui/material/Typography';
-import {DialogContentText} from '@mui/material';
 import Paper, { PaperProps } from '@mui/material/Paper';
 import Draggable from 'react-draggable';
 import Box from '@mui/material/Box';
@@ -20,7 +18,7 @@ interface ModalYesNoDialogProps {
     displayModal:   boolean;
     callback:       Function;
     data:           any;
-    disabled:       boolean;
+    disabledSaveBtn: boolean;
 }
 
 export default class ModalYesNoDialog extends React.PureComponent<ModalYesNoDialogProps, {displayModal: boolean}> {
@@ -40,15 +38,6 @@ export default class ModalYesNoDialog extends React.PureComponent<ModalYesNoDial
             this.props.callback(action);
         }
     }
-
-    // shouldComponentUpdate(nextProps: Readonly<ModalYesNoDialogProps>, nextState: Readonly<{ displayModal: boolean; message: string }>, nextContext: any): boolean {
-    //     if (this.state.displayModal !== nextProps.displayModal) {
-    //         this.setState({displayModal: nextProps.displayModal});
-    //         return true;
-    //     } else {
-    //         return false;
-    //     }
-    // }
 
     PaperComponent(props: PaperProps) {
         return (
@@ -101,7 +90,7 @@ export default class ModalYesNoDialog extends React.PureComponent<ModalYesNoDial
                     <Button autoFocus onClick={() => this.toggleShow()}>
                         Cancel
                     </Button>
-                    <Button onClick={() => this.toggleShow(true)} disabled={this.props.disabled}>Save</Button>
+                    <Button onClick={() => this.toggleShow(true)} disabled={this.props.disabledSaveBtn}>Save</Button>
                 </DialogActions>
             </Dialog>
         );

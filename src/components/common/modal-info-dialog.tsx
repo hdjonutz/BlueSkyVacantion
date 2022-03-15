@@ -14,10 +14,10 @@ export default class ModalInfoDialog extends React.PureComponent<ModalInfoDialog
 
     constructor(props: any) {
         super(props);
-        this.state={displayModal: this.props.displayModal};
+        this.state = {displayModal: this.props.displayModal};
     }
     toggleShow() {
-        this.state={displayModal: false};
+        this.state = {displayModal: false};
     }
     public render() {
         return (

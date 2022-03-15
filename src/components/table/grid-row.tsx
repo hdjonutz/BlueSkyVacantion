@@ -4,6 +4,9 @@ import style from './dialog-edit.less';
 import {i18n} from '../../i18n/i18n';
 import {IConfigForms, IAttendands, IReference, validityFormLength} from './forms';
 import classNames from 'classnames';
+// import IconNumbers from '@mui/icons-material/Numbers';
+import Button from '@mui/material/Button';
+import {generateUUID} from '../../util/generator_uuid';
 
 interface IGridRowProps {
     label:          string;
@@ -30,8 +33,9 @@ export default class GridRow extends React.PureComponent<IGridRowProps, IGridRow
             isValid:    this.checkValidity(this.props.value),
         };
 
-        this.getInput   = this.getInput.bind(this);
-        this.getSelect  = this.getSelect.bind(this);
+        this.getInput           = this.getInput.bind(this);
+        this.getSelect          = this.getSelect.bind(this);
+        this.generateNumbers    = this.generateNumbers.bind(this);
     }
 
     // componentDidUpdate(nextProps: GridRowProps, nextState: GridRowStates) {
@@ -84,31 +88,46 @@ export default class GridRow extends React.PureComponent<IGridRowProps, IGridRow
                           checked={this.state.value ? this.state.value.toString() === '1' : false}
                           value={this.state.value || ''}
                           className={classNames(this.state.isValid ? '' : style.notValid,
-                               isChanged ? style.changed: '')}
+                               isChanged ? style.changed : '')}
                           onChange={(el) => this.updateValue(el.target.checked ? '1' : '0')} />;
         } else {
             return <input disabled={disabled}
                           value={this.state.value || ''}
                           className={classNames(this.state.isValid ? '' : style.notValid,
-                               isChanged ? style.changed: '')}
+                               isChanged ? style.changed : '')}
                           onChange={(el) => this.updateValue(el.target.value)} />;
         }
     }
-    filterByRelatedFilter(referenceData: Array<any>, reference: IReference): Array<JSX.Element>{
+    filterByRelatedFilter(referenceData: Array<any>, reference: IReference): Array<JSX.Element> {
         const keyToSave     = reference.saveKey;
         const keyDisplay    = reference.displayKey;
-        const keyFilter     = reference.filter[0].f_name_;
-        const keyValue      = reference.filter[0].f_value;
-        // const keyOperatior  = reference.filter[0].f_operator;
 
-        const tmp = referenceData.filter((f) => f[keyFilter] === keyValue);
+        if (reference.filter) {
+            const keyFilter     = reference.filter[0].f_name_;
+            const keyValue      = reference.filter[0].f_value;
+            // const keyOperatior  = reference.filter[0].f_operator;
 
-        return tmp.map((o: any, idx: number) =>
+            const tmp = referenceData.filter((f) => f[keyFilter] === keyValue);
+
+            const objArr = tmp.map((o: any, idx: number) =>
                 <option key={idx}
                         value={o[keyToSave]} >
                     {o[keyDisplay]}
                 </option>
-            )
+            );
+            objArr.unshift(<option value={''}></option>);
+            return objArr;
+        } else {
+            const objArr = referenceData.map((o: any, idx: number) =>
+                <option key={idx}
+                        value={o[keyToSave]}>
+                    {o[keyDisplay]}
+                </option>
+            );
+            objArr.unshift(<option value={''}></option>);
+            return objArr;
+        }
+
     }
 
     getSelect() {
@@ -127,15 +146,17 @@ export default class GridRow extends React.PureComponent<IGridRowProps, IGridRow
                        )}
                        defaultValue={(this.state.value !== null && this.state.value !== undefined)
                            ? this.state.value.toString()
-                           : this.props.options[0].VALUE}
+                           : (this.props.options ? this.props.options[0].VALUE : '')}
                        onChange={(el) => {
                            const value = isMultiplsSelect
                                ? Array.from(el.target.options)
-                                   .map((el) => el.selected ? '1' : '0')
+                                   .map((e) => e.selected ? '1' : '0')
                                    .join('')
                                : el.target.value;
                            this.updateValue(value);
-                       }} >
+                       }}
+                >
+
                         {!reference && this.props.options.map((o: any, idx: number) =>
                             <option key={idx}
                                     value={o.VALUE} >
@@ -159,10 +180,26 @@ export default class GridRow extends React.PureComponent<IGridRowProps, IGridRow
             : this.getInput()
     }
 
+    generateNumbers() {
+        const id = generateUUID();
+        this.updateValue(id);
+    }
+
+    getFunctionLabel(): JSX.Element {
+        console.log(this.props.options, this.state);
+        const generate = this.props.configItem?.GENERATOR;
+        return <React.Fragment>
+            {this.props.label}
+            {generate && <div className={style.generator}>
+                <Button onClick={() => this.generateNumbers()}>#</Button>
+            </div>}
+        </React.Fragment>
+    }
+
     render() {
         return (
             <div className={style.flex}>
-                <div className={style.full}>{this.props.label}</div>
+                <div className={style.full}>{this.getFunctionLabel()}</div>
                 <div className={style.full}>
                     {this.getInputType()}
                 </div>

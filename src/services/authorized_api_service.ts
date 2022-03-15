@@ -46,7 +46,7 @@ export class AuthorizedApiService {
     private getDefaultParameters(): Observable<Parameters> {
         return this.authenticationService
             .getAuthentication()
-            // .filter((auth) => auth != null)
+            .filter((auth) => auth != null)
             .map((auth) => {
                 const res = {
                     // Thinking about the order of the parameters help while debugging later, because the resulting urls are

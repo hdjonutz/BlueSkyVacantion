@@ -45,7 +45,7 @@ export default class DialogEditRow extends React.Component<IDialogEditRowProps, 
     }
 
     shouldComponentUpdate(nextProps: Readonly<IDialogEditRowProps>, nextState: Readonly<IDialogEditRowStates>, nextContext: any): boolean {
-        if (this.state.isOpen !== nextProps.isOpen) {
+        if (this.state.isOpen !== nextProps.isOpen || this.state.disabled !== nextState.disabled) {
             this.setState({isOpen: nextProps.isOpen});
             return true;
         } else {
@@ -68,8 +68,9 @@ export default class DialogEditRow extends React.Component<IDialogEditRowProps, 
     getDates(): JSX.Element {
         return (
             <div className={classNames(style.container, style.column)}>
-                {this.state.config.ATTS.map((r: IAttendands, idx: number) =>
-                    <GridRow label={i18n(r.NAME_I18N)}
+                {this.state.config.ATTS.map((r: IAttendands, idx: number) => {
+                    {console.log(idx)}
+                    return <GridRow label={i18n(r.NAME_I18N)}
                              value={this.state.object[r.KEY]}
                              onChange={this.onChangeValue}
                              configForms={this.props.configForms}
@@ -79,7 +80,7 @@ export default class DialogEditRow extends React.Component<IDialogEditRowProps, 
                              referenceData={r.REFERENCE ? this.props.referenceData[r.REFERENCE.formid] : null}
                              key={idx}
                     />
-                )}
+                })}
             </div>
         )
     }
@@ -91,10 +92,11 @@ export default class DialogEditRow extends React.Component<IDialogEditRowProps, 
             <ModalYesNoDialog title={this.props.title}
                               component={component}
                               displayModal={this.props.isOpen}
-                              disabled={this.state.disabled}
+                              disabledSaveBtn={this.state.disabled}
                               data={this.state}
                               callback={(action: boolean) => {
                                   this.setState({isOpen: false});
+                                  debugger;
                                   this.props.callback(action ? this.state.object : null);
                               }} />
         )

@@ -34,7 +34,7 @@ tabs_name:
   notification: Benachrichtigung
   information: Information
 
-tid: Id
+tid: tId
 
 forms:
   users:
@@ -57,7 +57,9 @@ forms:
     null: ---
 
   product:
+    id: Product Id
     name: Name
+    type: Type
     group:  Group
     sub_grup: Sub Group
     price: Price
@@ -76,3 +78,26 @@ forms:
     train: Train
     bus: Bus
     null: ---
+
+  locations:
+    id: Id
+    name: Name
+    shortname: Short Name
+    hints: Hints
+
+  product_locations:
+    id: Id
+    prod_name: Product Name
+    location_name: Location Name
+
+  product_details:
+    label: Label
+    value: Value
+
+  product_tab:
+    tab_id: Tab Id
+    tab_name: Tab Name
+
+  tab_label_value:
+    label: Label
+    value: Value
