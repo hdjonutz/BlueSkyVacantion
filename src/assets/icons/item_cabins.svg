@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="128"
+   height="128"
+   viewBox="0 0 33.866666 33.866668"
+   version="1.1"
+   id="svg8"
+   inkscape:version="1.0.2 (e86c870879, 2021-01-15, custom)"
+   sodipodi:docname="cabins.svg">
+  <defs
+     id="defs2" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="4"
+     inkscape:cx="46.1755"
+     inkscape:cy="66.831101"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     inkscape:document-rotation="0"
+     showgrid="false"
+     inkscape:window-width="2560"
+     inkscape:window-height="1377"
+     inkscape:window-x="1912"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     units="px"
+     showguides="false"
+     inkscape:guide-bbox="true"
+     inkscape:snap-bbox="true"
+     inkscape:object-paths="true"
+     inkscape:bbox-nodes="false"
+     inkscape:snap-bbox-edge-midpoints="false"
+     inkscape:snap-nodes="false">
+    <inkscape:grid
+       type="xygrid"
+       id="grid906" />
+    <sodipodi:guide
+       position="1.3229166,28.575001"
+       orientation="1,0"
+       id="guide908" />
+    <sodipodi:guide
+       position="32.54375,26.19375"
+       orientation="1,0"
+       id="guide910" />
+    <sodipodi:guide
+       position="23.283333,32.543751"
+       orientation="0,-1"
+       id="guide912" />
+    <sodipodi:guide
+       position="10.847916,1.3229167"
+       orientation="0,-1"
+       id="guide914" />
+    <sodipodi:guide
+       position="16.933333,21.431251"
+       orientation="1,0"
+       id="guide916" />
+    <sodipodi:guide
+       position="8.4666665,30.956251"
+       orientation="1,0"
+       id="guide918" />
+    <sodipodi:guide
+       position="14.2875,16.933334"
+       orientation="0,-1"
+       id="guide922" />
+    <sodipodi:guide
+       position="13.49375,25.4"
+       orientation="0,-1"
+       id="guide924" />
+    <sodipodi:guide
+       position="11.1125,8.466667"
+       orientation="0,-1"
+       id="guide926" />
+    <sodipodi:guide
+       position="24.870834,29.633334"
+       orientation="1,0"
+       id="guide2176" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <path
+       id="path2212"
+       style="opacity:0.996;fill:none;stroke:#000000;stroke-width:7.45099989;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 62.25,16.224609 C 52.533424,16.224227 44.182653,22.490787 42.341797,31.164062 40.709012,30.863403 39.044336,30.711534 37.375,30.710938 24.167635,30.710493 13.460735,39.976282 13.460938,51.40625 13.460735,62.836218 24.167635,72.102007 37.375,72.101562 c 1.792363,-5.34e-4 3.578974,-0.175461 5.326172,-0.521484 0.102658,9.297353 8.321011,16.784741 18.423828,16.785156 2.010113,-7.81e-4 4.006542,-0.30427 5.910156,-0.898437 3.772812,3.335633 8.655181,5.179558 13.714844,5.179687 11.368036,1.37e-4 20.58378,-9.117671 20.58398,-20.365234 -6.7e-4,-1.29533 -0.12623,-2.587643 -0.375,-3.859375 6.13207,-3.695978 9.87435,-10.28642 9.875,-17.390625 -2e-4,-11.247563 -9.21594,-20.365371 -20.58398,-20.365234 -2.712438,5.95e-4 -5.398011,0.531603 -7.902344,1.5625 C 81.008879,23.067986 72.415129,16.224722 62.25,16.224609 Z"
+       transform="scale(0.26458334)"
+       sodipodi:nodetypes="ccccccccccccccc" />
+    <ellipse
+       style="opacity:0.996;fill:none;stroke:#000000;stroke-width:1.89737;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="path2298"
+       cx="2.7997916"
+       cy="25.764854"
+       rx="2.2593832"
+       ry="2.6893313"
+       transform="rotate(-13.874978)" />
+    <ellipse
+       style="opacity:0.996;fill:none;stroke:#000000;stroke-width:1.32291668;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="path2300"
+       cx="4.5971355"
+       cy="28.641146"
+       rx="1.4221355"
+       ry="1.3229167" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:5.06558px;line-height:1.25;font-family:sans-serif;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.12664;"
+       x="8.4388342"
+       y="18.229698"
+       id="text2304"
+       transform="scale(1.0936452,0.91437333)"><tspan
+         sodipodi:role="line"
+         id="tspan2302"
+         x="8.4388342"
+         y="18.229698"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Gadugi;-inkscape-font-specification:'Gadugi Bold';fill:#000000;fill-opacity:1;stroke-width:0.12664;">Z</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10.5833px;line-height:1.25;font-family:sans-serif;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583;"
+       x="18.586979"
+       y="20.042189"
+       id="text2304-1"><tspan
+         sodipodi:role="line"
+         id="tspan2302-8"
+         x="18.586979"
+         y="20.042189"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Gadugi;-inkscape-font-specification:'Gadugi Bold';fill:#000000;fill-opacity:1;stroke-width:0.264583;">Z</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10.5833px;line-height:1.25;font-family:sans-serif;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583;"
+       x="13.36146"
+       y="16.007292"
+       id="text2304-1-4"><tspan
+         sodipodi:role="line"
+         id="tspan2302-8-6"
+         x="13.36146"
+         y="16.007292"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Gadugi;-inkscape-font-specification:'Gadugi Bold';fill:#000000;fill-opacity:1;stroke-width:0.264583;">Z</tspan></text>
+  </g>
+</svg>
