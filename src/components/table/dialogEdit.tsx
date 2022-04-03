@@ -66,6 +66,7 @@ export default class DialogEditRow extends React.Component<IDialogEditRowProps, 
     }
 
     getDates(): JSX.Element {
+        debugger;
         return (
             <div className={classNames(style.container, style.column)}>
                 {this.state.config.ATTS.map((r: IAttendands, idx: number) => {
@@ -85,6 +86,24 @@ export default class DialogEditRow extends React.Component<IDialogEditRowProps, 
         )
     }
 
+    parseValues() {
+        const data = this.state.object;
+        const tmp = [];
+        Object.keys(data).map((k) => {
+            if (k !== 'DisplayTranslatedData' && k !== 'tid') {
+                const conf = this.state.config.ATTS.find((a) => a.KEY === k);
+                if (conf && conf.TYPE === 23) {  // *DATE_BIGINT*
+                    tmp[k] = !isNaN(+data[k]) ? +data[k] : data[k].setHours(0, 0, 0, 0);
+                } else {
+                    tmp[k] = data[k];
+                }
+            } else {
+                tmp[k] = data[k];
+            }
+        });
+        return tmp;
+    }
+
     render() {
         const component = this.getDates();
         console.log(this.state, this.props);
@@ -96,8 +115,9 @@ export default class DialogEditRow extends React.Component<IDialogEditRowProps, 
                               data={this.state}
                               callback={(action: boolean) => {
                                   this.setState({isOpen: false});
+                                  const parseValues = this.parseValues();
                                   debugger;
-                                  this.props.callback(action ? this.state.object : null);
+                                  this.props.callback(action ? parseValues : null);
                               }} />
         )
     }

@@ -7,6 +7,14 @@ import classNames from 'classnames';
 // import IconNumbers from '@mui/icons-material/Numbers';
 import Button from '@mui/material/Button';
 import {generateUUID} from '../../util/generator_uuid';
+import {DesktopDatePicker, LocalizationProvider} from '@mui/lab';
+import frLocale from 'date-fns/locale/fr';
+import ruLocale from 'date-fns/locale/ru';
+import deLocale from 'date-fns/locale/de';
+import enLocale from 'date-fns/locale/en-US';
+import DatePicker from '@mui/lab/DatePicker';
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import {TextField} from '@mui/material';
 
 interface IGridRowProps {
     label:          string;
@@ -90,6 +98,29 @@ export default class GridRow extends React.PureComponent<IGridRowProps, IGridRow
                           className={classNames(this.state.isValid ? '' : style.notValid,
                                isChanged ? style.changed : '')}
                           onChange={(el) => this.updateValue(el.target.checked ? '1' : '0')} />;
+        } else if (this.props.configItem.TYPE === 23) {
+            const localeMap = {
+                en: enLocale,
+                fr: frLocale,
+                ru: ruLocale,
+                de: deLocale,
+            };
+
+            const maskMap = {
+                fr: '__/__/____',
+                en: '__/__/____',
+                ru: '__.__.____',
+                de: '__.__.____',
+            };
+            return <LocalizationProvider dateAdapter={AdapterDateFns}>
+                <DatePicker mask={maskMap['de']}
+                            inputFormat='dd.MM.yyyy'
+                            value={this.state.value || ''}
+                            onChange={(el) => this.updateValue(el)}
+                            renderInput={(params) => <TextField {...params} />}
+
+                />
+            </LocalizationProvider>
         } else {
             return <input disabled={disabled}
                           value={this.state.value || ''}

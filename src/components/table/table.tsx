@@ -14,6 +14,7 @@ import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
+import moment from 'moment';
 
 
 interface ITableProps {
@@ -107,6 +108,7 @@ export default class Table extends React.Component<ITableProps, ITableStates> {
         dataFormated.map((d: any) => {
             Object.keys(d).map((k) => {
                 const isMultiSelect = currentConf.ATTS.find((att: IAttendands) => att.KEY === k).TYPE === 22;
+                const isDate        = currentConf.ATTS.find((att: IAttendands) => att.KEY === k).TYPE === 23;
                 const keyConf       = currentConf.ATTS.find((a: any) => a.KEY === k);
 
                 if (d && !d.DisplayTranslatedData) {
@@ -128,6 +130,8 @@ export default class Table extends React.Component<ITableProps, ITableStates> {
                     } else {
                         d.DisplayTranslatedData[k] = i18n(opt.TITEL_I18N) || opt.TITEL;
                     }
+                } else if (keyConf && isDate) {
+                    d.DisplayTranslatedData[k] = moment(d[k]).format('MM.DD.YYYY');
                 } else if (keyConf && keyConf.REFERENCE) {
                     const formid = keyConf.REFERENCE.formid;
                     const key = keyConf.REFERENCE.saveKey;

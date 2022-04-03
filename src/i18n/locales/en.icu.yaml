@@ -77,6 +77,8 @@ forms:
     airport: Airport
     train: Train
     bus: Bus
+    marker: Marker
+    model: Model
     null: ---
 
   locations:

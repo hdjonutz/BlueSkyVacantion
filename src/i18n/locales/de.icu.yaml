@@ -58,7 +58,7 @@ forms:
 
   product:
     id: Product Id
-    name: Name
+    name: Jacht Name
     type: Type
     group:  Group
     sub_grup: Sub Group
@@ -77,6 +77,9 @@ forms:
     airport: Airport
     train: Train
     bus: Bus
+    priority_show: Priority to show
+    marker: Marker
+    model: Model
     null: ---
 
   locations:
@@ -93,6 +96,7 @@ forms:
   product_details:
     label: Label
     value: Value
+    icon: Icon Name
 
   product_tab:
     tab_id: Tab Id
@@ -101,3 +105,8 @@ forms:
   tab_label_value:
     label: Label
     value: Value
+
+  product_price:
+    from_date: From
+    until_date: Until
+    value:  Value
