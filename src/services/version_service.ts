@@ -1,7 +1,7 @@
 import 'reflect-metadata';
-import {injectable} from "inversify";
+import {injectable} from 'inversify';
 import '../version';
-import {Observable} from 'rxjs';
+import {Observable, of} from 'rxjs';
 import ApplicationVersion from '../version';
 
 export class VersionInfo {
@@ -35,7 +35,8 @@ export class VersionService {
             version.id,
             version.build,
             version.hash,
-            version.branch);
-        return Observable.of<VersionInfo>(info);
+            version.branch
+        );
+        return of<VersionInfo>(info);
     }
 }

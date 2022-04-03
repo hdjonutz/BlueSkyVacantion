@@ -1,6 +1,5 @@
 import * as React from 'react';
 
-import {Observable} from 'rxjs';
 import 'reflect-metadata';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';

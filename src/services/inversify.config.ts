@@ -3,14 +3,14 @@ import { Container, interfaces } from 'inversify';
 import { fluentProvide } from 'inversify-binding-decorators';
 
 // import {CounterService} from './CounterService';
-import {AuthenticationService} from "./authentication_service";
-import {VersionService} from "./version_service";
-import {HttpClient} from "./http_client";
-import {SnackbarService} from "./snackbar_service";
-import {LocalConfigurationService} from "./local_configuration_service";
-import {ApiService} from "./api_service";
+import {AuthenticationService} from './authentication_service';
+import {VersionService} from './version_service';
+import {HttpClient} from './http_client';
+import {SnackbarService} from './snackbar_service';
+import {LocalConfigurationService} from './local_configuration_service';
+import {ApiService} from './api_service';
 import {AuthorizedApiService} from './authorized_api_service';
-import getDecorators from "inversify-inject-decorators";
+import getDecorators from 'inversify-inject-decorators';
 
 const container: Container = new Container();
 

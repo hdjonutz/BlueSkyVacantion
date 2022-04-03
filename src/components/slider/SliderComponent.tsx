@@ -2,7 +2,7 @@ import * as React from 'react';
 import style from './SliderComponent.less';
 import Container from '@mui/material/Container';
 import classnames from 'classnames';
-import { Observable, ReplaySubject, Subscription } from 'rxjs';
+import {Observable, ReplaySubject, Subscription, timer} from 'rxjs';
 import FiltersPage from '../pages/Products/Filters';
 
 interface ISliderComponentState {
@@ -156,7 +156,7 @@ export default class SliderComponent extends React.Component<ISliderComponentpro
 
     renderTimeSlider() {
         this.observerTimer.subscribe(() => {
-            const tmp = Observable.timer(this.timerChangeImg * 1000).subscribe(() => {
+            const tmp = timer(this.timerChangeImg * 1000).subscribe(() => {
                 this.setState({
                     timerSec: 0,
                     changeImg: 2,
@@ -170,7 +170,7 @@ export default class SliderComponent extends React.Component<ISliderComponentpro
 
         this.observerChangeImg.subscribe(() => {
             this.setState({ timerSec: 1, changeImg: 0});
-            const tmp = Observable.timer(this.timerSliderBar * 1000).subscribe(() => {
+            const tmp = timer(this.timerSliderBar * 1000).subscribe(() => {
                 this.setState({
                     timerSec: 2,
                     changeImg: 1,

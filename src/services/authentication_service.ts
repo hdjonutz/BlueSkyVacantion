@@ -1,13 +1,10 @@
 import 'reflect-metadata';
-import {Observable, ReplaySubject} from 'rxjs';
 import {ApiService} from './api_service';
 import {Logger} from '../util/logger';
 import {KJUR, Token} from 'jsrsasign'
-import { resolve, useInjection } from 'inversify-react';
-import {provideSingleton} from './inversify.config';
-import {Container, injectable, inject} from "inversify";
-import {VersionService} from "./version_service";
-import {lazyInject} from "./inversify.config";
+import {Container, injectable, inject} from 'inversify';
+import {filter, first, map, switchMap} from 'rxjs/operators';
+import {Observable, of, ReplaySubject} from 'rxjs';
 // import Cookie from 'tiny-cookie';
 
 const logger = Logger.create('AuthenticationService');
@@ -64,7 +61,7 @@ export class AuthenticationService {
 
         window.addEventListener('storage', (e) => {
             if (e.key === 'accessToken') {
-                this.isAuthenticated().first().subscribe((isAuthenticated) => {
+                this.isAuthenticated().pipe(first()).subscribe((isAuthenticated) => {
                     if (e.newValue == null && isAuthenticated) {
                         this.logout();
                     } else if (e.newValue != null && !isAuthenticated) {
@@ -91,7 +88,7 @@ export class AuthenticationService {
                 .applyExternalLogin(localStorage['accessToken'])
                 .subscribe(() => logger.info('Restored stored login'));
         } else {
-            this.authenticationSubject.next(null);
+            this.authenticationSubject.next(null as any);
         }
     }
 
@@ -108,7 +105,7 @@ export class AuthenticationService {
      * @return {any}
      */
     isAuthenticated(): Observable<boolean> {
-        return this.getAuthentication().map((a) => a != null);
+        return this.getAuthentication().pipe(map((a) => a != null));
     }
 
     /**
@@ -136,7 +133,7 @@ export class AuthenticationService {
             }
 
             const username = parsedAccessToken.payloadObj.sub;
-            const expires = parsedAccessToken.payloadObj.exp ? new Date(+parsedAccessToken.payloadObj.exp * 1000) : null;
+            const expires = parsedAccessToken.payloadObj.exp ? new Date(+parsedAccessToken.payloadObj.exp * 1000) : null as any;
             const permissions = parsedAccessToken.payloadObj.rechte ? parsedAccessToken.payloadObj.rechte : [];
             const authentication = new Authentication(username, parsedAccessToken, accessToken, expires, permissions);
 
@@ -147,7 +144,7 @@ export class AuthenticationService {
 
             this.authenticationSubject.next(authentication);
 
-            return this.getAuthentication().first();
+            return this.getAuthentication().pipe(first());
         } catch (err) {
             // Errror on upgrade application
             // old application from test to production.(the token is already saved)
@@ -156,7 +153,7 @@ export class AuthenticationService {
             localStorage.removeItem('logout');
             console.error('Error while parsing access token', accessToken, err);
             this.authenticationSubject.next( null as any);
-            return this.getAuthentication().first();
+            return this.getAuthentication().pipe(first());
         }
     }
 
@@ -175,25 +172,10 @@ export class AuthenticationService {
                 vorname:    window.atob(info[2]),
                 email:      window.atob(info[3])
             };
-            return Observable.of(detail);
+            return of(detail);
         } catch (err) {
-            return Observable.of(null);
+            return of(null);
         }
-    }
-
-    /**
-     * Applies a legacy login (e.g. the old cookie from Tomcat, or a login via local config) with mandant and username,
-     * however this mean that no access token is available and requires the API & co to work without one. Otherwise the
-     * user can't do anything.
-     * @param accessToken
-     */
-    applyExternalLegacyLogin(username: string, permissions?: ReadonlyArray<string>): Observable<Authentication> {
-        const authentication = new Authentication(username, null, null, null, permissions || null);
-        localStorage['accessToken'] = 'legacy';
-        logger.warn('Legacy login, this will not work in the future, is:', authentication);
-
-        this.authenticationSubject.next(authentication);
-        return this.getAuthentication().first();
     }
 
     /**
@@ -205,16 +187,16 @@ export class AuthenticationService {
     login(username: string, password: string): Observable<Authentication> {
         return this.apiService
             .post('getAuthenticationUser', {email: username, pass: password})
-            .switchMap((response) => {
+            .pipe(switchMap((response) => {
                 if (+response.data['granted'] === 1) {
                     logger.info('Logged in successfully', response.data['access_token']);
 
                     return this.applyExternalLogin(response.data['access_token']);
                 } else {
                     logger.warn('Login failed');
-                    return Observable.of(null as any);
+                    return of(null as any);
                 }
-            });
+            }));
     }
 
     /**
@@ -222,12 +204,14 @@ export class AuthenticationService {
      * @return {any}
      */
     logout(): Observable<boolean> {
-        return this.getAuthentication().first().map((auth) => {
+        return this.getAuthentication().pipe(
+            first(),
+            map((auth) => {
             if (auth != null) {
                 // As there is no server side session, we only need to forget our token to perform a logout:
-                this.authenticationSubject.next(null);
+                this.authenticationSubject.next(null as any);
                 localStorage.removeItem('accessToken');
-                localStorage.setItem('logout_accessToken', auth.accessToken);
+                localStorage.setItem('logout_accessToken', auth.accessToken || '');
                 window.sessionStorage.removeItem('InLine.ForceAccessMode');
                 localStorage.removeItem('LoginLastUsername');
                 localStorage.removeItem('LoginLastMndNr');
@@ -244,7 +228,7 @@ export class AuthenticationService {
             } else {
                 return false;
             }
-        });
+        }));
     }
 
     /**
@@ -256,7 +240,12 @@ export class AuthenticationService {
         logger.info('Refreshing login...');
 
         // Remove authentication and await a new login (which isn't controlled here...)
-        return this.logout().switchMap(() => this.getAuthentication().filter((auth) => auth != null).first());
+        return this.logout().pipe(
+            switchMap(() => this.getAuthentication()
+                .pipe(
+                    filter((auth) => auth != null)).pipe(first())
+            )
+        )
     }
 
     getPermissionfromToken(token: string): any {

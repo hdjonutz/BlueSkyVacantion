@@ -4,15 +4,16 @@ import ExtendableError from 'extendable-error-class';
 import { resolve } from 'inversify-react';
 import {HttpClient, HttpResponse} from './http_client';
 import {Logger, LogLevel} from '../util/logger';
-import {ReplaySubject, Observable} from 'rxjs';
+import {ReplaySubject, Observable, combineLatest} from 'rxjs';
 import {shortenText} from '../util/string_helper';
-import {VersionService} from './version_service';
+import {IExtendedVersionInfo, VersionService} from './version_service';
 import {LocalConfigurationService} from './local_configuration_service';
 import {i18n} from '../i18n/i18n';
 import {ApiServiceState, ApiServiceStatus} from './api_service_status';
 // import {showApiErrorDialog} from '../components/common/api-error-dialog';
 import {SnackbarService, SnackbarStyle} from './snackbar_service';
 import {inject, injectable} from 'inversify';
+import {distinctUntilChanged, filter, first, map, switchMap, tap} from 'rxjs/operators';
 
 const logger = Logger.create('ApiService', LogLevel.Info);
 
@@ -85,17 +86,17 @@ export class ApiService {
     ) {
 
         this.localConfigurationService.get()
-            .first()
+            .pipe(first())
             .subscribe(() => {
                 this.statusSubject
                 // We don't need to show a message for successful communication and as we retry, we can also skip missing
                 // sessions
-                    .filter((s) => s.state !== ApiServiceState.Ok && s.state !== ApiServiceState.Unauthorized)
+                    .pipe(filter((s) => s.state !== ApiServiceState.Ok && s.state !== ApiServiceState.Unauthorized))
                     // .throttleTime(15000)
                     .subscribe((s) => {
                         const message = ApiServiceState.formatMessage(s.state);
 
-                        this.snackbarService.displaySnack(message, null, {
+                        this.snackbarService.displaySnack(message, null as any, {
                             title: i18n('aktionen.details'),
                             callback: () => showApiErrorDialog(s)
                         }, SnackbarStyle.Error);
@@ -103,7 +104,7 @@ export class ApiService {
             });
 
         this.statusSubject
-            .distinctUntilChanged((a, b) => a.state === b.state)
+            .pipe(distinctUntilChanged((a, b) => a.state === b.state))
             .subscribe((s) => logger.info('Api Status', ApiServiceState[s.state], s));
     }
 
@@ -111,28 +112,43 @@ export class ApiService {
                  type: XMLHttpRequestResponseType = 'text'): Observable<ApiResponse<T>> {
         return this
             .buildUrl(key, parameters, format)
-            .first()
-            .switchMap((path) => this.httpClient.get(path, null, type))
-            .map((r) => this.handleResponse<T>(r, key, format, null, type))
-            .do(null, (error) => this.handleError(error));
+            .pipe(
+                first(),
+                switchMap((path) => this.httpClient.get(path, null, type)),
+                map((r) => this.handleResponse<T>(r, key, format, null, type)),
+                tap({
+                    next: (value) => {},
+                    error: (err) => {this.handleError(err)}
+                })
+            );
     }
 
     getNoTokens<T = any>(path: string, fileName?: string): Observable<ApiResponse<T>> {
         return this
             .buildUrlnoTokens(path, fileName)
-            .first()
-            .switchMap((_path) => this.httpClient.get(_path))
-            .map((r) => this.handleResponse<T>(r, '', 'text'))
-            .do(null, (error) => this.handleError(error));
+            .pipe(
+                first(),
+                switchMap((_path) => this.httpClient.get(_path)),
+                map((r) => this.handleResponse<T>(r, '', 'text')),
+                tap({
+                    next: (value) => {},
+                    error: (err) => {this.handleError(err)}
+                })
+            );
     }
 
     head<T = any>(key: string, parameters?: Parameters, format: ResponseFormat = 'json'): Observable<ApiResponse<T>> {
         return this
             .buildUrl(key, parameters, format)
-            .first()
-            .switchMap((path) => this.httpClient.head(path))
-            .map((r) => this.handleResponse<T>(r, key, format))
-            .do(null, (error) => this.handleError(error));
+            .pipe(
+                first(),
+                switchMap((path) => this.httpClient.head(path)),
+                map((r) => this.handleResponse<T>(r, key, format)),
+                tap({
+                    next: (value) => {},
+                    error: (err) => {this.handleError(err)}
+                })
+            );
     }
 
     post<T = any>(key: string, parameters?: Parameters, body?: any, format: ResponseFormat = 'json'): Observable<ApiResponse<T>> {
@@ -142,66 +158,72 @@ export class ApiService {
 
         return this
             .buildUrl(key, parameters, format)
-            .first()
-            .switchMap((path) => this.httpClient.post(path, payload))
-            .map((r) => this.handleResponse<T>(r, key, format, body))
-            .do(null, (error) => this.handleError(error, body));
+            .pipe(
+                first(),
+                switchMap((path) => this.httpClient.post(path, payload)),
+                map((r) => this.handleResponse<T>(r, key, format, body)),
+                tap({
+                    next: (value) => {},
+                    error: (err) => {this.handleError(err, body)}
+                })
+            );
     }
 
     buildUrl(key: string, parameters?: Parameters, format: ResponseFormat = 'json'): Observable<string> {
-        return Observable
-            .combineLatest(
-                this.localConfigurationService.get().filter((c) => c != null),
-                this.versionService.getCurrentVersion()
-            )
-            .map(([localConfig, versionInfo]) => {
-                // First only add the key name and mandant to the query object, because getting the parameter order
-                // right helps while debugging. But we have add the other global level parameters too, so that
-                // everything that is added on the higher layers comes last (like the access token)
+        return combineLatest(
+                [this.localConfigurationService.get().pipe(filter((c) => c != null)),
+                this.versionService.getCurrentVersion()]
+            ).pipe(
+                map(([localConfig, versionInfo]) => {
+                    // First only add the key name and mandant to the query object, because getting the parameter order
+                    // right helps while debugging. But we have add the other global level parameters too, so that
+                    // everything that is added on the higher layers comes last (like the access token)
 
-                const query: Parameters = {
-                    key: key,
-                    // This is the case that we don't have a authorized call, these calls never have a mndNr
-                    // so we should pass '0' here. Login is a special case, but callers can override the mnd.
-                    format: format,
-                    app: localConfig.appType,
-                    version: versionInfo.version,
-                };
+                    const query: Parameters = {
+                        key: key,
+                        // This is the case that we don't have a authorized call, these calls never have a mndNr
+                        // so we should pass '0' here. Login is a special case, but callers can override the mnd.
+                        format: format,
+                        app: localConfig.appType,
+                        version: versionInfo.version,
+                    };
 
-                if (versionInfo.appVersion) {
-                    query.app_version = versionInfo.appVersion;
-                }
-
-                for (const p in parameters) {
-                    if (parameters.hasOwnProperty(p) && parameters[p] !== undefined) {
-                        query[p] = parameters[p];
+                    if (versionInfo.appVersion) {
+                        query.app_version = versionInfo.appVersion;
                     }
-                }
 
-                const urlObj = {
-                    protocol: localConfig.apiServerProtocol,
-                    hostname: localConfig.apiServerHostname,
-                    port: '' + localConfig.apiServerPort,
-                    pathname: localConfig.apiServerApiBase,
-                    query: query,
-                };
+                    for (const p in parameters) {
+                        if (parameters.hasOwnProperty(p) && parameters[p] !== undefined) {
+                            query[p] = parameters[p];
+                        }
+                    }
 
-                return url.format(urlObj);
-            })
-            .first();
+                    const urlObj = {
+                        protocol: localConfig.apiServerProtocol,
+                        hostname: localConfig.apiServerHostname,
+                        port: '' + localConfig.apiServerPort,
+                        pathname: localConfig.apiServerApiBase,
+                        query: query,
+                    };
+
+                    return url.format(urlObj);
+                }),
+                first()
+        );
     }
 
     buildUrlnoTokens(path: string, fileName?: string): Observable<string> {
-        return Observable
-            .combineLatest(this.localConfigurationService.get().filter((c) => c != null),
-                this.versionService.getCurrentVersion())
-            .map(([localConfig, versionInfo]) => {
+        return combineLatest(
+                [this.localConfigurationService.get().pipe(filter((c) => c != null)),
+                this.versionService.getCurrentVersion()]
+            ).pipe(
+                map(([localConfig, versionInfo]) => {
                 const query: Parameters = {
                     app: localConfig.appType,
                     version: versionInfo.version,
                 };
 
-                if (versionInfo.appVersion) {
+                if (versionInfo && versionInfo.appVersion) {
                     query.app_version = versionInfo.appVersion;
                 }
 
@@ -212,8 +234,9 @@ export class ApiService {
                     pathname: fileName ? `${path}/${fileName}` : path
                 };
                 return url.format(urlObj);
-            })
-            .first();
+            }),
+            first()
+        );
     }
 
     getStatus(): Observable<ApiServiceStatus> {
@@ -222,7 +245,7 @@ export class ApiService {
 
     private handleResponse<T = any>(response: HttpResponse, key: string, format: ResponseFormat, body?: any,
                                     type: XMLHttpRequestResponseType = 'text') {
-        let data = null;
+        let data = null as any;
 
         try {
             if (response.method !== 'HEAD') {
@@ -269,7 +292,7 @@ export class ApiService {
 
     private handleError(error: HttpResponse, body?: any) {
         const log = error.status === 0 || error.status >= 500 ? logger.error : logger.warn;
-        let data = null
+        let data = null as any;
 
         if (error.method !== 'HEAD') {
             // For HEAD responses we always have data null, as a HEAD response has only headers!

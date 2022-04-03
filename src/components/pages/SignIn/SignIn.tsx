@@ -19,7 +19,6 @@ import styles from '../overwrite.less';
 import {Ids} from '../../../formsIds';
 import {resolve} from 'inversify-react';
 import {ApiService, encodePostBody} from '../../../services/api_service';
-import { Observable } from 'rxjs';
 import {AuthenticationService} from '../../../services/authentication_service';
 
 

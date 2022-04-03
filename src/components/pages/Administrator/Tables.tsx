@@ -10,7 +10,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 
-import {i18n} from "../../../i18n/i18n";
+import {i18n} from '../../../i18n/i18n';
 import routes from '../../../routes';
 import {Observable} from 'rxjs';
 import {AuthorizedApiService} from '../../../services/authorized_api_service';

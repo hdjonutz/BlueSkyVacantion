@@ -1,6 +1,6 @@
-import {Observable} from 'rxjs';
-import {injectable} from "inversify";
-import {getLocalConfig} from "../assets/config";
+import {Observable, of} from 'rxjs';
+import {injectable} from 'inversify';
+import {getLocalConfig} from '../assets/config';
 
 export class LocalConfiguration {
     constructor(public readonly apiServerProtocol: string,
@@ -57,6 +57,6 @@ export class LocalConfigurationService {
             apiServerPort, apiServerApiBase, enableEventPush, eventsServerViaProxy, eventsServerProtocol,
             eventsServerHost, eventsServerPort, eventsServerApiBase, appType, defaultUsername, defaultPassword);
 
-        return Observable.of<LocalConfigurationService>(localConfig);
+        return of(localConfig); // <LocalConfigurationService>
     }
 }
