@@ -3,7 +3,7 @@ import * as React from 'react';
 import './AppRouter.less';
 import routes from './routes';
 import {HashRouter} from 'react-router-dom';
-import AppView from "./components/AppView/app-view";
+import AppView from './components/AppView/app-view';
 
 class AppRouter extends React.Component {
 

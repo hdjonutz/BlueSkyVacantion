@@ -59,7 +59,11 @@ export default class Account extends React.Component<{}, HeaderStates> {
             .getAuthentication()
             // .filter((auth) => auth != null)
             .subscribe((auth) => {
-                this.setState({auth: auth && auth.username ? auth.username.split('#') : null});
+                let logged = true;
+                if (auth) {
+                    logged = auth.expires >= new Date();
+                }
+                this.setState({auth: auth && logged && auth.username ? auth.username.split('#') : null});
             });
     }
 

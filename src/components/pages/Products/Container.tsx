@@ -3,7 +3,6 @@ import style from './admin.less';
 import {NavLink} from 'react-router-dom';
 import {RouteComponentProps} from 'react-router';
 import routes from '../../../routes';
-import {Observable} from 'rxjs';
 import {AuthorizedApiService} from '../../../services/authorized_api_service';
 import {ApiService} from '../../../services/api_service';
 import 'reflect-metadata';
@@ -26,15 +25,25 @@ import FiltersPage from './Filters';
 import SliderComponent from '../../slider/SliderComponent';
 import ListProductsPage from './ListProducts';
 import ProductDetails from '../ProductDetail/ProductDetails'
+import {map} from 'rxjs/operators';
+import {FormsService} from '../../../services/form_service';
+import {combineLatest} from 'rxjs';
+import {getProduct, getProductId} from './helpers';
 
 interface IContainerPageState {
     isHome:     boolean;
     isProducts: boolean;
-    isProduct:  number;
+    isProduct:  string;
     path:       string;
+
+    products:   any;
+    details:    any;
 }
 
 export default class ContainerPage extends React.Component<{}, IContainerPageState> {
+
+    @resolve(FormsService)      private formsService: FormsService;
+    @resolve(ApiService)        private apiService: ApiService;
 
     constructor(props: any) {
         super(props);
@@ -45,50 +54,56 @@ export default class ContainerPage extends React.Component<{}, IContainerPageSta
             && this.props.match.params.products === 'products'
             && this.props.match.isExact;
         const path = this.props.location.pathname;  // /online/home/products/423232
-        const isProduct = !notProductDetail ? this.getProduct(path) : 0;
+        const isProduct = !notProductDetail ? getProduct(path) : null;
 
         this.state = {
             isHome:     isHome,
             isProducts: notProductDetail,
-            isProduct:  +isProduct,
+            isProduct:  isProduct as any,
             path:       this.props.location.pathname,
+
+            products: [],
+            details: [],
         };
     }
 
-    getProduct(path: string): string {
-        const regex = /^([\D]online[\D]home[\D]products[\D])([0-9]*)$/;
-        const found = path.match(regex);
-        return found ? found[2] : '0';
+    componentDidMount() {
+        this.refresh();
+    }
+
+    refresh() {
+        combineLatest(
+            [this.apiService.get('getFormData', {formid: Ids.PRODUCTS}).pipe(map((res) => res.data || [])),
+                this.apiService.get('getFormData', {formid: Ids.PROD_ESENTIAL_DETAILS}).pipe(map((res) => res.data || []))],
+        ).subscribe(([products, details]) => {
+            this.setState({
+                products,
+                details
+            });
+        });
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        const isHome = this.props.match.path === '/';
-        const notProductDetail = !isHome
-            && nextProps.match.params
-            && nextProps.match.params.products === 'products'
-            && nextProps.match.isExact;
-        const path = nextProps.location.pathname;  // /online/home/products/423232
-        const isProduct = !notProductDetail ? this.getProduct(path) : 0;
-
-        if (this.state.path !== nextProps.location.pathname) {
-            this.setState({path: nextProps.location.pathname, isProduct});
-            console.log("products container return true");
-            return true;
-        } else {
-            console.log("products container return false");
-            return false;
+        const isProduct = getProduct(nextProps.location.pathname);
+        if (isProduct !== this.state.isProduct || JSON.stringify(nextState) !== JSON.stringify(this.state)) {
+            this.setState({path: nextProps.location.pathname, isProduct: isProduct, isProducts: !isProduct});
         }
+        return true;
     }
 
     render() {
+        // const products = this.state.isProduct === '0'
+        //     ? this.state.products
+        //     : this.state.products.filter((f) => f.product_id === this.state.isProduct);
+
         return (
             <Container maxWidth='xl' style={{maxWidth: '100%', paddingLeft: 0, paddingRight: 0}}>
                 {/* <CssBaseline /> */}
                 <Box sx={{ marginTop: 9}} style={{marginTop: '93px'}}>
                     <SliderComponent {...this.props} {...this.state} />
-                    {!this.state.isProduct
-                        ? <ListProductsPage {...this.props} />
-                        : <ProductDetails {...this.props} {...this.state} />
+                    {this.state.isProduct
+                        ? <ProductDetails {...this.props} />
+                        : <ListProductsPage {...this.props} {...this.state} />
                     }
                 </Box>
             </Container>

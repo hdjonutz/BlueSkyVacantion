@@ -80,6 +80,11 @@ forms:
     priority_show: Priority to show
     marker: Marker
     model: Model
+    where_show: Where to show
+    no_configuration: ' '
+    in_list_products: In list of Products
+    in_top_detail_list: In top of detail Offer
+    in_bottom_detail_list: In bottom of detail Offer
     null: ---
 
   locations:

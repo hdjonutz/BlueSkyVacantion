@@ -2,7 +2,7 @@ import * as React from 'react';
 import style from './SliderComponent.less';
 import Container from '@mui/material/Container';
 import classnames from 'classnames';
-import {Observable, ReplaySubject, Subscription, timer} from 'rxjs';
+import {ReplaySubject, Subscription, timer} from 'rxjs';
 import FiltersPage from '../pages/Products/Filters';
 
 interface ISliderComponentState {
@@ -176,7 +176,9 @@ export default class SliderComponent extends React.Component<ISliderComponentpro
                     changeImg: 1,
                     updateImg: this.state.updateImg,
                 });
-                this.observerTimer.next(true);
+                if (this.observerTimer) {
+                    this.observerTimer.next(true);
+                }
                 tmp.unsubscribe();
             });
         });

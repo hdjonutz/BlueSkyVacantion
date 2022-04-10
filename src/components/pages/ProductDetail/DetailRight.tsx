@@ -1,6 +1,5 @@
 import * as React from 'react';
 
-import {Observable} from 'rxjs';
 import 'reflect-metadata';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
@@ -39,7 +38,38 @@ import samplePDF from '../../../assets/slider/products/423232/prices.pdf';
 import pdfjsWorker from 'pdfjs-dist/build/pdf.worker.entry';
 pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker;
 
-export default class DetailRight extends React.Component<{}, {value: string}> {
+import SailingIcon from '@mui/icons-material/Sailing';
+import BedIcon from '@mui/icons-material/Bed';
+import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
+import MeetingRoomIcon from '@mui/icons-material/MeetingRoom';
+import StraightenIcon from '@mui/icons-material/Straighten';
+import ReadMoreIcon from '@mui/icons-material/ReadMore';
+import { Ids } from '../../../formsIds';
+import {map} from 'rxjs/operators';
+import {resolve} from 'inversify-react';
+import {ApiService} from '../../../services/api_service';
+import {chunk, chunkArrayInGroups, getDetailsByWhereAndPriorityShow} from '../../../util/helpers';
+
+interface IDetailsRightStates {
+    value: string;
+    imageWidth: number;
+    data_received: {[key: string]: any};
+    path: string;
+    config: {[key: string]: any};
+}
+
+export default class DetailRight extends React.Component<{}, IDetailsRightStates> {
+
+    /*
+    * 2^3       NONE
+    * 2^2       FINAL_DETAIL_ITEM
+    * 2^1       FINAL_DETAILS_TOP
+    * 2^0       FINAL_DETAILS_BOTTOM
+    * */
+
+    private FINAL_DETAILS_TOP       = Math.pow(2, 1).toString();
+    private FINAL_DETAILS_BOTTOM    = Math.pow(2, 0).toString();
+    @resolve(ApiService) private apiService: ApiService;
 
     private _algemeine = [
         {name: 'Double bed cabins', detail: '3'},
@@ -136,40 +166,104 @@ export default class DetailRight extends React.Component<{}, {value: string}> {
         },
     ];
 
+    private logo = `assets/svg/logo.svg`;
+    private data_received = null;
+
     constructor(props: any) {
         super(props);
 
         this.state = {
-            value: '1'
+            value:          '1',
+            imageWidth:     500,
+            data_received:  null as any,
+            path:           this.logo,
+            config:         null as any,
         };
         this.handleChange = this.handleChange.bind(this);
         this.marks = this.marks.map((f, i) => Object.assign(f, {value: (100 / (this.marks.length - 1)) * i}));
+    }
+
+    componentDidMount() {
+        this.apiService.get('getFormConfig').pipe(map((res) => res.data || []))
+            .subscribe((config) => this.setState({config}));
+    }
+
+    shouldComponentUpdate(nextProps: Readonly<{}>, nextState: Readonly<IDetailsRightStates>, nextContext: any): boolean {
+        if (JSON.stringify(nextProps) !== JSON.stringify(this.props)) {
+            this.data_received = nextProps;
+            this.setState({
+                data_received: nextProps,
+                path: `assets/slider/products/${nextProps.isProduct}/small/01.jpg`
+            });
+        }
+        return true;
+    }
+
+    componentDidUpdate(prevProps: Readonly<{}>, prevState: Readonly<IDetailsRightStates>, snapshot?: any) {
+        if (JSON.stringify(this.state.data_received) !== JSON.stringify(this.data_received)) {
+            this.setState({data_received: this.data_received});
+        }
     }
 
     handleChange(event: React.SyntheticEvent, newValue: string) {
         this.setState({value: newValue});
     };
 
-    getTabContainerSimple(all) {
-        return <div style={{display: 'flex', flex: 1, flexDirection: 'row'}}>
+    getTabContainerSimple() {
+        let detailsTop = [];
+        let detailsBottom = [];
+        if (this.state.config && this.state.config[Ids.PROD_ESENTIAL_DETAILS]) {
+            const config = this.state.config[Ids.PROD_ESENTIAL_DETAILS];
+            detailsTop = getDetailsByWhereAndPriorityShow(config,
+                'where_show',
+                this.props.details,
+                [this.FINAL_DETAILS_TOP],
+                [this.FINAL_DETAILS_BOTTOM]);
+
+            const bottom = getDetailsByWhereAndPriorityShow(config,
+                'where_show',
+                this.props.details,
+                [this.FINAL_DETAILS_BOTTOM],
+                [this.FINAL_DETAILS_TOP]);
+            detailsBottom = chunkArrayInGroups(bottom, Math.floor(bottom.length / 2) + 1 );
+        }
+        return <div style={{display: 'flex', flex: 1, flexDirection: 'column', width: '100%'}}>
+            <div style={{display: 'flex', flex: 1, flexDirection: 'row', width: '100%',
+                justifyContent: 'space-between', paddingBottom: '10px', borderBottom: '1px solid #ece2f7'}}>
+                {detailsTop.map((p) => <div className={style.iconContent}>
+                        <img src={`assets/icons/item_${p.icon}.svg`} className={style.iconsSize} />{p.name}
+                    </div>
+                )}
+            </div>
+
             <TableContainer component={Paper} style={{background: 'none', borderRadius: 0, boxShadow: 'none'}}>
                 <Table sx={{ minWidth: 410 }} aria-label='simple table'>
                     <TableBody>
-                        {all.map((row) => (
-                            <TableRow key={row.name} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                                <TableCell style={{'padding': '5px', width: '25%'}}>{row.name}</TableCell>
-                                <TableCell style={{'padding': '5px', width: '25%'}}>{row.detail}</TableCell>
-                            </TableRow>
-                        ))}
+                        {detailsBottom.map((tab, idx) =>
+                            <TableRow key={idx} sx={{ '&:last-child td, &:last-child th': { border: 0 } }} style={{display: 'flex'}}>
+                                <TableCell className={style.tableRow}>
+                                    <img src={`assets/icons/item_${tab[0].icon}.svg`}/>{tab[0].name}
+                                </TableCell>
+                                <TableCell className={style.tableRow}>
+                                    {tab[1] && <><img src={`assets/icons/item_${tab[1].icon}.svg`}/> {tab[1].name}</>}
+                                </TableCell>
+                           </TableRow>
+                        )}
                         <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                            <TableCell style={{'padding': '5px', width: '25%'}}>
+                            {/*<TableCell style={{'padding': '5px', width: '25%'}}>
+                                <Button variant='contained'
+                                        style={{borderRadius: '50%'}}
+                                        color='info'
+                                        startIcon={<ReadMoreIcon style={{fontSize: '34px'}} />}
+                                        onClick={() => this.setState({imageWidth: this.state.imageWidth === 500 ? 350 : 500 })}
+                                        className={style.expandBtn} />
                                 <NavLink to={'/prices/prices'}>
                                     <Button variant='contained' className='mx-2' color='info' style={{textDecoration: 'none'}}>
                                         See Prices Administrator <br/>
                                         will be removed
                                     </Button>
                                 </NavLink>
-                            </TableCell>
+                            </TableCell> */}
                             <TableCell style={{'padding': '5px', width: '25%'}}>
                                 <Button variant='contained' className='mx-2' color='info'>
                                     Add To Basket
@@ -296,6 +390,9 @@ export default class DetailRight extends React.Component<{}, {value: string}> {
 
         return (
             <ThemeProvider theme={themeMeandro}>
+                {this.state.path && <img style={{display: 'none'}} src={this.state.path} onError={() => {
+                    this.setState({path: this.logo});
+                }} />}
                 <Container style={styledContainer}>
                 <CssBaseline />
                 <Box sx={{ flexGrow: 1 }} className={style.rightSide}>
@@ -304,20 +401,29 @@ export default class DetailRight extends React.Component<{}, {value: string}> {
                         <Card sx={{ display: 'flex', borderRadius: 0, backgroundColor: '#f5f1f0' }}>
                             <CardMedia
                                 component='img'
-                                sx={{ width: 500 }}
-                                image='assets/slider/products/423232/kos.png'
+                                sx={{ width: this.state.imageWidth }}
+                                image={this.state.path}
                                 alt='Live from space album cover'
                             />
-                            <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                                <CardContent sx={{ flex: '1 0 auto' }}>
-                                    <Typography component='div' variant='h4'>
-                                        KOS 41.1
-                                    </Typography>
-                                    <Typography variant='subtitle1' color='text.secondary' component='div'>
-                                        Oceanis 41.1
+                            <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%'}}>
+                                {this.props.product && this.props.details && <CardContent sx={{ flex: '1 0 auto', position: 'relative'}}>
+                                    <Typography component='div' variant='h4' style={{
+                                        display: 'flex',
+                                        justifyContent: 'space-between',
+                                        borderBottom: '1px solid rgba(236, 226, 247, 1)',
+                                        marginBottom: '10px' }}>
+                                        <div>{this.props.product.product_name}
+                                            <small style={{fontSize: '18px'}}>&nbsp;
+                                                {this.props.product.product_model || this.props.product.product_marker}
+                                            </small>
+                                        </div>
+                                        <div style={{display: 'flex', flexDirection: 'column', textAlign: 'end'}}>
+                                            <small style={{fontSize: '18px'}}>450€</small>
+                                            <small style={{fontSize: '18px', color: '#3fb521'}}>20%</small>
+                                        </div>
                                     </Typography>
                                     {this.getTabContainerSimple(this.details)}
-                                </CardContent>
+                                </CardContent>}
                             </Box>
                         </Card>
                         <hr />
@@ -375,7 +481,7 @@ export default class DetailRight extends React.Component<{}, {value: string}> {
                             </TabContext>
                         </Box>
                         <hr />
-                        <h2>Other Products By Ort oder ByTyp </h2>
+                        <h2>Other Products By Ort oder ByTyp2 </h2>
                         <ListRight />
                     </Container>
                     </Box>
@@ -384,3 +490,4 @@ export default class DetailRight extends React.Component<{}, {value: string}> {
         )
     }
 }
+// https://www.bednblue.com/yachts/1093

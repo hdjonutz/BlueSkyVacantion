@@ -23,7 +23,7 @@ export default class CardPartnerSay extends React.Component<{}, {}> {
                             Lizard
                         </Typography>
                         <Typography gutterBottom variant="h7" component="div">
-                            April 13, 2015
+                            April 13, 2015 A
                         </Typography>
                         <Typography variant="body2" color="text.secondary">
                             This impressive paella is a perfect party dish and a fun meal to

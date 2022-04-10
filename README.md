@@ -248,3 +248,8 @@ ACCOUNT TEST HOST
 13.03.2022
 https://app.diagrams.net/
 diagram table
+
+
+icons
+https://www.vectorstock.com/royalty-free-vector/set-icons-of-motor-and-engine-vector-4786538
+https://www.vectorstock.com/royalty-free-vector/plane-propellers-motion-symbols-jet-aviation-vector-28974119

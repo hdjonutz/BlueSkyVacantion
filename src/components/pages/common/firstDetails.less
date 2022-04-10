@@ -1,0 +1,31 @@
+.rowColumn{
+  flex-direction: row;
+  display: flex;
+  flex: 1;
+  .column{
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    &:first-child{
+      padding-right: 12px;
+    }
+    &:last-child{
+      padding-left: 12px;
+    }
+
+    .row{
+      font-size: 12px;
+      display: flex;
+      justify-content: space-between;
+      flex: 1;
+      align-items: center;
+      text-align: end;
+      border-bottom: 1px solid #ddddddbf;
+      min-height: 35px;
+      max-height: 35px;
+    }
+  }
+
+}
+
+

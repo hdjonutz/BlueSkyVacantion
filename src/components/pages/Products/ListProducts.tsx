@@ -1,8 +1,6 @@
 import * as React from 'react';
-import {Observable} from 'rxjs';
+
 import 'reflect-metadata';
-import Paper from "@mui/material/Paper";
-import { styled } from "@mui/material/styles";
 import { ThemeProvider } from '@mui/material/styles';
 import themeMeandro from '../../Layout/Theme';
 
@@ -17,9 +15,8 @@ export default class ListProductsPage extends React.Component<{}, {}> {
     constructor(props: any) {
         super(props);
 
-        this.state = {}
+        this.state = {};
     }
-
 
     render() {
         const style = {border: '1px solid red', background: 'blue'};
@@ -32,21 +29,13 @@ export default class ListProductsPage extends React.Component<{}, {}> {
                     <Box sx={{ flexGrow: 1 }} style={rightSide}>
                         <Container component='main' style={boxStyled}>
                             <CssBaseline />
-                            <h2>Other Products By Ort oder ByTyp </h2>
-                            <ListRight />
+                            <h2>Other Products By Ort oder ByTyp1 </h2>
+                            <ListRight {...this.props} />
                         </Container>
                     </Box>
                 </div>
             </ThemeProvider>
         )
-        // return (
-        //     <ThemeProvider theme={themeMeandro}>
-        //         <Container component='homeRightSide' style={styledContainer}>
-        //             <CssBaseline />
-        //
-        //         </Container>
-        //     </ThemeProvider>
-        // )
     }
 }
 

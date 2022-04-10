@@ -3,7 +3,6 @@ import style from './admin.less';
 import {NavLink} from 'react-router-dom';
 import {RouteComponentProps} from 'react-router';
 import routes from '../../../routes';
-import {Observable} from 'rxjs';
 import {AuthorizedApiService} from '../../../services/authorized_api_service';
 import {ApiService} from '../../../services/api_service';
 import 'reflect-metadata';

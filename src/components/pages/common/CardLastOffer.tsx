@@ -3,7 +3,6 @@ import style from './admin.less';
 import {NavLink} from 'react-router-dom';
 import {RouteComponentProps} from 'react-router';
 import routes from '../../../routes';
-import {Observable} from 'rxjs';
 import {AuthorizedApiService} from '../../../services/authorized_api_service';
 import {ApiService} from '../../../services/api_service';
 import 'reflect-metadata';
@@ -18,20 +17,32 @@ import CardActions from '@mui/material/CardActions';
 import Collapse from '@mui/material/Collapse';
 import Link from '@mui/material/Link';
 
-
 import IconButton, { IconButtonProps } from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Tooltip from '@mui/material/Tooltip/Tooltip';
+import FirstDetails from './FirstDetails';
+
+interface ICardLastOfferStates {
+    expanded:   boolean;
+    path:       string;
+}
+
+interface ICardLastOfferProps {
+    jacht:   any;
+}
 
 
-export default class CardLastOffer extends React.Component<{}, {expanded: boolean}> {
+export default class CardLastOffer extends React.Component<ICardLastOfferProps, ICardLastOfferStates> {
+    private logo = `assets/svg/logo.svg`;
+
     constructor(props: any) {
         super(props);
 
         this.state = {
             expanded: false,
+            path: this.props.jacht ? `assets/slider/products/${this.props.jacht.product_id}/small/01.jpg` : ''
         };
 
         this.setExpanded        = this.setExpanded.bind(this);
@@ -47,28 +58,41 @@ export default class CardLastOffer extends React.Component<{}, {expanded: boolea
     };
 
     render() {
+        const j = this.props.jacht;
         return (
-            <Grid item xs={12} sm={4} xl={4}>
-                <NavLink to={'/online/home/products/12432'} >
+            <>{ j && <Grid item xs={12} sm={4} xl={4}>
+                <img style={{display: 'none'}} src={this.state.path} onError={() => this.setState({path: this.logo})}/>
+                <NavLink to={`/online/home/products/${j.product_id}`} style={{textDecoration: 'none'}} >
                     <Card variant={'special'}>
                         <CardMedia
                             component='img'
                             height='194'
-                            image='assets/images/iacht.jpeg'
+                            image={this.state.path}
                             alt='Paella dish'
+                            style={{background: '#d6f1f7'}}
                         />
-                        <CardContent>
-                            <Typography gutterBottom variant="h5" component="div">
-                                Lizard
-                            </Typography>
-                            <Typography gutterBottom variant="h7" component="div">
-                                April 13, 2015
-                            </Typography>
-                            <Typography variant="body2" color="text.secondary">
-                                This impressive paella is a perfect party dish and a fun meal to
-                                cook together with your guests. Add 1 cup of frozen peas along with
-                                the mussels, if you like.
-                            </Typography>
+                        <CardContent style={{minHeight: '263px'}}>
+                            <div style={{display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between'}}>
+                                <div style={{display: 'flex', flexDirection: 'column'}}>
+                                    <Typography variant='h6' component='div'>
+                                        {j.product_name}
+                                    </Typography>
+                                    <Typography variant='h7' component='div'>
+                                        {j.product_model || j.product_marker}
+                                    </Typography>
+                                </div>
+                                <div style={{display: 'flex', flexDirection: 'column', textAlign: 'end'}}>
+                                    <Typography variant='h7' component='div'>
+                                        40€
+                                    </Typography>
+                                    <Typography variant='h7' component='div' style={{color: '#3fb521'}}>
+                                        +20%
+                                    </Typography>
+                                </div>
+                            </div>
+                            {this.props.jacht &&
+                                <FirstDetails {...this.props.jacht} />
+                            }
                         </CardContent>
                         <CardActions disableSpacing>
                             {/* <IconButton aria-label="add to favorites">
@@ -89,7 +113,7 @@ export default class CardLastOffer extends React.Component<{}, {expanded: boolea
                             </Tooltip>
 
                         </CardActions>
-                        <Collapse in={this.state.expanded} timeout="auto" unmountOnExit>
+                        <Collapse in={this.state.expanded} timeout='auto' unmountOnExit>
                             <CardContent>
                                 <Typography paragraph>Method:</Typography>
                                 <Typography paragraph>
@@ -124,6 +148,7 @@ export default class CardLastOffer extends React.Component<{}, {expanded: boolea
                     </Card>
                 </NavLink>
             </Grid>
+            }</>
         );
     }
 }

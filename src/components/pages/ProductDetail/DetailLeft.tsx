@@ -1,5 +1,4 @@
 import * as React from 'react';
-import {Observable} from 'rxjs';
 import 'reflect-metadata';
 import Box from '@mui/material/Box';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -67,7 +66,7 @@ export default class DetailRight extends React.Component<{}, {}> {
                                             <img src={'https://images.unsplash.com/photo-1589118949245-7d38baf380d6?w=164&h=164&fit=crop&auto=format'} />
                                         </div>
                                         <p className={style.sidebarPostTitle}>Cupidatat est esse</p>
-                                        <p className={style.sidebarPostDate}>April 13, 2015</p>
+                                        <p className={style.sidebarPostDate}>April 13, 2015 D</p>
                                     </NavLink>
                                 </li>)
                             }
