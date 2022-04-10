@@ -21,7 +21,7 @@ export class VersionInfo {
 
 @injectable()
 export class VersionService {
-    private constructor() {
+    public constructor() {
         // TODO: Later move the update checker and reload functionality here... but only if not mobile!
     }
 

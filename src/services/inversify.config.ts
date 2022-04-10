@@ -11,6 +11,7 @@ import {LocalConfigurationService} from './local_configuration_service';
 import {ApiService} from './api_service';
 import {AuthorizedApiService} from './authorized_api_service';
 import getDecorators from 'inversify-inject-decorators';
+import {FormsService} from './form_service';
 
 const container: Container = new Container();
 
@@ -18,13 +19,13 @@ const container: Container = new Container();
 
     container.bind(AuthenticationService).toSelf().inSingletonScope();
     container.bind<AuthenticationService>('AuthenticationService').to(AuthenticationService);
-    
+
     container.bind(HttpClient).toSelf().inSingletonScope();
     container.bind<HttpClient>('HttpClient').to(HttpClient);
 
     container.bind(SnackbarService).toSelf().inSingletonScope();
     container.bind<SnackbarService>('SnackbarService').to(SnackbarService);
-    
+
     container.bind(ApiService).toSelf().inSingletonScope();
     container.bind<ApiService>('ApiService').to(ApiService);
 
@@ -33,9 +34,12 @@ const container: Container = new Container();
 
     container.bind(LocalConfigurationService).toSelf().inSingletonScope();
     container.bind<LocalConfigurationService>('LocalConfigurationService').to(LocalConfigurationService);
-    
+
     container.bind(VersionService).toSelf().inSingletonScope();
     container.bind<VersionService>('VersionService').to(VersionService);
+
+    container.bind(FormsService).toSelf().inSingletonScope();
+    container.bind<FormsService>('FormsService').to(FormsService);
 
 export { container };
 

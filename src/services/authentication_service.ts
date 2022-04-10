@@ -54,7 +54,7 @@ export class AuthenticationService {
 
     // private apiService: ApiService;
 
-    private constructor(@inject('ApiService') private apiService: ApiService) {
+    public constructor(@inject('ApiService') private apiService: ApiService) {
         // this.apiService = apiService;
 
         // https://www.youtube.com/watch?v=nk3wUKxVDAg&ab_channel=ProgrammingwithKarthik

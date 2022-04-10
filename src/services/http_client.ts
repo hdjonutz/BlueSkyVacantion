@@ -1,6 +1,6 @@
 import {Observable} from 'rxjs';
 import {Logger, LogLevel} from '../util/logger';
-import {injectable} from "inversify";
+import {injectable} from 'inversify';
 
 const logger = Logger.create('HttpClient', LogLevel.Info);
 
@@ -87,7 +87,7 @@ export interface RequestOptions {
  */
 @injectable()
 export class HttpClient {
-    private constructor() {}
+    public constructor() {}
 
     /**
      * Performs a http request.

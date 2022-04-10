@@ -20,7 +20,7 @@ export class LocalConfiguration {
 
 @injectable()
 export class LocalConfigurationService {
-    private constructor() {}
+    public constructor() {}
 
     get(): Observable<LocalConfiguration> {
         const configLocal = getLocalConfig();

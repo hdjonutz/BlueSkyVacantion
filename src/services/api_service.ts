@@ -6,7 +6,7 @@ import {HttpClient, HttpResponse} from './http_client';
 import {Logger, LogLevel} from '../util/logger';
 import {ReplaySubject, Observable, combineLatest} from 'rxjs';
 import {shortenText} from '../util/string_helper';
-import {IExtendedVersionInfo, VersionService} from './version_service';
+import {VersionService} from './version_service';
 import {LocalConfigurationService} from './local_configuration_service';
 import {i18n} from '../i18n/i18n';
 import {ApiServiceState, ApiServiceStatus} from './api_service_status';
@@ -78,7 +78,7 @@ export class ApiService {
     private statusSubject: ReplaySubject<ApiServiceStatus> = new ReplaySubject<ApiServiceStatus>(1);
     private lastSuccess: Date = null;
 
-    private constructor(
+    public constructor(
         @inject('LocalConfigurationService')    private localConfigurationService: LocalConfigurationService,
         @inject('VersionService')               private versionService: VersionService,
         @inject('SnackbarService')              private snackbarService: SnackbarService,
