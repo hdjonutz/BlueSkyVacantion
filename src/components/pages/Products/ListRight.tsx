@@ -8,14 +8,14 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Container from '@mui/material/Container';
 
 import style from './listRight.less';
-import ContactSupportIcon from '@mui/icons-material/ContactSupport';
-import PsychologyIcon from '@mui/icons-material/Psychology';
-import DesignServicesIcon from '@mui/icons-material/DesignServices';
+// import ContactSupportIcon from '@mui/icons-material/ContactSupport';
+// import PsychologyIcon from '@mui/icons-material/Psychology';
+// import DesignServicesIcon from '@mui/icons-material/DesignServices';
 
-import CardPage from './Card';
-import CardAbout from './CardAbout';
+// import CardPage from './Card';
+// import CardAbout from './CardAbout';
 import CardLastOffer from './../common/CardLastOffer';
-import CardPartnerSay from './CardPartnerSay';
+// import CardPartnerSay from './CardPartnerSay';
 import {chunkArrayInGroups} from '../../../util/helpers';
 
 interface IListRightProps {
@@ -56,20 +56,20 @@ export default class ListRight extends React.Component<IListRightProps, IListRig
     }
 
     render() {
-        const styledHomeRightSide = {maxWidth: '100%', paddingLeft: 0, paddingRight: 0, position: 'relative'};
         const styledContainer = {
-            maxWidth: '1070px',
-            paddingLeft: 0,
-            paddingRight: 0,
+            'max-width': '1070px',
+            'padding-left': 0,
+            'padding-right': 0,
             position: 'relative',
-            marginLeft: 0
+            'margin-left': 0
         };
         const arr = chunkArrayInGroups(this.state.productsDetails, 3);
+
         return (
-            <Container style={styledHomeRightSide}>
+            <Container className={style.styledHomeRightSide}>
                 <CssBaseline />
                 <Box sx={{ flexGrow: 1 }}>
-                    <Container component='main' style={styledContainer}>
+                    <Container component='main' className={style.styledContainer}>
                         <CssBaseline />
                         {arr.map((h) => {
                             return<React.Fragment>
