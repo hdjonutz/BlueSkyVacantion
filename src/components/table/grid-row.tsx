@@ -15,6 +15,7 @@ import enLocale from 'date-fns/locale/en-US';
 import DatePicker from '@mui/lab/DatePicker';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import {TextField} from '@mui/material';
+import {numberToBinar} from '../../util/helpers';
 
 interface IGridRowProps {
     label:          string;
@@ -169,29 +170,35 @@ export default class GridRow extends React.PureComponent<IGridRowProps, IGridRow
         const reference = this.props.configItem && this.props.configItem.REFERENCE;
         const isMultiplsSelect = this.props.configItem && this.props.configItem.TYPE === 22;
 
-        return <select disabled={disabled}
+        const arrayOptions = isMultiplsSelect
+            ? numberToBinar(this.state.value + '', this.props.options.length)
+            : [];
+
+        return <select key={this.props.configItem.KEY}
+                       disabled={disabled}
                        multiple={isMultiplsSelect}
                        className={classNames(this.state.isValid ? '' : style.notValid,
                            isChanged ? style.changed : '',
                            isMultiplsSelect ? style.multiSelect : ''
                        )}
-                       defaultValue={(this.state.value !== null && this.state.value !== undefined)
-                           ? this.state.value.toString()
-                           : (this.props.options ? this.props.options[0].VALUE : '')}
+
                        onChange={(el) => {
                            const value = isMultiplsSelect
-                               ? Array.from(el.target.options)
+                               ? parseInt(Array.from(el.target.options)
                                    .map((e) => e.selected ? '1' : '0')
-                                   .join('')
+                                   .join(''), 2)
                                : el.target.value;
                            this.updateValue(value);
                        }}
                 >
-
                         {!reference && this.props.options.map((o: any, idx: number) =>
                             <option key={idx}
-                                    value={o.VALUE} >
-                                {i18n(o.TITEL_I18N)}
+                                    value={o.VALUE}
+                                    selected={isMultiplsSelect
+                                        ? (arrayOptions[idx] === '1' )
+                                        : (o.VALUE === this.state.value.toString())
+                                    }>
+                                {o.TITEL_I18N ? i18n(o.TITEL_I18N) : o.TITEL}
                                 </option>
                         )}
                         {reference && this.filterByRelatedFilter(this.props.referenceData, reference)}

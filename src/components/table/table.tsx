@@ -15,6 +15,9 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import moment from 'moment';
+import { combineLatest } from 'rxjs';
+import {map} from 'rxjs/operators';
+import {numberToBinar} from '../../util/helpers';
 
 
 interface ITableProps {
@@ -69,9 +72,12 @@ export default class Table extends React.Component<ITableProps, ITableStates> {
 
                 if (formsIdReference && formsIdReference.length > 0) {
                     formsIdReference.map((formId: string, idx: number) => {
-                        Observable.combineLatest(
-                            this.apiService.get('getFormData', {formid: formId}).map((res) => res.data || []),
+                        combineLatest(
+                            [this.apiService
+                                .get('getFormData', {formid: formId})
+                                .pipe(map((res) => res.data || []))],
                         ).subscribe(([items]) => {
+                            debugger;
                             this.formIdData[formId] = items;
 
                             if (formsIdReference.length === idx + 1) {
@@ -118,17 +124,23 @@ export default class Table extends React.Component<ITableProps, ITableStates> {
                 if (keyConf && keyConf.OPTS) {
                     const opt = keyConf.OPTS.find((f: any) => f.VALUE.toString() === d[k].toString());
                     if ( isMultiSelect ) {
-                        d[k].toString().split('').map((e: string, idx: number) => {
-                            if (e === '1') {
-                                d.DisplayTranslatedData[k] = d.DisplayTranslatedData[k] ? d.DisplayTranslatedData[k] : '';
-                                d.DisplayTranslatedData[k] += keyConf.OPTS[idx].TITEL_I18N
-                                    ? i18n(keyConf.OPTS[idx].TITEL_I18N)
-                                    : opt.TITEL;
-                                d.DisplayTranslatedData[k] += ', \n';
-                            }
-                        });
+                        numberToBinar(d[k], keyConf.OPTS.length)
+                            .map((e: string, idx: number) => {
+                                if (!d.DisplayTranslatedData[k]) {
+                                    d.DisplayTranslatedData[k] = [];
+                                }
+                                if (e === '1') {
+                                    d.DisplayTranslatedData[k] = d.DisplayTranslatedData[k] ? d.DisplayTranslatedData[k] : '';
+                                    d.DisplayTranslatedData[k].push(keyConf.OPTS[idx].TITEL_I18N
+                                        ? i18n(keyConf.OPTS[idx].TITEL_I18N)
+                                        : opt.TITEL);
+                                }
+                            });
+                        if (d.DisplayTranslatedData && d.DisplayTranslatedData[k]) {
+                            d.DisplayTranslatedData[k] = d.DisplayTranslatedData[k].join(', <br/>');
+                        }
                     } else {
-                        d.DisplayTranslatedData[k] = i18n(opt.TITEL_I18N) || opt.TITEL;
+                        d.DisplayTranslatedData[k] = opt.TITEL_I18N ? i18n(opt.TITEL_I18N) : opt.TITEL;
                     }
                 } else if (keyConf && isDate) {
                     d.DisplayTranslatedData[k] = moment(d[k]).format('MM.DD.YYYY');
@@ -185,14 +197,14 @@ export default class Table extends React.Component<ITableProps, ITableStates> {
         //
         // })
 
-        debugger;
         return <React.Fragment>
             {this.state.data.map((tr, i: number) =>
                 <tr key={i}>
                     {this.state.configForms && this.state.configForms[this.props.formId].ATTS
                         .map((k: any, m: number) =>
-                            <td style={{display: k.HIDE_WEB ? 'none' : ''}} key={i + '_' + m}>
-                                {tr.DisplayTranslatedData[k.KEY]}
+                            <td style={{display: k.HIDE_WEB ? 'none' : ''}} key={i + '_' + m}
+                                dangerouslySetInnerHTML={{__html: tr.DisplayTranslatedData[k.KEY]}}>
+                                {/* tr.DisplayTranslatedData[k.KEY] */}
                             </td>
                         )}
                     <td key={i + '_'}>

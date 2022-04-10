@@ -6,7 +6,7 @@ import { resolve } from 'inversify-react';
 import {RouteComponentProps} from 'react-router';
 import Table from '../../table/table';
 import {Ids} from '../../../formsIds';
-import {Observable} from 'rxjs';
+import {combineLatest, map, Observable, of} from 'rxjs';
 import {ApiService} from '../../../services/api_service';
 
 interface IProductsPageState {
@@ -31,9 +31,9 @@ export default class ProductsAdminPage extends React.Component<{}, IProductsPage
     }
 
     refresh(only_data?: boolean) {
-        Observable.combineLatest(
-            only_data ? Observable.of(null) : this.apiService.get('getFormConfig').map((res) => res.data || []),
-            this.apiService.get('getFormData', {formid: Ids.PRODUCTS}).map((res) => res.data || []),
+        combineLatest(
+            [only_data ? of(null) : this.apiService.get('getFormConfig').pipe(map((res) => res.data || [])),
+            this.apiService.get('getFormData', {formid: Ids.PRODUCTS}).pipe(map((res) => res.data || []))],
         ).subscribe(([configForms, items]) => {
             this.setState({
                 configForms: configForms || this.state.configForms,

@@ -4,7 +4,7 @@ import style from './admin.less';
 import {NavLink} from 'react-router-dom';
 import {RouteComponentProps} from 'react-router';
 import routes from '../../../routes';
-import {Observable} from 'rxjs';
+import {combineLatest, Observable, of} from 'rxjs';
 import {AuthorizedApiService} from '../../../services/authorized_api_service';
 import {ApiService} from '../../../services/api_service';
 import 'reflect-metadata';
@@ -30,6 +30,7 @@ import Container from '@mui/material/Container';
 import { ThemeProvider } from '@mui/material/styles';
 import themeMeandro from '../../Layout/Theme';
 import Layout from '../../AppView/layout-page';
+import {map} from 'rxjs/operators';
 
 
 interface IUsersPageStates {
@@ -69,9 +70,9 @@ export default class AdministratorPage extends React.Component<RouteComponentPro
             const items = [].concat.apply([], this.routes.map((r: any) => r.items)) as Array<any>;
             adminChildren = items.find((r) => r.title === 'Users').children;
         }
-        Observable.combineLatest(
-            only_data ? Observable.of(null) : this.apiService.get('getFormConfig').map((res) => res.data || []),
-            this.apiService.get('getFormData', {formid: Ids.USERS}).map((res) => res.data || []),
+        combineLatest(
+            [only_data ? of(null) : this.apiService.get('getFormConfig').pipe(map((res) => res.data || [])),
+            this.apiService.get('getFormData', {formid: Ids.USERS}).pipe(map((res) => res.data || []))],
         ).subscribe(([configForms, users]) => {
             this.setState({
                 configForms: configForms || this.state.configForms,

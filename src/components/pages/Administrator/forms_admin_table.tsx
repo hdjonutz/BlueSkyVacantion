@@ -17,7 +17,8 @@ import Select, {SelectChangeEvent} from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import {IRowAttendands} from '../../table/forms';
-import {Observable} from 'rxjs';
+import {combineLatest, Observable, of} from 'rxjs';
+import {map} from 'rxjs/operators';
 
 interface IFormsPageStates {
     formId:         number;
@@ -53,9 +54,9 @@ export default class FormsPage extends React.Component<{}, IFormsPageStates> {
 
     refresh(only_data?: boolean, formId?: number) {
         const form = formId || this.state.formId;
-        Observable.combineLatest(
-            only_data ? Observable.of(null) : this.apiService.get('getFormConfig').map((res) => res.data || []),
-            this.apiService.get('getFormData', {formid: form}).map((res) => res.data || []),
+        combineLatest(
+            [only_data ? of(null) : this.apiService.get('getFormConfig').pipe(map((res) => res.data || [])),
+            this.apiService.get('getFormData', {formid: form}).pipe(map((res) => res.data || []))],
         ).subscribe(([configForms, data]) => {
             this.setState({
                 configForms: configForms || this.state.configForms,

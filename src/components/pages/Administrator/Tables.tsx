@@ -12,7 +12,7 @@ import Typography from '@mui/material/Typography';
 
 import {i18n} from '../../../i18n/i18n';
 import routes from '../../../routes';
-import {Observable} from 'rxjs';
+import {combineLatest, Observable, of} from 'rxjs';
 import {AuthorizedApiService} from '../../../services/authorized_api_service';
 import {ApiService} from '../../../services/api_service';
 import 'reflect-metadata';
@@ -20,6 +20,7 @@ import { resolve } from 'inversify-react';
 import {Ids} from '../../../formsIds';
 
 import moment from 'moment';
+import {map} from 'rxjs/operators';
 
 
 
@@ -56,9 +57,9 @@ export default class TablesPage extends React.Component<{}, ITablePageStates> {
     }
 
     refresh(only_data?: boolean) {
-        Observable.combineLatest([
-            only_data ? Observable.of(null) : this.apiService.get('getFormConfig').map((res) => res.data || []),
-            this.apiService.get('getFormData', {formid: Ids.USERS}).map((res) => res.data || []),
+        combineLatest([
+            only_data ? of(null) : this.apiService.get('getFormConfig').pipe(map((res) => res.data || [])),
+            this.apiService.get('getFormData', {formid: Ids.USERS}).pipe(map((res) => res.data || [])),
         ]).subscribe(([configForms, dataSource]) => {
             debugger;
             this.setState({
