@@ -139,7 +139,7 @@ export default class AdministratorPage extends React.Component<RouteComponentPro
         console.log('router FILTER: ' + filter);
         return (
             <ThemeProvider theme={themeMeandro}>
-                <Container component='main' maxWidth='xl'>
+                <Container component='main' maxWidth='xl' style={{display: 'flex', height: '100%'}}>
                     <CssBaseline />
                     <Box
                         sx={{

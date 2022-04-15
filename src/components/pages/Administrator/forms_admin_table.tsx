@@ -84,7 +84,7 @@ export default class FormsPage extends React.Component<{}, IFormsPageStates> {
         console.log(this.state.data, this.state.formId);
         return (
             <ThemeProvider theme={themeMeandro}>
-                <Container component='main' maxWidth='xl'>
+                <Container component='main' maxWidth='xl' style={{display: 'flex', height: '100%'}}>
                     <CssBaseline />
                     <Box
                         sx={{

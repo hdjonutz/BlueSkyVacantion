@@ -196,7 +196,7 @@ export default class GridRow extends React.PureComponent<IGridRowProps, IGridRow
                                     value={o.VALUE}
                                     selected={isMultiplsSelect
                                         ? (arrayOptions[idx] === '1' )
-                                        : (o.VALUE === this.state.value.toString())
+                                        : (o.VALUE === (this.state.value + '').toString())
                                     }>
                                 {o.TITEL_I18N ? i18n(o.TITEL_I18N) : o.TITEL}
                                 </option>

@@ -18,6 +18,7 @@ import moment from 'moment';
 import { combineLatest } from 'rxjs';
 import {map} from 'rxjs/operators';
 import {numberToBinar} from '../../util/helpers';
+import Button from '@mui/material/Button';
 
 
 interface ITableProps {
@@ -33,6 +34,8 @@ interface ITableStates {
     configForms:    any;
     editData:       any;
     referenceData:  any;
+    filtersTable:   Array<{[key: string]: any}>;
+    sortableTable:  Array<{[key: string]: any}>;
 }
 
 export default class Table extends React.Component<ITableProps, ITableStates> {
@@ -53,6 +56,8 @@ export default class Table extends React.Component<ITableProps, ITableStates> {
             configForms:    this.props.configForms,
             editData:       null,
             referenceData:  null,
+            filtersTable:   [],
+            sortableTable:  [],
         };
         this.onClickDelete  = this.onClickDelete.bind(this);
         this.saveCallback   = this.saveCallback.bind(this);
@@ -190,15 +195,38 @@ export default class Table extends React.Component<ITableProps, ITableStates> {
         }
     }
 
-    getBodyTable() {
-        // const formId = this.props.formId;
-        // const hasRef = this.state.configForms[formId].ATTS;
-        // const dat = this.state.data.map((d) => {
-        //
-        // })
+    filterAndSortable(): Array<any> {
+        let result = this.state.data;
+        this.state.filtersTable.map((f) => {
+            result = result.filter((r) => r.DisplayTranslatedData[f.key].toString().indexOf(f.value.toString()) >= 0);
+        });
 
+        this.state.sortableTable.map((s) => {
+            if (s.value === 1) {
+                result.sort((a, b) => a.DisplayTranslatedData[s.key] > b.DisplayTranslatedData[s.key] ? 1 : -1);
+            } else if (s.value === -1) {
+                result.sort((a, b) => a.DisplayTranslatedData[s.key] > b.DisplayTranslatedData[s.key] ? -1 : 1);
+            }
+        });
+        return result;
+    }
+    setStateSortable(filter) {
+        const filtered = this.state.sortableTable.filter((f) => f.key !== filter.key && f.value !== 0);
+        if (filter && filter.value !== 0) {
+            filtered.push(filter);
+        }
+        this.setState({sortableTable: filtered});
+    }
+
+    setStateFilter(filter) {
+        const filtered = this.state.filtersTable.filter((f) => f.key !== filter.key && f.value !== '');
+        filtered.push(filter);
+        this.setState({filtersTable: filtered});
+    }
+
+    getBodyTable() {
         return <React.Fragment>
-            {this.state.data.map((tr, i: number) =>
+            {this.filterAndSortable().map((tr, i: number) =>
                 <tr key={i}>
                     {this.state.configForms && this.state.configForms[this.props.formId].ATTS
                         .map((k: any, m: number) =>
@@ -208,8 +236,13 @@ export default class Table extends React.Component<ITableProps, ITableStates> {
                             </td>
                         )}
                     <td key={i + '_'}>
-                        <span onClick={() => this.setState({editData: tr})} >Edit &nbsp;</span>
-                        | <span onClick={() => this.onClickDelete(tr)}>&nbsp;Delete</span>
+                        <Button onClick={() => this.setState({editData: tr})}
+                                variant='outlined'
+                                size='small'>Edit</Button> &nbsp;
+
+                        <Button onClick={() => this.onClickDelete(tr)}
+                                variant='outlined'
+                                size='small'>Delete</Button>
                     </td>
                 </tr>
             )}
@@ -219,6 +252,18 @@ export default class Table extends React.Component<ITableProps, ITableStates> {
                     no data
                 </td>
             </tr>}
+        </React.Fragment>
+    }
+
+    getFiltersSortable(key: string): JSX.Element {
+        const val: {[key: string]: any} = this.state.sortableTable.find((f) => f.key === key);
+        return <React.Fragment>
+            {!val && <div className={style.filterElem}
+                          onClick={() => this.setStateSortable({key: key, value: 1})}>□</div>}{/* &#9633; updown simbol */}
+            {val && val.value === 1 && <div className={style.filterElem}
+                                            onClick={() => this.setStateSortable({key: key, value: -1})}>▲</div>} {/* &#9650; up simbol */}
+            {val && val.value === -1 && <div className={style.filterElem}
+                                             onClick={() => this.setStateSortable({key: key, value: 0})}>▼</div>}{/* &#9660; down simbol */}
         </React.Fragment>
     }
 
@@ -232,11 +277,25 @@ export default class Table extends React.Component<ITableProps, ITableStates> {
                                 {this.state.configForms && this.state.configForms[this.props.formId].ATTS
                                     .map((kName: any, m: number) =>
                                     <th key={m} className={style.th} style={{display: kName.HIDE_WEB ? 'none' : ''}}>
-                                        <div>{i18n(kName.NAME_I18N)}</div><div><input /></div>
+                                        <div className={style.filter}>
+                                            {i18n(kName.NAME_I18N)}
+                                            <div className={style.sortableSimbol}>{this.getFiltersSortable(kName.KEY)}</div>
+                                        </div>
+                                        <div>
+                                            <input onChange={(el) => {
+                                                const filter = {
+                                                    key: kName.KEY,
+                                                    value: el.target.value,
+                                                };
+                                                this.setStateFilter(filter)
+                                            }}/>
+                                        </div>
                                     </th>)
                                 }
                                 <th className={style.th}>Count: {this.state.data.length} <br/>
-                                    <span onClick={() => this.setState({editData: []})}>Add</span>
+                                    <Button onClick={() => this.setState({editData: []})}
+                                            variant='outlined'
+                                            size='small'>Add </Button>
                                 </th>
                             </tr>
                         </thead>
