@@ -135,7 +135,7 @@ export class AuthenticationService {
             const username = parsedAccessToken.payloadObj.sub;
             const expires = parsedAccessToken.payloadObj.exp ? new Date(+parsedAccessToken.payloadObj.exp * 1000) : null as any;
             const permissions = parsedAccessToken.payloadObj.rechte ? parsedAccessToken.payloadObj.rechte : [];
-            const authentication = new Authentication(username, parsedAccessToken, accessToken, expires, permissions);
+            const authentication = new Authentication(username, parsedAccessToken, accessToken, expires, [permissions]);
 
             localStorage['accessToken'] = accessToken;
             localStorage.setItem('logout', 'false');

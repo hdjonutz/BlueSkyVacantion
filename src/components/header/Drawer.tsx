@@ -30,18 +30,43 @@ import Button  from '@mui/material/Button';
 import {NavLink} from 'react-router-dom';
 
 import themeMeandro from '../Layout/Theme';
+import {filter, first, map} from 'rxjs/operators';
+import {inject} from 'inversify';
+import {Authentication, AuthenticationService} from '../../services/authentication_service';
+import {combineLatest, Observable, of, Subscription} from 'rxjs';
+import {resolve} from 'inversify-react';
 // const useStyles = makeStyles({
 //     list: {
 //       width: 250,
 //     },
 //   });
 
-export default class Drawer extends React.Component<{}, {open: boolean}> {
+export default class Drawer extends React.Component<{}, {open: boolean, showAdministrator: boolean}> {
+
+    private subscription: Subscription;
+    @resolve(AuthenticationService)     private authenticationService: AuthenticationService;
+
     constructor(props: any) {
         super(props);
         this.state = {
-            open:   false,
+            open:               false,
+            showAdministrator:  false,
         };
+    }
+    componentWillUnmount() {
+        if (this.subscription) {
+            this.subscription.unsubscribe();
+        }
+    }
+
+    componentDidMount() {
+        this.subscription = this.authenticationService.getAuthentication()
+            .pipe(filter((auth) => auth != null), first())
+            .subscribe((allInOne) => {
+                const expired = allInOne.expires > new Date();
+                const hasPermission = allInOne.hasPermission('toRead');
+                this.setState({showAdministrator: expired && hasPermission });
+        });
     }
 
     render() {
@@ -49,52 +74,52 @@ export default class Drawer extends React.Component<{}, {open: boolean}> {
         return (
             <>
                 <IconButton
-                    edge="start"
-                    color="inherit"
-                    aria-label="open drawer"
+                    edge='start'
+                    color='inherit'
+                    aria-label='open drawer'
                     onClick={() => this.setState({open: true})}
                 >
                     <MenuIcon />
                 </IconButton>
                 <SwipeableDrawer
-                    anchor="left"
+                    anchor='left'
                     open={this.state.open}
                     onClose={() => this.setState({open: false})}
                     onOpen={() => {}}
                     onClick={() => this.setState({open: false})}
                 >
-                    <div className={"classname"}>
-                    <Box textAlign="center" p={2}>
+                    <div className={'classname'}>
+                    <Box textAlign='center' p={2}>
                         Meandro Jachting LTD
                     </Box>
                     <Divider />
                     <List
                         sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
-                        component="nav"
-                        aria-labelledby="nested-list-subheader"
+                        component='nav'
+                        aria-labelledby='nested-list-subheader'
                         >
-                        
-                        <ListItemButton onClick={() => location.hash = "/contactUs/contact_us"}>
-                            <ListItemIcon>
-                                <Email style={{color: magenda}} />
-                            </ListItemIcon>
-                            <ListItemText primary="Contact Us" />
-                        </ListItemButton>
+                            <ListItemButton onClick={() => location.hash = '/contactUs/contact_us'}>
+                                <ListItemIcon>
+                                    <Email style={{color: magenda}} />
+                                </ListItemIcon>
+                                <ListItemText primary='Contact Us' />
+                            </ListItemButton>
 
 
-                        <ListItemButton onClick={() => location.hash = "/services/accommodation"}>
-                            <ListItemIcon>
-                                <Houseboat style={{color: magenda}} />
-                            </ListItemIcon>
-                            <ListItemText primary="Accommodation" />
-                        </ListItemButton>
+                            <ListItemButton onClick={() => location.hash = '/services/accommodation'}>
+                                <ListItemIcon>
+                                    <Houseboat style={{color: magenda}} />
+                                </ListItemIcon>
+                                <ListItemText primary='Accommodation' />
+                            </ListItemButton>
 
-                        <ListItemButton onClick={() => location.hash = "/admin/administrator/"}>
-                            <ListItemIcon>
-                                <AdminPanelSettings style={{color: magenda}} />
-                            </ListItemIcon>
-                            <ListItemText primary="Administrator" />
-                        </ListItemButton>
+                            {this.state.showAdministrator && <ListItemButton onClick={() => location.hash = '/admin/administrator/'}>
+                                    <ListItemIcon>
+                                        <AdminPanelSettings style={{color: magenda}} />
+                                    </ListItemIcon>
+                                    <ListItemText primary='Administrator' />
+                                </ListItemButton>
+                            }
                     </List>
 
                     </div>

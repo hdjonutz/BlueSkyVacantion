@@ -39,7 +39,7 @@ export default class TablesPage extends React.Component<{}, ITablePageStates> {
 
     @resolve(AuthorizedApiService)      private authorizedApiService: AuthorizedApiService;
     @resolve(ApiService)                private apiService: ApiService;
-    
+
     constructor(props: any) {
         super(props);
         this.state = {
@@ -61,7 +61,6 @@ export default class TablesPage extends React.Component<{}, ITablePageStates> {
             only_data ? of(null) : this.apiService.get('getFormConfig').pipe(map((res) => res.data || [])),
             this.apiService.get('getFormData', {formid: Ids.USERS}).pipe(map((res) => res.data || [])),
         ]).subscribe(([configForms, dataSource]) => {
-            debugger;
             this.setState({
                 configForms: configForms || this.state.configForms,
                 dataSource
@@ -99,7 +98,7 @@ export default class TablesPage extends React.Component<{}, ITablePageStates> {
                     value: '',
                     })
                 );
-            
+
             columns = atts.map((att: any) => ({
                 name: att.KEY,
                 defaultFlex: 1,
@@ -142,7 +141,7 @@ export default class TablesPage extends React.Component<{}, ITablePageStates> {
                         />
                         </React.Fragment>
                     : <div style={{ display: 'flex', flex: 1, alignItems: 'center' }}>
-                        <CircularProgress color="primary"/>
+                        <CircularProgress color='primary'/>
                     </div>
                 }
             </div>

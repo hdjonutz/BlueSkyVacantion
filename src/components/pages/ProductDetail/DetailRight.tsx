@@ -45,20 +45,29 @@ import MeetingRoomIcon from '@mui/icons-material/MeetingRoom';
 import StraightenIcon from '@mui/icons-material/Straighten';
 import ReadMoreIcon from '@mui/icons-material/ReadMore';
 import { Ids } from '../../../formsIds';
-import {map} from 'rxjs/operators';
+import {combineLatest} from 'rxjs';
 import {resolve} from 'inversify-react';
 import {ApiService} from '../../../services/api_service';
-import {chunk, chunkArrayInGroups, getDetailsByWhereAndPriorityShow} from '../../../util/helpers';
+import {chunkArrayInGroups, getDetailsByWhereAndPriorityShow} from '../../../util/helpers';
+import {FormConfig, FormsService} from '../../../services/form_service';
 
 interface IDetailsRightStates {
-    value: string;
-    imageWidth: number;
-    data_received: {[key: string]: any};
-    path: string;
-    config: {[key: string]: any};
+    value:          string;
+    imageWidth:     number;
+    data_received:  {[key: string]: any};
+    path:           string;
+    config:         {[key: string]: any};
+    locations:      any;
 }
 
-export default class DetailRight extends React.Component<{}, IDetailsRightStates> {
+interface IDetailsRightProps {
+    details:    any;
+    orts:       any
+    product:    any;
+    isProduct:  any;
+}
+
+export default class DetailRight extends React.Component<IDetailsRightProps, IDetailsRightStates> {
 
     /*
     * 2^3       NONE
@@ -69,7 +78,8 @@ export default class DetailRight extends React.Component<{}, IDetailsRightStates
 
     private FINAL_DETAILS_TOP       = Math.pow(2, 1).toString();
     private FINAL_DETAILS_BOTTOM    = Math.pow(2, 0).toString();
-    @resolve(ApiService) private apiService: ApiService;
+    @resolve(ApiService)    private apiService: ApiService;
+    @resolve(FormsService)  private formsService: FormsService;
 
     private _algemeine = [
         {name: 'Double bed cabins', detail: '3'},
@@ -167,7 +177,7 @@ export default class DetailRight extends React.Component<{}, IDetailsRightStates
     ];
 
     private logo = `assets/svg/logo.svg`;
-    private data_received = null;
+    private data_received = null as any;
 
     constructor(props: any) {
         super(props);
@@ -178,17 +188,22 @@ export default class DetailRight extends React.Component<{}, IDetailsRightStates
             data_received:  null as any,
             path:           this.logo,
             config:         null as any,
+            locations:      null as any,
         };
         this.handleChange = this.handleChange.bind(this);
         this.marks = this.marks.map((f, i) => Object.assign(f, {value: (100 / (this.marks.length - 1)) * i}));
     }
 
     componentDidMount() {
-        this.apiService.get('getFormConfig').pipe(map((res) => res.data || []))
-            .subscribe((config) => this.setState({config}));
+        combineLatest([
+            this.formsService.getFormId(Ids.LOCATIONS),
+            this.formsService.getAllFormConfigs()]
+        ).subscribe(([locations, config]) => {
+                this.setState({locations, config});
+            });
     }
 
-    shouldComponentUpdate(nextProps: Readonly<{}>, nextState: Readonly<IDetailsRightStates>, nextContext: any): boolean {
+    shouldComponentUpdate(nextProps: Readonly<IDetailsRightProps>, nextState: Readonly<IDetailsRightStates>, nextContext: any): boolean {
         if (JSON.stringify(nextProps) !== JSON.stringify(this.props)) {
             this.data_received = nextProps;
             this.setState({
@@ -210,10 +225,10 @@ export default class DetailRight extends React.Component<{}, IDetailsRightStates
     };
 
     getTabContainerSimple() {
-        let detailsTop = [];
-        let detailsBottom = [];
-        if (this.state.config && this.state.config[Ids.PROD_ESENTIAL_DETAILS]) {
-            const config = this.state.config[Ids.PROD_ESENTIAL_DETAILS];
+        let detailsTop = [] as any;
+        let detailsBottom = [] as any;
+        if (this.state.config) {
+            const config = this.state.config.find((f: FormConfig) => f.formId === Ids.PROD_ESENTIAL_DETAILS);
             detailsTop = getDetailsByWhereAndPriorityShow(config,
                 'where_show',
                 this.props.details,
@@ -387,7 +402,6 @@ export default class DetailRight extends React.Component<{}, IDetailsRightStates
         const styledContainer = {maxWidth: '100%', paddingLeft: 0, paddingRight: 0, position: 'relative'};
         const boxStyled = {maxWidth: '1070px', paddingLeft: 0, paddingRight: 0, position: 'relative', marginLeft: 0};
 
-
         return (
             <ThemeProvider theme={themeMeandro}>
                 {this.state.path && <img style={{display: 'none'}} src={this.state.path} onError={() => {
@@ -430,7 +444,10 @@ export default class DetailRight extends React.Component<{}, IDetailsRightStates
                         <h2>Locations</h2>
                         <Box sx={{ width: '100%', typography: 'body1' }}>
                             {/* this.getOrte() */}
-                            <LocationDetails locations={this.marks} />
+                            {this.state.locations && this.props.orts &&
+                                <LocationDetails locations={this.props.orts
+                                    .map((o) => this.state.locations.find((l) => l.ortId === o.location_ort_id))} />
+                            }
                         </Box>
                         {/*
                         <Document file={samplePDF}>

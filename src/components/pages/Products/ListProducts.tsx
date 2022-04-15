@@ -20,7 +20,7 @@ export default class ListProductsPage extends React.Component<{}, {}> {
 
     render() {
         const style = {border: '1px solid red', background: 'blue'};
-        const boxStyled = {maxWidth: '1070px', paddingLeft: 0, paddingRight: 0, position: 'relative', marginLeft: 0};
+        const boxStyled = {'max-width': '1070px', paddingLeft: 0, paddingRight: 0, position: 'relative', marginLeft: 0};
         const rightSide = {padding: '60px 40px'};
         return (
             <ThemeProvider theme={themeMeandro}>
