@@ -139,7 +139,7 @@ export default class AdministratorPage extends React.Component<RouteComponentPro
         console.log('router FILTER: ' + filter);
         return (
             <ThemeProvider theme={themeMeandro}>
-                <Container component='main' maxWidth='xl' style={{display: 'flex', height: '100%'}}>
+                <Container component='main' maxWidth='xl' style={{display: 'flex', height: '100%', backgroundColor: '##fffffd'}}>
                     <CssBaseline />
                     <Box
                         sx={{
@@ -147,6 +147,7 @@ export default class AdministratorPage extends React.Component<RouteComponentPro
                         display: 'flex',
                         flexDirection: 'column',
                         alignItems: 'center',
+                        width: '100%'
                         }}
                     >
                         <div className={classNames(style.container, style.column)}>

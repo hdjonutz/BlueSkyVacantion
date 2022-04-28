@@ -1,0 +1,84 @@
+.tripDetails{
+  flexDirection: row;
+  flex: 1;
+  display: flex;
+
+  .tabsStyle{
+    button{
+      /*&:active{
+        background-color: yellow !important;
+      }*/
+    }
+  }
+
+  .table{
+    background-color: #f5f1f0;
+    min-height: 345px;
+    flex:1;
+    .row{
+      display: flex;
+      flex-direction: row;
+      .left{
+
+      }
+      .right{
+        display: flex;
+        flex-direction: column;
+        .rightBottom{
+          display: flex;
+          flex-direction: row;
+          .isIncluded, .notIncluded{
+            flex: 1;
+          }
+          .isIncluded{
+            margin-right: 5px;
+          }
+          .notIncluded{
+            margin-left: 5px;
+          }
+        }
+      }
+    }
+    .textAlign{
+      text-align: justify;
+      display: flex;
+    }
+  }
+
+  .iconContent{
+    flex-direction: column;
+    display: flex;
+    align-items: center;
+    .iconsSize{
+      /* font-size: 55px; */
+      height: 50px;
+    }
+  }
+
+  .tableRow{
+    padding: 2px;
+    justify-content: space-between;
+    align-items: center;
+    display: flex;
+    flex:1;
+    &:first-child{
+      margin-right: 4%;
+    }
+    &:last-child{
+      margin-left: 4%;
+    }
+    img{
+      height: 32px;
+    }
+  }
+
+}
+
+
+
+
+:global {
+  .Mui-selected{
+    background-color: #f5f1f0 !important;
+  }
+}

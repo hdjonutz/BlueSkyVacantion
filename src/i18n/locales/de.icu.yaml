@@ -115,3 +115,6 @@ forms:
     from_date: From
     until_date: Until
     value:  Value
+
+  trip:
+    name: Trip Name

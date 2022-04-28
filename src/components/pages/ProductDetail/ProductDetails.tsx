@@ -15,9 +15,11 @@ import {FormsService} from '../../../services/form_service';
 import {ApiService} from '../../../services/api_service';
 
 interface IProductDetail {
-    product: {[key: string]: any};
-    details: {[key: string]: any};
-    orts: {[key: string]: any};
+    product:    {[key: string]: any};
+    details:    {[key: string]: any};
+    orts:       {[key: string]: any};
+    path:       string;
+    isProduct:  boolean;
 }
 
 export default class ProductDetail extends React.Component<{}, IProductDetail> {
@@ -29,9 +31,11 @@ export default class ProductDetail extends React.Component<{}, IProductDetail> {
         super(props);
 
         this.state = {
-            product: null as any,
-            details: null as any,
-            orts: null as any,
+            product:    null as any,
+            details:    null as any,
+            orts:       null as any,
+            path:       null as any,
+            isProduct:  false,
         }
     }
 
@@ -57,7 +61,7 @@ export default class ProductDetail extends React.Component<{}, IProductDetail> {
                 product,
                 details,
                 orts,
-                path: this.props.location.pathname,
+                path: (this.props as any).location.pathname,
                 isProduct: obj.isProduct
             })
         });

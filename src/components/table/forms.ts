@@ -50,6 +50,12 @@ export interface IConfigForms {
 }
 
 export function validityFormLength(value: number) {
+
+    if ((value + '' ).indexOf('CHAR') >= 0 ) {
+        const type =  +(value + '').replace('CHAR', '');
+        return {input: 'input', type: type};
+    }
+
     switch (value) {
         case 1:
             return {input: 'input', type: 25};

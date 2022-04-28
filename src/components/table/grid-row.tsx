@@ -45,6 +45,7 @@ export default class GridRow extends React.PureComponent<IGridRowProps, IGridRow
         this.getInput           = this.getInput.bind(this);
         this.getSelect          = this.getSelect.bind(this);
         this.generateNumbers    = this.generateNumbers.bind(this);
+        this.filterByRelatedFilter =this.filterByRelatedFilter.bind(this);
     }
 
     // componentDidUpdate(nextProps: GridRowProps, nextState: GridRowStates) {
@@ -73,7 +74,7 @@ export default class GridRow extends React.PureComponent<IGridRowProps, IGridRow
             } else {
                 return true;
             }
-        } else if ([25, 50, 100].indexOf(+lenghtType.type) >= 0) {
+        } else if ([25, 50, 100, 200, 1000].indexOf(+lenghtType.type) >= 0) {
             if (required) {
                 return value && value.length > 0 && value.length <= +lenghtType.type;
             } else {
@@ -152,7 +153,9 @@ export default class GridRow extends React.PureComponent<IGridRowProps, IGridRow
         } else {
             const objArr = referenceData.map((o: any, idx: number) =>
                 <option key={idx}
-                        value={o[keyToSave]}>
+                        value={o[keyToSave]}
+                        selected={o[this.props.configItem.REFERENCE.saveKey] === this.state.value}
+                        >
                     {o[keyDisplay]}
                 </option>
             );

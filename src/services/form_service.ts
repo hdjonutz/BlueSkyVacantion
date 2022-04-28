@@ -1,10 +1,11 @@
-import {combineLatest, Observable, of, ReplaySubject, Subscription} from 'rxjs';
+import {connectable, interval, merge, Observable, of, ReplaySubject, Subscription} from 'rxjs';
 import {Logger, LogLevel} from '../util/logger';
 import {inject, injectable} from 'inversify';
-import {map, publishReplay, share} from 'rxjs/operators';
+import {connect, map, mergeAll, publish, publishReplay, share, shareReplay, tap} from 'rxjs/operators';
 import {ApiService} from './api_service';
 import {AuthorizedApiService} from './authorized_api_service';
 import { i18n } from '../i18n/i18n';
+import {Publish} from '@mui/icons-material';
 
 const logger = Logger.create('ContainerClient', LogLevel.Info);
 
@@ -73,26 +74,24 @@ export class FormsService {
     private formConfigs: Observable<FormConfigs>;
 
     public constructor(@inject('ApiService') private apiService: ApiService,
-                       @inject('AuthorizedApiService') private authorizedApiService: AuthorizedApiService
+                       @inject('AuthorizedApiService') private authorizedApiService: AuthorizedApiService,
     ) {}
 
     loadAllFormConfigs(): Observable<FormConfigs> {
         if (!this.formConfigs) {
-            const observable: Observable<FormConfigs> = this.authorizedApiService.get('getFormConfig')
+            const observable = this.apiService.get('getFormConfig')
                 .pipe(
                     map((r) => {
                         const formConfigs = Object.keys(r.data).map((formId) => {
-                        return FormConfig.parse(formId, r.data[formId]);
-                    });
-                    return new FormConfigs(formConfigs);
+                            return FormConfig.parse(formId, r.data[formId]);
+                        });
+                        return new FormConfigs(formConfigs);
                     }),
-                    share()
-                    // publishReplay(1)
+                    shareReplay(1)
                 );
-            // observable.connect();
+            connectable(observable, { connector: () => new ReplaySubject(1), resetOnDisconnect: false });
             this.formConfigs = observable;
         }
-
         return this.formConfigs;
     }
 

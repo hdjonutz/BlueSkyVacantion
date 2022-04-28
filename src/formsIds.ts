@@ -7,4 +7,7 @@ export const Ids = {
     'PROD_TABS':                '1006',
     'PROD_TABS_DETAILS':        '1007',
     'PROD_ESENTIAL_DETAILS':    '1010',
+
+    'PROD_TRIPS':               '1030',
+    'PROD_TRIPS_DETAILS':       '1031',
 };

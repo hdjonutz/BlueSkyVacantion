@@ -45,11 +45,12 @@ import MeetingRoomIcon from '@mui/icons-material/MeetingRoom';
 import StraightenIcon from '@mui/icons-material/Straighten';
 import ReadMoreIcon from '@mui/icons-material/ReadMore';
 import { Ids } from '../../../formsIds';
-import {combineLatest} from 'rxjs';
+import {combineLatest, of} from 'rxjs';
 import {resolve} from 'inversify-react';
 import {ApiService} from '../../../services/api_service';
 import {chunkArrayInGroups, getDetailsByWhereAndPriorityShow} from '../../../util/helpers';
 import {FormConfig, FormsService} from '../../../services/form_service';
+import TripsDetails from './Trips';
 
 interface IDetailsRightStates {
     value:          string;
@@ -128,53 +129,6 @@ export default class DetailRight extends React.Component<IDetailsRightProps, IDe
         {name: 'Sleeping places (Bearths)', detail: '6'},
         {name: 'Capacity', detail: '8'}
     ];
-    private marks = [
-        {
-            value: 0,
-            label: 'Volos Base',
-            hints: '',
-        },
-        {
-            value: 14,
-            label: '**Agios Ioannis',
-            hints: '(MAMA MIA Movie)',
-        },
-        {
-            value: 28,
-            label: 'Arkos',
-            hints: '',
-        },
-        {
-            value: 45,
-            label: '**Blue Cave Dasia',
-            hints: '(The Cave of the Seal)',
-        },
-        {
-            value: 60,
-            label: '**Kastani Beach',
-            hints: '(Mama Mia Movie)',
-        },
-        {
-            value: 75,
-            label: 'Lalaria',
-            hints: '',
-        },
-        {
-            value: 52,
-            label: 'Loutraki',
-            hints: '',
-        },
-        {
-            value: 64,
-            label: 'Panormos',
-            hints: '',
-        },
-        {
-            value: 100,
-            label: 'Tsougrias',
-            hints: '',
-        },
-    ];
 
     private logo = `assets/svg/logo.svg`;
     private data_received = null as any;
@@ -191,7 +145,7 @@ export default class DetailRight extends React.Component<IDetailsRightProps, IDe
             locations:      null as any,
         };
         this.handleChange = this.handleChange.bind(this);
-        this.marks = this.marks.map((f, i) => Object.assign(f, {value: (100 / (this.marks.length - 1)) * i}));
+        this.getTabContainerSimple = this.getTabContainerSimple.bind(this);
     }
 
     componentDidMount() {
@@ -199,8 +153,8 @@ export default class DetailRight extends React.Component<IDetailsRightProps, IDe
             this.formsService.getFormId(Ids.LOCATIONS),
             this.formsService.getAllFormConfigs()]
         ).subscribe(([locations, config]) => {
-                this.setState({locations, config});
-            });
+            this.setState({locations, config});
+        });
     }
 
     shouldComponentUpdate(nextProps: Readonly<IDetailsRightProps>, nextState: Readonly<IDetailsRightStates>, nextContext: any): boolean {
@@ -242,6 +196,7 @@ export default class DetailRight extends React.Component<IDetailsRightProps, IDe
                 [this.FINAL_DETAILS_TOP]);
             detailsBottom = chunkArrayInGroups(bottom, Math.floor(bottom.length / 2) + 1 );
         }
+        console.log('*****************', detailsBottom, '*****************');
         return <div style={{display: 'flex', flex: 1, flexDirection: 'column', width: '100%'}}>
             <div style={{display: 'flex', flex: 1, flexDirection: 'row', width: '100%',
                 justifyContent: 'space-between', paddingBottom: '10px', borderBottom: '1px solid #ece2f7'}}>
@@ -315,83 +270,6 @@ export default class DetailRight extends React.Component<IDetailsRightProps, IDe
         return `${value} dsdsd`;
     }
 
-    getOrte() {
-        /* Volos Base, Agios Ioannis (MAMA MIA Movie), Arkos, Blue Cave Dasia (The Cave of the Seal), Kastani Beach (Mama Mia Movie),
-        Kastro, Lalaria, Loutraki, Panormos, Tsougrias */
-
-        let marks = [
-            {
-                value: 0,
-                label: 'Volos Base',
-                hints: '',
-            },
-            {
-                value: 14,
-                label: '**Agios Ioannis',
-                hints: '(MAMA MIA Movie)',
-            },
-            {
-                value: 28,
-                label: 'Arkos',
-                hints: '',
-            },
-            {
-                value: 45,
-                label: '**Blue Cave Dasia',
-                hints: '(The Cave of the Seal)',
-            },
-            {
-                value: 60,
-                label: '**Kastani Beach',
-                hints: '(Mama Mia Movie)',
-            },
-            {
-                value: 75,
-                label: 'Lalaria',
-                hints: '',
-            },
-            {
-                value: 52,
-                label: 'Loutraki',
-                hints: '',
-            },
-            {
-                value: 64,
-                label: 'Panormos',
-                hints: '',
-            },
-            {
-                value: 100,
-                label: 'Tsougrias',
-                hints: '',
-            },
-        ];
-
-        marks = marks.map((f, i) => Object.assign(f, {value: (100 / (marks.length - 1)) * i}));
-
-        const valueLabelFormat = (value: number) => {
-            const found = marks.find((mark) => mark.value === value);
-            return found ? found.hints : '';
-        };
-
-        return (
-            <Box sx={{ margin: '0 35px' }}>
-                <Typography id='track-false-range-slider' gutterBottom>
-                    ** Something spectacular happened in some locations **
-                </Typography>
-                <Slider
-                    track={false}
-                    valueLabelDisplay='auto'
-                    valueLabelFormat={valueLabelFormat}
-                    aria-labelledby='track-false-range-slider'
-                    getAriaValueText={this.valuetext}
-                    defaultValue={marks.map((f) => f.value)}
-                    marks={marks}
-                />
-            </Box>
-        )
-    }
-
     render() {
         const algemeineAll = [];
         this._algemeine.map((a, i) => algemeineAll.push(Object.assign(a, this._algemeine2[i] || {})) );
@@ -436,7 +314,7 @@ export default class DetailRight extends React.Component<IDetailsRightProps, IDe
                                             <small style={{fontSize: '18px', color: '#3fb521'}}>20%</small>
                                         </div>
                                     </Typography>
-                                    {this.getTabContainerSimple(this.details)}
+                                    {this.getTabContainerSimple()}
                                 </CardContent>}
                             </Box>
                         </Card>
@@ -472,6 +350,12 @@ export default class DetailRight extends React.Component<IDetailsRightProps, IDe
                                 </Card>
                             </Grid>
                         </Box>
+
+
+                        <hr />
+                        <h2>Trips</h2>
+                        <TripsDetails {...this.state} {...this.props} />
+
                         <hr />
                         <h2>Detail yachts {'Oceanis 41.1'}</h2>
                         <Box sx={{ width: '100%', typography: 'body1' }}>
