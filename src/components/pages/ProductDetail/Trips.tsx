@@ -14,12 +14,14 @@ import {resolve} from 'inversify-react';
 import {FormsService} from '../../../services/form_service';
 import {ApiService, encodePostBody} from '../../../services/api_service';
 import TabContext from '@mui/lab/TabContext';
+import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import TabList from '@mui/lab/TabList';
 import style from './trips.less';
 import Tab from '@mui/material/Tab';
 import TabPanel from '@mui/lab/TabPanel';
 import {groupBy} from '../../../util/groupby';
+import {ReactNode} from 'react';
 
 interface ITripsDetailsState {
     value:          string;
@@ -102,54 +104,57 @@ export default class TripsDetails extends React.Component<ITripsDetailsProps, IT
                                      className={style.tabsStyle}
                             >
                                 {this.state.trips.map((t) => <Tab label={t.value} value={t.trip_id} className={style.tabsStyle} />)}
-                                {/* <Tab label='Mykonos Crysta' value='_01' className={style.tabsStyle} />
-                                <Tab label='Apollon and Artemis' value='_02' className={style.tabsStyle} /> */}
                             </TabList>
                         </Box>
 
                         {this.state.tripsDetails.length > 0 && this.state.tripsDetails.map((tD) =>
                             <TabPanel value={tD.key} className={style.table}>
-                                <span>{tD.items.find((f) => f.label === 'name').value}</span>
-                                <div className={style.row}>
-                                    <div className={style.left}>
-                                        <img src={`assets/slider/products/${this.state.isProduct}/trips/${tD.items[0].product_id}/img.png`}
-                                             style={{height: '200px'}}/>
-                                    </div>
-                                    <div className={style.right}>
-                                        {tD.items.find((f) => f.label === 'meeting_point').value}<br/>
-                                        {tD.items.find((f) => f.label === 'time_interval').value}<br/><br/>
-                                        <div className={style.rightBottom}>
-                                            <div className={style.isIncluded}>
-                                                What's included:<br/>
-                                                <small>
-                                                    {JSON.parse(tD.items.find((f) => f.label === 'included').value)
-                                                        .map((el) => <>{el}<br/></>)}
-                                                    {/* Sailing yacht charter<br/>
-                                                    Fully licensed English-speaking skipper<br/>
-                                                    Skipper’s assistant (sailor)<br/>
-                                                    Lunch on board<br/>
-                                                    Wine, beer and soft drinks<br/>
-                                                    Snorkeling equipment<br/>
-                                                    Fuel charges<br/> */}
-                                                </small>
+                                <Box sx={{ flexGrow: 1 }} >
+                                    <Grid container spacing={2}>
+                                        {/* name of trip */}
+                                        <Grid item xs={12} md={12} lg={12} >
+                                            <span>{tD.items.find((f) => f.label === 'name').value}</span>
+                                        </Grid>
+                                        {/* left */}
+                                        <Grid item xs={12} md={12} lg={6} >
+                                            <div className={style.left}>
+                                                <img src={`assets/slider/products/${this.state.isProduct}/trips/${tD.items[0].product_id}/img.png`}
+                                                     style={{maxWidth: '100%'}} />
                                             </div>
-                                            <div className={style.notIncluded}>
-                                                What's not included:<br/>
-                                                <small>
-                                                    {JSON.parse(tD.items.find((f) => f.label === 'not_included').value)
-                                                        .map((el) => <>{el}<br/></>)}
-                                                    {/* Hotel pick-up and drop off service (available upon request)<br/>
-                                                    Beach towels<br/>
-                                                    Gratuities<br/> */}
-                                                </small>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <small className={style.textAlign}>
-                                    {JSON.parse(tD.items.find((f) => f.label === 'extra_infos').value)
-                                        .map((el) => <>{el}<br/></>)}
-                                </small>
+                                        </Grid>
+                                        {/* right */}
+                                        <Grid item xs={12} md={12} lg={6} >
+                                            {tD.items.find((f) => f.label === 'meeting_point').value}<br/>
+                                            {tD.items.find((f) => f.label === 'time_interval').value}<br/> <br/>
+                                            <Box sx={{ flexGrow: 1 }} >
+                                                <Grid container spacing={1}>
+                                                    <Grid item xs={12} md={6} lg={6}>
+                                                        What's included:<br/>
+                                                        <small>
+                                                            {JSON.parse(tD.items.find((f) => f.label === 'included').value)
+                                                                .map((el) => <>{el}<br/></>)}
+                                                        </small>
+                                                        <br/>
+                                                    </Grid>
+                                                    <Grid item xs={12} md={6} lg={6}>
+                                                        What's not included:<br/>
+                                                        <small>
+                                                            {JSON.parse(tD.items.find((f) => f.label === 'not_included').value)
+                                                                .map((el) => <>{el}<br/></>)}
+                                                        </small>
+                                                        <br/>
+                                                    </Grid>
+                                                </Grid>
+                                            </Box>
+                                        </Grid>
+                                    </Grid>
+                                    <Grid item xs={12} md={12} lg={12} >
+                                        <small className={style.textAlign}>
+                                            {JSON.parse(tD.items.find((f) => f.label === 'extra_infos').value)
+                                                .map((el) => <>{el}<br/></>)}
+                                        </small>
+                                    </Grid>
+                                </Box>
                             </TabPanel>
                         )}
                     </TabContext>

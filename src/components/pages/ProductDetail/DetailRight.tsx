@@ -207,7 +207,7 @@ export default class DetailRight extends React.Component<IDetailsRightProps, IDe
             </div>
 
             <TableContainer component={Paper} style={{background: 'none', borderRadius: 0, boxShadow: 'none'}}>
-                <Table sx={{ minWidth: 410 }} aria-label='simple table'>
+                <Table aria-label='simple table'>
                     <TableBody>
                         {detailsBottom.map((tab, idx) =>
                             <TableRow key={idx} sx={{ '&:last-child td, &:last-child th': { border: 0 } }} style={{display: 'flex'}}>
@@ -290,7 +290,7 @@ export default class DetailRight extends React.Component<IDetailsRightProps, IDe
                 <Box sx={{ flexGrow: 1 }} className={style.rightSide}>
                     <Container component='main' style={boxStyled}>
                         <CssBaseline />
-                        <Card sx={{ display: 'flex', borderRadius: 0, backgroundColor: '#f5f1f0' }}>
+                        {/* <Card sx={{ display: 'flex', borderRadius: 0, backgroundColor: '#f5f1f0' }}>
                             <CardMedia
                                 component='img'
                                 sx={{ width: this.state.imageWidth }}
@@ -317,7 +317,41 @@ export default class DetailRight extends React.Component<IDetailsRightProps, IDe
                                     {this.getTabContainerSimple()}
                                 </CardContent>}
                             </Box>
-                        </Card>
+                        </Card> */}
+                        <Box sx={{ flexGrow: 0 }} >
+                            <Grid container spacing={0}>
+                                <Grid item xs={12} md={12} lg={6} style={{backgroundColor: 'red', overflow: 'hidden'}}>
+                                    <img src={this.state.path} style={{maxWidth: '105%', width: '105%', height: '105%'}} />
+                                </Grid>
+                                <Grid item xs={12} md={12} lg={6} style={{backgroundColor: '#f5f1f0', padding: '16px'}}>
+                                    {this.props.product && this.props.details &&
+                                        <>
+                                        <Typography component='div' variant='h4' style={{
+                                            display: 'flex',
+                                            justifyContent: 'space-between',
+                                            borderBottom: '1px solid rgba(236, 226, 247, 1)',
+                                            marginBottom: '10px' }}>
+                                            <div>{this.props.product.product_name}
+                                                <small style={{fontSize: '18px'}}>&nbsp;
+                                                    {this.props.product.product_model || this.props.product.product_marker}
+                                                </small>
+                                            </div>
+                                            <div style={{display: 'flex', flexDirection: 'column', textAlign: 'end'}}>
+                                                <small style={{fontSize: '18px'}}>450€</small>
+                                                <small style={{fontSize: '18px', color: '#3fb521'}}>20%</small>
+                                            </div>
+                                        </Typography>
+                                        <Box sx={{ flexGrow: 2 }} >
+                                            <Grid container spacing={2}>
+                                                <Grid item xs={12} md={12} lg={12}>
+                                                    {this.getTabContainerSimple()}
+                                                </Grid>
+                                            </Grid>
+                                        </Box></>}
+                                </Grid>
+                            </Grid>
+                        </Box>
+
                         <hr />
                         <h2>Locations</h2>
                         <Box sx={{ width: '100%', typography: 'body1' }}>
