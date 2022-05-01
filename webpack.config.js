@@ -52,7 +52,7 @@ module.exports = Object.assign({
                         loader: 'css-loader',
                         options: {
                             modules: {
-                                localIdentName: isProduction ? "[hash:base64:5]" : "[path][name]__[local]--[hash:base64:5]",
+                                localIdentName: isProduction ? "[hash:base64:5]" : "[path][name]__[local]",
                             },
                             importLoaders: true,
                         },
