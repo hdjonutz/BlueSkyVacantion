@@ -52,10 +52,10 @@ export default class Header extends React.Component<{}, {toHome: string}> {
                                 <div style={{width: '25%', padding: 0, display: 'flex', alignItems: 'center'}}>
                                     <Drawer/>
                                     <NavLink to={this.state.toHome}>
-                                        <img src={'assets/images/Untitled-2_logo.png'} style={{height: '46px'}}/>
+                                        <img src={'assets/images/logo_ico_blue_white.png'} style={{height: '46px'}}/> &nbsp;
                                     </NavLink>
                                     <Typography variant='h6' style={{fontSize: '1rem', color: 'white'}}>
-                                        Meandro Jachting LTD
+                                        {COMPANY_NAME}
                                     </Typography>
                                 </div>
                                 <div style={{width: '75%', padding: 0, display: 'flex', alignItems: 'center'}}>

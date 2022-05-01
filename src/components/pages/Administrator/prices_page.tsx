@@ -71,7 +71,7 @@ export default class PricesPage extends React.Component<{}, PricesPageStates> {
     getHeader(): JSX.Element {
         return <div className={style['pdf-header']}>
                                     <span className={style['company-logo']}>
-                                      <img src={'assets/svg/logo.svg'} style={{height: '80px'}} alt='Company Logo' /> Meandro Jachting LTD
+                                      <img src={'assets/svg/logo.svg'} style={{height: '80px'}} alt='Company Logo' /> {COMPANY_NAME}
                                     </span>
             <div className={style['from']}>
                 <p>
@@ -90,7 +90,7 @@ export default class PricesPage extends React.Component<{}, PricesPageStates> {
     getFooter(): JSX.Element {
         return <div className={style['pdf-footer']}>
             <p>
-                Meandros jachting LTD
+                {COMPANY_NAME}
                 <br />
                 Lützowplatz 456
                 <br />

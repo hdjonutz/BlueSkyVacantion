@@ -14,7 +14,7 @@ export default class CopyrightPureComponent extends React.PureComponent {
         <Typography variant="body2" color="inherit" align="center" {...props}>
             {'Copyright © '} 
             <Link color="inherit" href="/policy">
-              {new Date().getFullYear()} Meandro Jachting LTD
+              {new Date().getFullYear()} {COMPANY_NAME}
             </Link>{' '}<br />
             <Link color="inherit" href="/policy">
               All Rights Reserved |

@@ -90,7 +90,7 @@ export default class Drawer extends React.Component<{}, {open: boolean, showAdmi
                 >
                     <div className={'classname'}>
                     <Box textAlign='center' p={2}>
-                        Meandro Jachting LTD
+                        {COMPANY_NAME}
                     </Box>
                     <Divider />
                     <List
