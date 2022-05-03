@@ -3,6 +3,10 @@
   flex: 1;
   flex-direction: column;
   position: relative;
+  &.vertical{
+    padding-left: 30px;
+    margin: 0;
+  }
   .line{
     background-color: #c4a4e8;
     height: 4px;
@@ -11,6 +15,11 @@
     position: absolute;
     width: 100%;
     z-index: 0;
+    &.vertical{
+      height: 100%;
+      width: 4px;
+      margin: 0;
+    }
   }
   .lineLocations{
     display: flex;
@@ -18,6 +27,9 @@
     justify-content: space-between;
     width: 100%;
     z-index: 1;
+    &.vertical{
+      flex-direction: column;
+    }
     .location{
       color: #640ec3;
       padding: 5px;
@@ -30,6 +42,14 @@
         width: 20px;
         background: #640ec3;
         border-radius: 50%;
+        &.vertical{
+          margin-right: 20px;
+        }
+      }
+      &.vertical{
+        height: 50px;
+        flex-direction: row;
+        margin-left: -13px;
       }
     }
   }

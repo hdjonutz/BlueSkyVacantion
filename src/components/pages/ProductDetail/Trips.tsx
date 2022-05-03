@@ -169,7 +169,7 @@ export default class TripsDetails extends React.Component<ITripsDetailsProps, IT
                     </TabContext>}
                 </Box>}
                 {this.state.tripsDetails.length > 0 && this.state.trips &&
-                    <Box flexGrow={2} display={{md: 'none', lg: 'none', xl: 'none'}}>
+                <Box flexGrow={2} display={{md: 'none', lg: 'none', xl: 'none'}}>
                     {this.state.tripsDetails.length > 0 && this.state.tripsDetails.map((tD, idx) =>
                         <Grid style={{backgroundColor: '#f5f1f0', padding: '16px'}} key={idx}>
                             {/* name of trip */}
