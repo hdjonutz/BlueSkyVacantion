@@ -1,3 +1,5 @@
+@import '../../../assets/css/global.less';
+
 .container {
   width: 29% !important;
   min-width: 29% !important;
@@ -9,7 +11,7 @@
 .leftSide {
   background-color: #1b1b1b;
   color: #a6a6a6;
-  padding: 60px 40px;
+  padding: @glb_padding;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
@@ -21,7 +23,7 @@
       color: #fff;
       background-color: #262626;
       border-left: 3px solid #da2f10;
-      margin-right: -40px;
+      margin-right: @glb_left_margin_right;
       padding: 15px;
     }
 
@@ -94,7 +96,7 @@
       color: #fff;
       background-color: #262626;
       border-left: 3px solid #da2f10;
-      margin-right: -40px;
+      margin-right: @glb_left_margin_right;
       padding: 15px;
     }
     .sidebarPosts {

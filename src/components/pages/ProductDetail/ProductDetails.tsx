@@ -72,8 +72,8 @@ export default class ProductDetail extends React.Component<{}, IProductDetail> {
         return (
             <ThemeProvider theme={themeMeandro}>
                 <div style={{flex: 1, display: 'flex', maxWidth: '100%'}}>
-                    <DetailLeft />
-                    <DetailRight {...this.state} />
+                    <DetailLeft key={'01'} />
+                    <DetailRight {...this.state} key={'02'}/>
                 </div>
             </ThemeProvider>
         )

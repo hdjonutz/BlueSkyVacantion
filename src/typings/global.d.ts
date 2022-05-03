@@ -12,4 +12,5 @@ type Omit<T, K extends keyof T> = { [P in Diff<keyof T, K>]: T[P] };
 
 type PartialPick<T, K extends keyof T> = Partial<T> & Pick<T, K>;
 
-declare var COMPANY_NAME: string;
+declare const COMPANY_NAME: string;
+declare const TARGET_COMPANY: string;

@@ -47,22 +47,33 @@ export default class Header extends React.Component<{}, {toHome: string}> {
             <ThemeProvider theme={themeMeandro}>
                 <Container maxWidth='xs'>
                     <HideOnScroll>
-                        <AppBar style={{padding: '15px', background: 'linear-gradient(to right, #000000 29%, rgba(0,0,0,0) 29%)'}}> {/* background: themeMeandro.palette?.background?.default*/}
+                        <AppBar style={{padding: '15px', background: 'linear-gradient(to right, #000000 29%, rgba(0,0,0,0) 29%)'}}
+                        > {/* background: themeMeandro.palette?.background?.default */}
                             <Toolbar>
                                 <div style={{width: '25%', padding: 0, display: 'flex', alignItems: 'center'}}>
                                     <Drawer/>
-                                    <NavLink to={this.state.toHome}>
-                                        <img src={'assets/images/logo_ico_blue_white.png'} style={{height: '46px'}}/> &nbsp;
-                                    </NavLink>
-                                    <Typography variant='h6' style={{fontSize: '1rem', color: 'white'}}>
-                                        {COMPANY_NAME}
-                                    </Typography>
+                                    <Box flexGrow={1} display={{ xs: 'none', md: 'inline'}}>
+                                        <NavLink to={this.state.toHome}>
+                                            <img src={'assets/images/logo_ico2_objects.svg'} style={{height: '46px'}}/>
+                                        </NavLink>
+                                        {/* <Typography variant='h6' style={{fontSize: '1rem', color: 'red'}}>
+                                            {COMPANY_NAME} md
+                                        </Typography> */}
+                                    </Box>
                                 </div>
                                 <div style={{width: '75%', padding: 0, display: 'flex', alignItems: 'center'}}>
                                     <Box flexGrow={1} display={{ xs: 'none', sm: 'flex', flexDirection: 'row', display: 'flex', alignItems: 'center', justifyContent: 'end'}}>
                                         <ShipTypes />
                                         <LanguageSelector />
                                         <Account />
+                                    </Box>
+                                    <Box flexGrow={1} display={{ md: 'none', lg: 'none', xl: 'none'}}>
+                                        <NavLink to={this.state.toHome}>
+                                            <img src={'assets/images/logo_ico2_objects_contrast.svg'} style={{height: '46px', paddingLeft: '16px'}}/>
+                                        </NavLink>
+                                        {/*<Typography variant='h6' style={{fontSize: '1rem', color: 'red'}}>
+                                            {COMPANY_NAME} xs
+                                        </Typography>*/}
                                     </Box>
                                     <ShoppingCartLink />
                                 </div>

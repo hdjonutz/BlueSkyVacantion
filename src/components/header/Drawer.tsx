@@ -79,7 +79,7 @@ export default class Drawer extends React.Component<{}, {open: boolean, showAdmi
                     aria-label='open drawer'
                     onClick={() => this.setState({open: true})}
                 >
-                    <MenuIcon />
+                    <MenuIcon style={{color: 'white'}} />
                 </IconButton>
                 <SwipeableDrawer
                     anchor='left'
@@ -90,7 +90,8 @@ export default class Drawer extends React.Component<{}, {open: boolean, showAdmi
                 >
                     <div className={'classname'}>
                     <Box textAlign='center' p={2}>
-                        {COMPANY_NAME}
+                        {/* COMPANY_NAME */}
+                        <img src={'assets/images/logo_ico2_objects_contrast.svg'} style={{height: '46px'}}/>
                     </Box>
                     <Divider />
                     <List

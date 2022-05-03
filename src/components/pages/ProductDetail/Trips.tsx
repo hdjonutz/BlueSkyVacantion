@@ -22,6 +22,7 @@ import Tab from '@mui/material/Tab';
 import TabPanel from '@mui/lab/TabPanel';
 import {groupBy} from '../../../util/groupby';
 import {ReactNode} from 'react';
+import CssBaseline from '@mui/material/CssBaseline';
 
 interface ITripsDetailsState {
     value:          string;
@@ -44,7 +45,7 @@ export default class TripsDetails extends React.Component<ITripsDetailsProps, IT
         super(props);
 
         this.state = {
-            value:          '_01',
+            value:          null as any,
             isProduct:      '',
             trips:          [],
             tripsDetails:   [],
@@ -92,28 +93,36 @@ export default class TripsDetails extends React.Component<ITripsDetailsProps, IT
         this.setState({value: newValue});
     };
 
+    findItem(item: any, label: string): string {
+        const found = item.items.find((f) => f.label === label);
+        return found ? found.value : '';
+    }
+
     render() {
         return (
             <ThemeProvider theme={themeMeandro}>
-                <Box sx={{ width: '100%', typography: 'body1'}} className={style.tripDetails}>
-                    <TabContext value={this.state.value}>
+                {this.state.tripsDetails.length > 0 && this.state.trips &&
+                <Box flexGrow={2}
+                     display={{ xs: 'none', sm: 'flex', flexDirection: 'row', flex: '1', display: 'flex'}} >
+                    {this.state.value && <TabContext value={this.state.value}>
                         <Box>
                             <TabList onChange={this.handleChange}
                                      orientation='vertical'
                                      aria-label='lab API tabs example'
+                                     style={{minWidth: '200px'}}
                                      className={style.tabsStyle}
                             >
-                                {this.state.trips.map((t) => <Tab label={t.value} value={t.trip_id} className={style.tabsStyle} />)}
+                                {this.state.trips.map((t, idx) =>
+                                    <Tab label={t.value} value={t.trip_id} className={style.tabsStyle} key={idx}/>)}
                             </TabList>
                         </Box>
-
-                        {this.state.tripsDetails.length > 0 && this.state.tripsDetails.map((tD) =>
-                            <TabPanel value={tD.key} className={style.table}>
+                        {this.state.tripsDetails.length > 0 && this.state.tripsDetails.map((tD, idx) =>
+                            <TabPanel value={tD.key} className={style.table} style={{backgroundColor: '#f5f1f0'}} key={idx}>
                                 <Box sx={{ flexGrow: 1 }} >
-                                    <Grid container spacing={2}>
+                                    <Grid container spacing={1}>
                                         {/* name of trip */}
                                         <Grid item xs={12} md={12} lg={12} >
-                                            <span>{tD.items.find((f) => f.label === 'name').value}</span>
+                                            <span>{this.findItem(tD, 'name')}</span>
                                         </Grid>
                                         {/* left */}
                                         <Grid item xs={12} md={12} lg={6} >
@@ -124,24 +133,24 @@ export default class TripsDetails extends React.Component<ITripsDetailsProps, IT
                                         </Grid>
                                         {/* right */}
                                         <Grid item xs={12} md={12} lg={6} >
-                                            {tD.items.find((f) => f.label === 'meeting_point').value}<br/>
-                                            {tD.items.find((f) => f.label === 'time_interval').value}<br/> <br/>
+                                            {this.findItem(tD, 'meeting_point')}<br/>
+                                            {this.findItem(tD, 'time_interval')}<br/> <br/>
                                             <Box sx={{ flexGrow: 1 }} >
                                                 <Grid container spacing={1}>
                                                     <Grid item xs={12} md={6} lg={6}>
                                                         What's included:<br/>
-                                                        <small>
-                                                            {JSON.parse(tD.items.find((f) => f.label === 'included').value)
-                                                                .map((el) => <>{el}<br/></>)}
-                                                        </small>
+                                                        {this.findItem(tD, 'included') !== '' && <small>
+                                                            {JSON.parse(this.findItem(tD, 'included'))
+                                                                .map((el, idx) => <span key={idx}>{el}<br/></span>)}
+                                                        </small>}
                                                         <br/>
                                                     </Grid>
                                                     <Grid item xs={12} md={6} lg={6}>
                                                         What's not included:<br/>
-                                                        <small>
-                                                            {JSON.parse(tD.items.find((f) => f.label === 'not_included').value)
-                                                                .map((el) => <>{el}<br/></>)}
-                                                        </small>
+                                                        {this.findItem(tD, 'not_included') !== '' && <small>
+                                                            {JSON.parse(this.findItem(tD, 'not_included'))
+                                                                .map((el, idx) => <span key={idx}>{el}<br/></span>)}
+                                                        </small>}
                                                         <br/>
                                                     </Grid>
                                                 </Grid>
@@ -149,16 +158,61 @@ export default class TripsDetails extends React.Component<ITripsDetailsProps, IT
                                         </Grid>
                                     </Grid>
                                     <Grid item xs={12} md={12} lg={12} >
-                                        <small className={style.textAlign}>
-                                            {JSON.parse(tD.items.find((f) => f.label === 'extra_infos').value)
-                                                .map((el) => <>{el}<br/></>)}
-                                        </small>
+                                        {this.findItem(tD, 'extra_infos') !== '' && <small className={style.textAlign}>
+                                            {JSON.parse(this.findItem(tD, 'extra_infos'))
+                                                .map((el, idx) => <span key={idx}>{el}<br/></span>)}
+                                        </small>}
                                     </Grid>
                                 </Box>
                             </TabPanel>
                         )}
-                    </TabContext>
-                </Box>
+                    </TabContext>}
+                </Box>}
+                {this.state.tripsDetails.length > 0 && this.state.trips &&
+                    <Box flexGrow={2} display={{md: 'none', lg: 'none', xl: 'none'}}>
+                    {this.state.tripsDetails.length > 0 && this.state.tripsDetails.map((tD, idx) =>
+                        <Grid style={{backgroundColor: '#f5f1f0', padding: '16px'}} key={idx}>
+                            {/* name of trip */}
+                            <Grid item xs={12} md={12} lg={12} >
+                                <span>{this.findItem(tD, 'name')}</span>
+                            </Grid>
+                            {/* left */}
+                            <Grid item xs={12} md={12} lg={12} >
+                                <div className={style.left}>
+                                    <img src={`assets/slider/products/${this.state.isProduct}/trips/${tD.items[0].product_id}/img.png`}
+                                         style={{maxWidth: '100%'}} />
+                                </div>
+                            </Grid>
+                            {/* right */}
+                            <Grid item xs={12} md={12} lg={12} >
+                                {this.findItem(tD, 'meeting_point')}<br/>
+                                {this.findItem(tD, 'time_interval')}<br/> <br/>
+                            </Grid>
+                            <Grid item xs={12} md={6} lg={12}>
+                                What's included:<br/>
+                                {this.findItem(tD, 'included') !== '' && <small>
+                                    {JSON.parse(this.findItem(tD, 'included'))
+                                        .map((el, idx) => <span key={idx}>{el}<br/></span>)}
+                                </small>}
+                                <br/>
+                            </Grid>
+                            <Grid item xs={12} md={6} lg={12}>
+                                What's not included:<br/>
+                                {this.findItem(tD, 'not_included') !== '' && <small>
+                                    {JSON.parse(this.findItem(tD, 'not_included'))
+                                        .map((el, idx) => <span key={idx}>{el}<br/></span>)}
+                                </small>}
+                                <br/>
+                            </Grid>
+                            <Grid item xs={12} md={12} lg={12} >
+                                {this.findItem(tD, 'extra_infos') !== '' && <small className={style.textAlign}>
+                                    {JSON.parse(this.findItem(tD, 'extra_infos'))
+                                        .map((el, idx) => <span key={idx}>{el}<br/></span>)}
+                                </small>}
+                            </Grid>
+                        </Grid>
+                    )}
+                </Box>}
             </ThemeProvider>
         )
     }

@@ -200,7 +200,7 @@ export default class DetailRight extends React.Component<IDetailsRightProps, IDe
         return <div style={{display: 'flex', flex: 1, flexDirection: 'column', width: '100%'}}>
             <div style={{display: 'flex', flex: 1, flexDirection: 'row', width: '100%',
                 justifyContent: 'space-between', paddingBottom: '10px', borderBottom: '1px solid #ece2f7'}}>
-                {detailsTop.map((p) => <div className={style.iconContent}>
+                {detailsTop.map((p, idx) => <div className={style.iconContent} key={idx}>
                         <img src={`assets/icons/item_${p.icon}.svg`} className={style.iconsSize} />{p.name}
                     </div>
                 )}

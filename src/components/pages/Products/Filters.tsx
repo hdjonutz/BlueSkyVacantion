@@ -58,7 +58,7 @@ export default class FiltersPage extends React.PureComponent<IFiltersProps, {det
 
         return(
                 <Grid container spacing={1} style={{backgroundColor: 'rgb(255 255 255 / 80%)'}} className={styles.grid}>
-                    <Grid item xs={12} sm={4} xl={2} style={styleGrid}>
+                    <Grid item xs={12} md={2} xl={2} style={styleGrid}>
                         <TextField
                             margin="normal"
                             fullWidth
@@ -74,7 +74,7 @@ export default class FiltersPage extends React.PureComponent<IFiltersProps, {det
                             }}
                         />
                     </Grid>
-                    <Grid item xs={12} sm={4} xl={2} style={styleGrid}>
+                    <Grid item xs={12} md={2} xl={2} style={styleGrid}>
                         <TextField
                             margin="normal"
                             fullWidth
@@ -90,11 +90,11 @@ export default class FiltersPage extends React.PureComponent<IFiltersProps, {det
                             }}
                             />
                     </Grid>
-                    <Grid item xs={12} sm={4} xl={2} style={styleGrid}>
-                    <LocalizationProvider dateAdapter={AdapterDateFns}>
+                    <Grid item xs={12} md={2} xl={2} style={styleGrid}>
+                        <LocalizationProvider dateAdapter={AdapterDateFns}>
                             <DatePicker
                                 views={['day']}
-                                label="von"
+                                label='von'
                                 value={this.state.value}
                                 onChange={(newValue) => {
                                     this.setValue(newValue);
@@ -103,20 +103,20 @@ export default class FiltersPage extends React.PureComponent<IFiltersProps, {det
                                     {...params}
                                     helperText={null}
                                     sx={{
-                                        margin: '8px 0',
+                                        width: '100%',
                                         fieldset: {
                                             borderColor: themeMeandro.palette?.primary.main,
                                         }
                                     }}
-                                    />}
+                                />}
                             />
                         </LocalizationProvider>
                     </Grid>
-                    <Grid item xs={12} sm={4} xl={2} style={styleGrid}>
+                    <Grid item xs={12} md={2} xl={2} style={styleGrid}>
                         <LocalizationProvider dateAdapter={AdapterDateFns}>
                             <DatePicker
                                 views={['day']}
-                                label="bis"
+                                label='bis'
                                 value={this.state.value}
                                 onChange={(newValue) => {
                                     this.setValue(newValue);
@@ -127,6 +127,7 @@ export default class FiltersPage extends React.PureComponent<IFiltersProps, {det
                                     helperText={null}
                                     sx={{
                                         margin: '8px 0',
+                                        width: '100%',
                                         fieldset: {
                                             borderColor: themeMeandro.palette?.primary.main,
                                         }
@@ -136,7 +137,7 @@ export default class FiltersPage extends React.PureComponent<IFiltersProps, {det
                             />
                         </LocalizationProvider>
                     </Grid>
-                    <Grid item xs={12} sm={4} xl={2} style={styleGrid}>
+                    <Grid item xs={12} md={2} xl={2} style={styleGrid}>
                         <Button
                             type="submit"
                             variant="contained"
