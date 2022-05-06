@@ -14,7 +14,10 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { ThemeProvider } from '@mui/material/styles';
 import themeMeandro from '../Layout/Theme';
 import {AuthenticationService} from '../../services/authentication_service';
-
+import Box from '@mui/material/Box';
+import LoginIcon from '@mui/icons-material/Login';
+import LogoutIcon from '@mui/icons-material/Logout';
+import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
 
 interface HeaderStates {
     toHome:         string;
@@ -75,18 +78,43 @@ export default class Account extends React.Component<{}, HeaderStates> {
         return(
             <ThemeProvider theme={themeMeandro}>
                 <div className={style.header}>
-                    <div className={style.container}>
-                        {this.state.auth && <div className={style.sprache}>{this.state.auth[0]}-{this.state.auth[1]} &nbsp; </div>}
-                        {!this.state.auth && <div> &nbsp;
-                            <Button variant='special' href={'#' + this.state.toLogin}>Login</Button>
-                        </div>}
-                        {this.state.auth && <div>
-                            <Button variant='special' onClick={() => this.LogOut()} href={'#' + this.state.toLogin}>Logout</Button>
-                        </div>}
-                        <div>
-                            <Button variant='special' href={'#' + this.state.toContactUs}>Contact Us</Button>
+                    <Box flexGrow={2} display={{xs: 'none', sm: 'none', md: 'block', lg: 'block', xl: 'block'}}>
+                        <div className={style.container}>
+                            {this.state.auth && <div className={style.sprache}>{this.state.auth[0]}-{this.state.auth[1]} &nbsp; </div>}
+                            {!this.state.auth && <div> &nbsp;
+                                <Button variant='special' href={'#' + this.state.toLogin}>Login</Button>
+                            </div>}
+                            {this.state.auth && <div>
+                                <Button variant='special' onClick={() => this.LogOut()} href={'#' + this.state.toLogin}>Logout</Button>
+                            </div>}
+                            <div>
+                                <Button variant='special' href={'#' + this.state.toContactUs}>Contact Us</Button>
+                            </div>
                         </div>
-                    </div>
+                    </Box>
+                    <Box flexGrow={2} display={{xs: 'block', sm: 'block', md: 'none', lg: 'none', xl: 'none'}}>
+                        <div className={style.container}>
+                            {this.state.auth && <div className={style.sprache}>{this.state.auth[0]}-{this.state.auth[1]} &nbsp; </div>}
+                            {!this.state.auth && <div>
+                                {/* <Button variant='special' href={'#' + this.state.toLogin}>Login</Button> */}
+                                <LoginIcon style={{paddingLeft: '16px', width: 'auto'}}
+                                           onClick={() => { location.href = '#' + this.state.toLogin; }} />
+                            </div>}
+                            {this.state.auth && <div>
+                                {/* <Button variant='special' onClick={() => this.LogOut()} href={'#' + this.state.toLogin}>Logout</Button> */}
+                                <LogoutIcon style={{paddingLeft: '16px', width: 'auto'}}
+                                            onClick={() => {
+                                                this.LogOut();
+                                                location.href = '#' + this.state.toLogin;
+                                            }} />
+                            </div>}
+                            <div>
+                                {/* <Button variant='special' href={'#' + this.state.toContactUs}>Contact Us</Button> */}
+                                <AlternateEmailIcon style={{paddingLeft: '16px', width: 'auto'}}
+                                                    onClick= {() => { location.href = '#' + this.state.toContactUs; }} />
+                            </div>
+                        </div>
+                    </Box>
                 </div>
             </ThemeProvider>
         )

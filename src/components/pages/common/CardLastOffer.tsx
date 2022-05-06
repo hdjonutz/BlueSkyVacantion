@@ -60,7 +60,7 @@ export default class CardLastOffer extends React.Component<ICardLastOfferProps, 
     render() {
         const j = this.props.jacht;
         return (
-            <>{ j && <Grid item xs={12} sm={4} xl={4}>
+            <>{ j && <Grid item xs={12} sm={12} md={4} lg={4} xl={4}>
                 <img style={{display: 'none'}} src={this.state.path} onError={() => this.setState({path: this.logo})}/>
                 <NavLink to={`/online/home/products/${j.product_id}`} style={{textDecoration: 'none'}} >
                     <Card variant={'special'}>

@@ -50,7 +50,7 @@ export default class Header extends React.Component<{}, {toHome: string}> {
                         <AppBar style={{padding: '15px', background: 'linear-gradient(to right, #000000 29%, rgba(0,0,0,0) 29%)'}}
                         > {/* background: themeMeandro.palette?.background?.default */}
                             <Toolbar>
-                                <div style={{width: '25%', padding: 0, display: 'flex', alignItems: 'center'}}>
+                                <div style={{width: '28%', paddingRight: '24px', display: 'flex', alignItems: 'center'}}>
                                     <Drawer/>
                                     <Box flexGrow={1} display={{ xs: 'none', md: 'inline'}}>
                                         <NavLink to={this.state.toHome}>
@@ -61,10 +61,17 @@ export default class Header extends React.Component<{}, {toHome: string}> {
                                         </Typography> */}
                                     </Box>
                                 </div>
-                                <div style={{width: '75%', padding: 0, display: 'flex', alignItems: 'center'}}>
-                                    <Box flexGrow={1} display={{ xs: 'none', sm: 'flex', flexDirection: 'row', display: 'flex', alignItems: 'center', justifyContent: 'end'}}>
+                                <div style={{width: '75%', paddingLeft: '24px', display: 'flex', alignItems: 'center'}}>
+                                    {/*<Box flexGrow={1} display={{ xs: 'none', sm: 'flex', flexDirection: 'row', display: 'flex', alignItems: 'center', justifyContent: 'end'}}>*/}
+                                    {/*    <ShipTypes />*/}
+                                    {/*    <LanguageSelector />*/}
+                                    {/*    <Account />*/}
+                                    {/*</Box>*/}
+                                    <Box flexGrow={1} display={{ xs: 'none', sm: 'none', md: 'block', lg: 'block', xl: 'block'}} >
                                         <ShipTypes />
                                         <LanguageSelector />
+                                    </Box>
+                                    <Box flexGrow={1} display={{ xs: 'none', sm: 'block', md: 'block', lg: 'block', xl: 'block'}}>
                                         <Account />
                                     </Box>
                                     <Box flexGrow={1} display={{ md: 'none', lg: 'none', xl: 'none'}}>

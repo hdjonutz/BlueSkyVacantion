@@ -73,7 +73,7 @@ export default class ListRight extends React.Component<IListRightProps, IListRig
                     <Container component='main'
                                style={{maxWidth: '1070px', paddingLeft: 0, paddingRight: 0, position: 'relative', marginLeft: 0}}>
                         <CssBaseline />
-                        <Box>
+                        <Box sx={{ flexGrow: 1 }} >
                             <Grid container spacing={2}>
                                 <CardAbout title={'Wo we are'} description={this.hoWeAre} >
                                     <ContactSupportIcon sx={{ width: 96, height: 96, bgcolor: '#ffffff', color: '#f44336'}} />
