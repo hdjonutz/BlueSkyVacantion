@@ -3,36 +3,51 @@ import { ThemeOptions } from '@mui/material';
 import { createTheme } from '@mui/material/styles';
 import { green, orange, blue } from '@mui/material/colors';
 
-export const magentaLight = '#7212dd';
-export const magenta = '#640ec3';
-export const magentaDarker = '#5b0faf';
-const color =  magenta;
+// export const magentaLight = '#7212dd';
+// export const magenta = '#ff7f27';
+// export const magentaDarker = '#5b0faf';
+
+export const colorWhite = '#f5f1f0';
+export const colorBase = '#ff7f27';
+
+export const colorPrimary = '#ff7f27';
+export const colorPrimaryDarker = '#e07024';
+export const colorPrimaryLighter = '#fa8a3d';
+
+export const colorSecundary = '#fd9a59';
+export const colorDisabled = '#fab083';
+export const colorHint = '#bd6e37';
+
+export const colorTextPrimary = '#343e45';
+export const colorTextSecundary = '#37444d';
+export const colorTextDisabled = '#52626c';
+export const colorTextHint = '#252c31';
+
+export const colorTextHover = '#ff7f271a';
+
 
 const themeMeandro: ThemeOptions = createTheme({
   palette: {
-    type: 'light',
     primary: {
-      main: magenta,
-      contrastText: magenta,
-      white: '#FFFFFF',
+      main: colorPrimary,
+      contrastText: colorPrimary,
     },
     secondary: {
-      main: '#f50057',
+      main: colorSecundary,
     },
     info: {
-      main: magenta,
+      main: colorHint,
     },
     background: {
       /*default: '#b5cdf7',*/
       /*paper: '#60f9a9',*/
     },
     text: {
-      primary: magenta,
-      secondary: '#5a1078',
-      disabled: 'rgba(129,107,0,0.38)',
-      hint: magenta,
+      primary: colorTextPrimary,
+      secondary: colorTextSecundary,
+      disabled: colorTextDisabled,
     },
-    divider: magenta,
+    divider: colorTextDisabled,
   },
   components: {
     MuiButton: {
@@ -40,17 +55,17 @@ const themeMeandro: ThemeOptions = createTheme({
         {
           props: { variant: 'contained' },
           style: {
-            color: '#FFFFFF',
-            backgroundColor: magenta,
+            color: colorWhite,
+            backgroundColor: colorPrimary,
             textTransform: 'none',
-            border: `1px solid ${magenta}`,
-            "&:focus": {
-              color: "#FFFFFF",
-              backgroundColor: magentaDarker,
+            border: `1px solid ${colorPrimary}`,
+            '&:focus': {
+              color: colorWhite,
+              backgroundColor: colorPrimaryDarker,
             },
-            "&:hover": {
-              color: "#FFFFFF",
-              backgroundColor: magentaLight
+            '&:hover': {
+              color: colorWhite,
+              backgroundColor: colorPrimaryLighter
             }
           },
         },
@@ -66,7 +81,7 @@ const themeMeandro: ThemeOptions = createTheme({
             backgroundImage: `url(assets/images/color2.jpg)`,
             backgroundSize: 'cover',
             margin: '5px' */
-            backgroundColor: '#f5f1f0',
+            backgroundColor: colorWhite,
             borderRadius: 0
           },
         },
@@ -75,24 +90,39 @@ const themeMeandro: ThemeOptions = createTheme({
     MuiIconButton: {
       styleOverrides: {
         sizeMedium: {
-          color,
+          colorBase,
         }
       }
     },
     MuiOutlinedInput: {
       styleOverrides: {
         root: {
-          color,
+          colorBase,
         }
       }
     },
     MuiInputLabel: {
       styleOverrides: {
         root: {
-          color,
+          colorBase,
         }
       }
-    }
+    },
+    // MuiInput: {
+    //   styleOverrides: {
+    //     root: {
+    //       '::before': {
+    //         borderBottom: `1px solid ${colorPrimary}`,
+    //       },
+    //       '::after': {
+    //         borderBottom: `2px solid ${colorPrimary}`,
+    //       },
+    //       ':hover:not(.Mui-disabled):before': {
+    //         backgroundColor: colorTextHover
+    //       }
+    //     }
+    //   }
+    // }
   },
   typography: {
     fontFamily: [

@@ -17,7 +17,7 @@ import useScrollTrigger from '@mui/material/useScrollTrigger';
 import Slide from '@mui/material/Slide';
 import Container from '@mui/material/Container';
 import { ThemeProvider } from '@mui/material/styles';
-import themeMeandro from '../Layout/Theme';
+import themeMeandro, {colorPrimary} from '../Layout/Theme';
 import LanguageSelector from './Language';
 import ShoppingCartLink from './ShoppingCart';
 import ShipTypes from './ShipTypes';

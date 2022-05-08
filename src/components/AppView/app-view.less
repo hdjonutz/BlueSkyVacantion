@@ -1,6 +1,4 @@
-/*@import '../../../css/inline.colors.less';*/
-@interautomation-dark-blue: #172859;
-@interautomation-medium-blue: #4963ff;
+@import '../Layout/theme.less';
 
 .layout {
   display: flex;
@@ -41,7 +39,7 @@
 }
 
 button.logo {
-  background-color: @interautomation-dark-blue;
+  background-color: @colorPrimary;
   border-radius: 0;
   margin: 0;
   width: 56px;
@@ -53,11 +51,11 @@ button.logo {
   }
 
   &:hover {
-    background-color: lighten(@interautomation-dark-blue, 5%);
+    background-color: @colorPrimaryLighter;
   }
 
   &:active {
-    background-color: lighten(@interautomation-medium-blue, 5%);
+    background-color: @colorPrimaryDarker;
   }
 }
 

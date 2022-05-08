@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { ThemeProvider } from '@mui/material/styles';
-import themeMeandro from '../Layout/Theme';
+// import { ThemeProvider } from '@mui/material/styles';
+// import themeMeandro from '../Layout/Theme';
 
 import 'reflect-metadata';
 import MenuItem from '@mui/material/MenuItem';
@@ -16,16 +16,12 @@ export default class ShipTypes extends React.PureComponent<{}, {type: number}> {
         }
     }
 
-    handleAction(open: boolean) {
-        this.setState({open});
-    }
-
     handleChange = (event: SelectChangeEvent<any>) => {
         this.setState({type: event.target.value});
     };
 
     render () {
-        const magenda = '#640ec3';
+        // const magenda = '#ff7f27';
         return(
             <FormControl variant='standard' sx={{ m: 1, minWidth: 120 }}>
                 <Select
@@ -36,9 +32,10 @@ export default class ShipTypes extends React.PureComponent<{}, {type: number}> {
                     onChange={this.handleChange}
                     variant='standard'
                 >
-                    <MenuItem style={{color: magenda}} value={0}>Ship Type 1</MenuItem>
-                    <MenuItem style={{color: magenda}} value={1}>Ship Type 2</MenuItem>
-                    <MenuItem style={{color: magenda}} value={2}>Ship Type 3</MenuItem>
+                    <MenuItem value={0}>Ship Type 1</MenuItem>
+                    <MenuItem value={1}>Ship Type 2</MenuItem>
+                    <MenuItem value={2}>Ship Type 3</MenuItem>
+                    {/* <MenuItem style={{color: magenda}} value={2}>Ship Type 3</MenuItem> */}
                 </Select>
             </FormControl>
         )
